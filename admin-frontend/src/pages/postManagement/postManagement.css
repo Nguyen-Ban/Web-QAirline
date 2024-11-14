@@ -1,0 +1,4 @@
+.post-management .head-section {
+  display: flex;
+  justify-content: space-between;
+}

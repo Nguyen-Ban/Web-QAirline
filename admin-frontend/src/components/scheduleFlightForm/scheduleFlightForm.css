@@ -1,0 +1,38 @@
+/* Container for the Schedule Flight Form */
+
+/* Form Labels */
+.schedule-flight-form label {
+  font-weight: bold;
+  color: #4b5876;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Text Input, Date Input, and Select Styling */
+.schedule-flight-form input[type="text"],
+.schedule-flight-form input[type="date"],
+.schedule-flight-form select {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #4b5876;
+}
+
+/* Submit Button */
+.schedule-flight-form input[type="submit"] {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #28a745; /* Green */
+  color: #fff;
+}
+
+.schedule-flight-form input[type="submit"]:hover {
+  background-color: #218838;
+}

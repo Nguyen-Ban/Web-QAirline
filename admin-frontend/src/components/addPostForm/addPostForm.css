@@ -1,0 +1,50 @@
+.add-post-form label {
+  font-weight: bold;
+  margin-bottom: 0.5 rem;
+  display: block;
+  color: #4b5876;
+}
+
+.add-post-form input[type="text"],
+.add-post-form select {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #4b5876;
+}
+
+.add-post-form input[type="text"]:focus,
+.add-post-form select:focus {
+  outline: none;
+  border-color: #396aff;
+  box-shadow: 0 0 4px rgba(57, 106, 255, 0.2);
+}
+
+.add-post-form input[type="submit"] {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.add-post-form .save-and-post {
+  background-color: #28a745; /* Green */
+}
+
+.add-post-form .save-and-post:hover {
+  background-color: #218838;
+}
+
+.add-post-form .discard {
+  background-color: #dc3545; /* Red */
+}
+
+.add-post-form .discard:hover {
+  background-color: #c82333;
+}
