@@ -1,131 +1,135 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Doto:wght@100..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: "Merriweather", serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Merriweather", serif;
 }
 
 :root {
-    --primaryColor: #2b5081;
-    --secondaryColor: #0a9396;
-    --colorOne: #94d2bd;
-    --colorTwo: #e9d8a6;
-    --HoverColor: #0c496f;
-    --whiteColor: #ffffff;
-    --blackColor: #001219;
-    --textColor: #14213d;
-    --borderColor: #3d5a80;
-    --whiteColorDeam: #f8f9fa;
-    --grayBg: #e5e5e5;
-    --grayText: #6c757d;
-    --inputColor: #f1f5f9;
-    --boxShadow: rgba(0, 0, 0, 0.1) 0px 4px 6px, rgba(0, 0, 0, 0.06) 0px 1px 3px;
-    --transition: .3s ease-in-out;
-  }
-  
+  --primaryColor: #2b5081;
+  --secondaryColor: #0a9396;
+  --colorOne: #94d2bd;
+  --colorTwo: #e9d8a6;
+  --HoverColor: #0c496f;
+  --whiteColor: #ffffff;
+  --blackColor: #001219;
+  --textColor: #14213d;
+  --borderColor: #3d5a80;
+  --whiteColorDeam: #f8f9fa;
+  --grayBg: #e5e5e5;
+  --grayText: #6c757d;
+  --inputColor: #f1f5f9;
+  --boxShadow: rgba(0, 0, 0, 0.1) 0px 4px 6px, rgba(0, 0, 0, 0.06) 0px 1px 3px;
+  --transition: .3s ease-in-out;
+}
+
 
 /*defualt setting*/
 body {
-    background: var(--whiteColor);
+  background: var(--whiteColor);
 }
 
-a{
-    text-decoration:none;
+a {
+  text-decoration: none;
 }
 
 li {
-    list-style: none;
-    cursor: pointer;
+  list-style: none;
+  cursor: pointer;
 }
 
 .section {
-    padding: 6rem 0 3rem;
+  padding: 6rem 0 3rem;
 }
 
 .container {
-    padding-left: 2rem;
-    padding-right: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .icon {
-    font-size: 1.5rem;
-    cursor: pointer;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .flex {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .grid {
-    display: grid;
-    align-items: center;
+  display: grid;
+  align-items: center;
 }
 
 .none {
-    display: none;
+  display: none;
 }
 
 .btn {
-    padding: .8rem 1.5rem;
-    background: var(--primaryColor);
-    border: none;
-    outline: none;
-    border-radius: 1.3rem;
-    cursor:pointer;
-    color: var(--whiteColor);
-    &:hover {
-        background-color: var(--HoverColor);
-    }
-    a{
-        color: var(--whiteColorDeam);
-        font-weight: 200;
-    }
+  padding: .8rem 1.5rem;
+  background: var(--primaryColor);
+  border: none;
+  outline: none;
+  border-radius: 1.3rem;
+  cursor: pointer;
+  color: var(--whiteColor);
+
+  &:hover {
+    background-color: var(--HoverColor);
+  }
+
+  a {
+    color: var(--whiteColorDeam);
+    font-weight: 200;
+  }
 }
 
-img, video {
-    width: 100%;
-    height: auto;
+img,
+video {
+  width: 100%;
+  height: auto;
 }
 
 input {
-    font-size: 100px;
-    color: var(--grayText);
+  font-size: 100px;
+  color: var(--grayText);
 }
 
-p{
-    font-size: 15px;
-    color: var(--grayText);
-    line-height: 20px;
+p {
+  font-size: 15px;
+  color: var(--grayText);
+  line-height: 20px;
 }
 
 h4 {
-    padding: 1rem 0;
-    font-weight: 600;
-    color: var(--blackColor);
+  padding: 1rem 0;
+  font-weight: 600;
+  color: var(--blackColor);
 }
 
 h1 {
-    padding: 1rem 0;
-    font-weight: 600;
-    color: var(--blackColor);
-    font-size: 60px;
+  padding: 1rem 0;
+  font-weight: 600;
+  color: var(--blackColor);
+  font-size: 60px;
 }
 
 h2 {
-    font-size: 25px;
-    padding: 1rem 0;
-    color: var(--blackColor);
+  font-size: 25px;
+  padding: 1rem 0;
+  color: var(--blackColor);
 }
+
 
 //NavBar scss
 .main {
   margin-top: 0;
   height: 0;
   margin: 0 auto;
-  
+
   .navBarWrapper {
     position: relative;
     padding-bottom: 5px;
@@ -164,17 +168,17 @@ h2 {
           font-weight: 570;
         }
 
-          a {
-            color: darkslategrey; 
-            text-decoration: none;
-      
-            &:link,
-            &:visited {
-              color: darkslategrey; 
-            }
+        a {
+          color: darkslategrey;
+          text-decoration: none;
+
+          &:link,
+          &:visited {
+            color: darkslategrey;
+          }
 
           &:hover {
-            color: var(--primaryColor); 
+            color: var(--primaryColor);
             font-weight: 700;
           }
 
@@ -195,7 +199,7 @@ h2 {
             right: auto;
           }
 
-          
+
         }
       }
 
@@ -214,6 +218,7 @@ h2 {
         background-color: darkslategray;
       }
     }
+
     .navbar_With_Bg {
       background: var(--colorTwo);
       padding: .5rem 1rem;
@@ -222,8 +227,8 @@ h2 {
   }
 
 
-//Home scss
-.home {
+  //Home scss
+  .home {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -246,14 +251,24 @@ h2 {
         width: 100%;
         height: 570px;
         margin-top: 0;
+        position: relative; 
 
         .homePageImg {
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
-          line-height: 0; 
+          line-height: 0;
           margin: 0;
+          position: absolute; 
+          top: 0; 
+          left: 0; 
+          opacity: 0; 
+          transition: opacity 1s ease-in-out; 
+
+          &.active {
+            opacity: 0.8; 
+          }
         }
       }
     }
@@ -272,13 +287,13 @@ h2 {
       .phrase {
         font-size: 3.5rem;
         margin-bottom: 0.7rem;
-        color: rgb(229, 228, 228);
+        color: rgb(219, 217, 217);
       }
 
       .explanation {
         font-size: 1rem;
         margin-bottom: 2rem;
-        line-height: 1.5rem; 
+        line-height: 1.5rem;
       }
 
       .bookBtn {
@@ -291,136 +306,247 @@ h2 {
   }
 }
 
+
 //Search scss
 .search {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   width: 90%;
-  margin: 0 auto; 
+  margin: 0 auto;
   margin-top: 550px;
 
   .title {
     margin-bottom: 50px;
-    font-size: 3rem; 
+    font-size: 3rem;
     font-weight: 600;
-    text-align: center; 
+    text-align: center;
   }
-  
+
   .titleContainer {
     display: flex;
-    width: 100%;
+    width: 102%;
   }
 
   .searchTitle {
     flex: 1;
-    max-width: 25%;
+    max-width: 26.5%;
     background-color: var(--grayBg);
     border-radius: 25px 25px 0 0;
-    padding: 20px; 
-    color: var(--blackColor); 
+    padding: 20px;
+    color: var(--blackColor);
     font-size: 1.5rem;
   }
 
   .blank {
     flex: 3;
-    max-width: 75%; 
+    max-width: 75%;
     background-color: var(--grayText);
     border-radius: 25px 25px 0 0;
-    padding: 20px; 
+    padding: 20px;
   }
 
   .sectionContainer {
-    flex-direction: column; 
+    flex-direction: column;
     display: flex;
-    flex-direction: row; 
-    width: 100%;
+    flex-direction: row;
+    width: 102%;
     background-color: var(--grayBg);
     border-radius: 0 0 25px 25px;
     padding: 10px;
     height: 300px;
-    align-items: center; /* Center align the content */
+    align-items: flex-start;
+    /* Center align the content */
   }
 
-  .leftSide{
-    flex-direction: column; 
-  }
 
   .country {
     display: flex;
-    flex-direction: column; 
-    gap: 30px; 
-    width: 25%; 
-    align-items: center; 
+    flex-direction: column;
+    gap: 30px;
+    width: 25%;
+    align-items: center;
     margin: 0;
-  }
 
-  .departure, .destination {
-    width: 100%;
-    border-radius: 5px;
-    align-items: center;
-    margin-bottom: 15px; 
-    border: px solid black;
-    font-size: 15px;
-    margin-top: 80px;
-    margin-left: 8px;
-  }
-  .destination {
-    margin-top: 15px;
-    margin-bottom: 0; 
-  }
+    .leftSide {
+      display: flex;
+      flex-direction: column;
 
-  .dropdown {
-    width: 90%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--grayText);
-    font-size: 1rem;
-  }
+      .departure,
+      .destination {
+        width: 100%;
+        border-radius: 5px;
+        align-items: center;
+        margin-bottom: 15px;
+        border: px solid black;
+        font-size: 15px;
+        margin-top: 27px;
+        margin-left: 8px;
+      }
 
-  .iconDiv {
-    display: flex;
-    align-items: center;
-    justify-content: center; 
+      .destination {
+        margin-top: 15px;
+        margin-bottom: 0;
+      }
+
+      .dropdown {
+        width: 90%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid var(--grayText);
+        font-size: 1rem;
+      }
+
+      .iconDiv {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .barcode {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 160px;
+        width: 95%;
+        margin: 0 auto;
+        font-size: 3rem;
+        margin-bottom: 5px;
+        margin-right: 11px;
+      }
+
+    }
   }
 
   .verticalLine {
-    border-left: 3.5px dashed var(--blackColor); 
+    margin-top: 25px;
+    border-left: 3.5px dashed var(--blackColor);
     height: 240px;
-    margin-left: -5px; 
+    margin-left: 10px;
   }
 
-  .barcode {
+  .rightSide {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 160px;
-    width: 95%; 
-    margin: 0 auto; 
-    font-size: 3rem;
-    margin-bottom: 5px;
-    margin-right: 11px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 70%;
+    margin-left: 20px;
+    margin-top: 3%;
+    margin-left: 30px;
+    gap: 80px;
+    position: relative;
   }
+
+  .topInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
+
+    select#tripType {
+      width: 150px;
+      padding: 5px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+    }
+
+    label {
+      white-space: nowrap; // Added to prevent label wrapping
+    }
+
+    .date-group {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="date"] {
+      width: 150px;
+      padding: 5px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+    }
+  }
+
+  .bottonInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    justify-content: flex-start;
+
+    .adult,
+    .child {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    label {
+      white-space: nowrap;
+    }
+
+
+    select#adults,
+    select#children {
+      width: 80px;
+      padding: 5px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+      border: 1px solid var(--grayText);
+    }
+
+    select#travelClass {
+      width: 130px;
+      padding: 5px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+      border: 1px solid var(--grayText);
+    }
+  }
+
+  .searchBtn {
+    padding: 1rem 2.3rem;
+    background: var(--primaryColor);
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--whiteColor);
+    position: absolute;
+    right: 0;
+    margin-top: 186px;
+    margin-right: 16px;
+  }
+
 }
 
 
 //Book scss
 .bookPage {
   h1 {
-    margin-top: 90px; 
+    margin-top: 90px;
   }
 
-  p, h1 {
+  p,
+  h1 {
     margin-left: 20px;
   }
 }
 
+
 .aboutUsPage {
   h1 {
-    margin-top: 90px; 
+    margin-top: 90px;
   }
 
-  p, h1 {
+  p,
+  h1 {
     margin-left: 20px;
   }
 }
@@ -429,16 +555,15 @@ h2 {
 //support scss
 .support {
   margin: 0 auto;
-  margin-bottom: -2000px;
-  margin-top: 600px;
 
   .sectionContainer {
-    display: flex; 
+    display: flex;
     flex-direction: column;
     align-items: center;
 
     .titlesDiv {
       text-align: center;
+
       small {
         letter-spacing: .8rem;
         text-transform: uppercase;
@@ -459,7 +584,7 @@ h2 {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-        width: 60%; 
+        width: 60%;
 
         .singleInfo {
           .number {
@@ -476,6 +601,7 @@ h2 {
           .colorOne {
             background: var(--colorOne);
           }
+
           .colorTwo {
             background: var(--colorTwo);
           }
@@ -483,7 +609,7 @@ h2 {
       }
 
       .imgDiv {
-        width: 40%; 
+        width: 40%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -501,28 +627,29 @@ h2 {
 
 
 //lounge scss 
-.lounge{
-  margin: 0 auto; 
+.lounge {
+  margin: 10 auto;
 
-  .sectionContainer{
+  .sectionContainer {
     display: flex;
     gap: 1.5rem;
 
-    .imgDiv{
+    .imgDiv {
       margin: auto;
-      display: flex; 
+      display: flex;
       gap: 1.5rem;
-      width: 20%
-      img{
+
+      width: 20% img {
         width: 40%;
         max-width: 300px;
       }
     }
 
-    .textDiv{
+    .textDiv {
       width: 140%;
       margin-right: 100px;
       margin-left: -50px;
+
       .grids {
         margin-top: 1rem;
         gap: 1.5rem;
@@ -542,11 +669,11 @@ h2 {
 
 //Footer scss
 .footer {
-  margin: 0 auto; 
+  margin: 0 auto;
   padding: 50px 0;
   background: var(--textColor);
   margin-top: 70px;
-  
+
   .sectionContainer {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -554,20 +681,20 @@ h2 {
     margin-top: -30px;
 
     .gridOne {
-       display: flex;
-       flex-direction: column;
-       gap: 1rem;
-       justify-content: center;
-       margin: auto;
-       margin-right: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: center;
+      margin: auto;
+      margin-right: 50px;
 
-       .logoDiv {
+      .logoDiv {
         .Logo {
           width: 10%;
         }
-       }
+      }
 
-       .socialIcon {
+      .socialIcon {
         margin-top: 1rem;
         gap: 1rem;
 
@@ -588,18 +715,18 @@ h2 {
             color: var(--whiteColor);
           }
         }
-       }
+      }
     }
 
     .footerLinks {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      
+
       .linkTitle {
         color: var(--grayBg);
         font-weight: 500;
-        display: block; 
+        display: block;
         padding-bottom: 1rem;
       }
 
