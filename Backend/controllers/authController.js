@@ -1,9 +1,9 @@
 const express = require('express');
-const User = require('./models/user');
+const User = require('../models/user');
 const router = express.Router;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { Op, where } = require('sequelize');
+const { Op } = require('sequelize');
 
 exports.login = async (req, res) => {
     const { password, email } = req.body;

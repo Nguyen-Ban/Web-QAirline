@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const sequelize = require('./config/sequelize');
-const User = require('./models/user');
 
 const app = express();
 
@@ -12,12 +11,11 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 5000;
 
+const authRoutes = require('./routes/authRoute');
+const userRoutes = require('./routes/userRoute');
 
-
-app.get('/', (req, res) => {
-  const { email, password } = req.body;
-  console.log({ email, password});
-})
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 sequelize.sync().then(() => {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
