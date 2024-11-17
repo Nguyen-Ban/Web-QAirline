@@ -1,0 +1,21 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+}
+
+.header .title {
+  display: flex;
+}
+
+.header .title h1 {
+  color: var(--main-text);
+  font-weight: 600;
+}
+
+.header label {
+  display: inline-block;
+  color: var(--color-main);
+  margin-right: 2rem;
+  font-size: 1.8rem;
+}

@@ -1,0 +1,61 @@
+/* Container for the Add Aircraft Form */
+
+/* Form Labels */
+.add-aircraft-form label {
+  font-weight: bold;
+  color: #4b5876;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Text Input and Select Styling */
+.add-aircraft-form input[type="text"],
+.add-aircraft-form input[type="number"],
+.add-aircraft-form select {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #4b5876;
+}
+
+/* Seat Configuration Inline Labels */
+.add-aircraft-form .seat-config label {
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-weight: normal;
+}
+
+/* Seat Configuration Inputs */
+.add-aircraft-form .seat-config-options input[type="number"] {
+  width: 60px;
+  display: inline-block;
+  padding: 0.5rem;
+  margin-right: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.add-aircraft-form .seat-config-options {
+  display: flex;
+  gap: 15px;
+}
+
+/* Submit Button */
+.add-aircraft-form input[type="submit"] {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #28a745; /* Green */
+  color: #fff;
+}
+
+.add-aircraft-form input[type="submit"]:hover {
+  background-color: #218838;
+}
