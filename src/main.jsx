@@ -9,6 +9,7 @@ import FlightManagement from "./pages/flightManagement/FlightManagement.jsx";
 import ScheduleFlight from "./pages/scheduleFlight/ScheduleFlight.jsx";
 import PostManagement from "./pages/postManagement/PostManagement.jsx";
 import AddPost from "./pages/addPost/AddPost.jsx";
+import PassengerList from "./pages/passengerList/passengerList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Dashboard />,
+      },
+      {
+        path: "/post-management",
+        element: <PostManagement />,
+      },
+      {
+        path: "/add-post",
+        element: <AddPost />,
       },
       {
         path: "/aircraft-management",
@@ -36,12 +45,8 @@ const router = createBrowserRouter([
         element: <ScheduleFlight />,
       },
       {
-        path: "/post-management",
-        element: <PostManagement />,
-      },
-      {
-        path: "/add-post",
-        element: <AddPost />,
+        path: "/passenger-list",
+        element: <PassengerList />,
       },
     ],
   },

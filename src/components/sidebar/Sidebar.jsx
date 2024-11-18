@@ -71,12 +71,14 @@ const Sidebar = () => {
               </li>
             </NavLink>
 
-            <li>
-              <span className="passenger-icon">
-                <FaPersonWalkingLuggage />
-              </span>
-              <span>Passenger Lists</span>
-            </li>
+            <NavLink to="/passenger-list">
+              <li>
+                <span className="passenger-icon">
+                  <FaPersonWalkingLuggage />
+                </span>
+                <span>Passenger Lists</span>
+              </li>
+            </NavLink>
           </ul>
         </div>
       </div>
