@@ -10,8 +10,8 @@ const PassengerTable = () => {
             <th>Name</th>
             <th>Day of Birth</th>
             <th>Gender</th>
-            <th>Booking</th>
-            <th>Phone Number</th>
+            <th>Flight</th>
+            <th>Contact</th>
           </tr>
         </thead>
 
