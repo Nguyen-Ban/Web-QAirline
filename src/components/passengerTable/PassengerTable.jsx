@@ -1,6 +1,17 @@
+import { useEffect, useState } from "react";
 import "./passengerTable.css";
+import { fetchPassengersAPI } from "../../services/api.service";
 
 const PassengerTable = () => {
+  const [passengerData, setPassengerData] = useState([]);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+  const loadData = async () => {
+    const res = await fetchPassengersAPI();
+    setPassengerData(res.data);
+  };
   return (
     <div className="passenger-table">
       <table>
@@ -16,32 +27,18 @@ const PassengerTable = () => {
         </thead>
 
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mr.Darshan Bhasme</td>
-            <td>2003-09-28</td>
-            <td>Male</td>
-            <td>VN972: Mumbai to Hanoi</td>
-            <td>7774012809</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Miss.Aara Galkwad</td>
-            <td>2002-11-10</td>
-            <td>Female</td>
-
-            <td>VN972: Mumbai to Hanoi</td>
-            <td>9021817579</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Mr.Sanat Pillai</td>
-            <td>2004-11-14</td>
-            <td>Male</td>
-
-            <td>VN972: Mumbai to Hanoi</td>
-            <td>7547546729</td>
-          </tr>
+          {passengerData.map((item, index) => {
+            return (
+              <tr className="passenger-item">
+                <td>{index + 1}</td>
+                <td>{item.name}</td>
+                <td>{item.dob}</td>
+                <td>{item.gender}</td>
+                <td>{item.flight}</td>
+                <td>{item.contact}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

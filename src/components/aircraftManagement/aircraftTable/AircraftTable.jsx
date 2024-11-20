@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
 import "./aircraftTable.css";
+import { useEffect, useState } from "react";
+import { fetchPlanesAPI } from "../../../services/api.service";
 
 const AircraftTable = () => {
+  const [aircraftData, setAircraftData] = useState([]);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    const res = await fetchPlanesAPI();
+    setAircraftData(res.data);
+  };
   return (
     <div className="aircraft-table">
       <table>
@@ -19,81 +31,19 @@ const AircraftTable = () => {
         </thead>
 
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>QAL007</td>
-            <td>Airbus A380-800</td>
-            <td>Airbus</td>
-            <td>3</td>
-            <td>76</td>
-            <td>429</td>
-            <td>
-              <Link to="/add-aircraft">
-                <div>Edit</div>
-              </Link>
-              <Link to="/add-aircraft">
-                <div>Schedule</div>
-              </Link>
-              <Link>
-                <div>Remove</div>
-              </Link>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>QAL024</td>
-            <td>Airbus A380-800</td>
-            <td>Airbus</td>
-            <td>3</td>
-            <td>76</td>
-            <td>429</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>QAL007</td>
-            <td>Boeing 747-8</td>
-            <td>Boeing</td>
-            <td>6</td>
-            <td>80</td>
-            <td>244</td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>QAL007</td>
-            <td>Boeing 777-300ER</td>
-            <td>Boeing</td>
-            <td>8</td>
-            <td>42</td>
-            <td>304</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>QAL007</td>
-            <td>Embraer E195-E2 </td>
-            <td>Embraer</td>
-            <td>0</td>
-            <td>12</td>
-            <td>124</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>QAL007</td>
-            <td>Airbus A321</td>
-            <td>Airbus</td>
-            <td>0</td>
-            <td>16</td>
-            <td>180</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>QAL007</td>
-            <td>Boeing 787-9</td>
-            <td>Boeing</td>
-            <td>4</td>
-            <td>32</td>
-            <td>220</td>
-          </tr>
+          {aircraftData.map((item, index) => {
+            return (
+              <tr className="aircraft-item">
+                <td>{index + 1}</td>
+                <td>{item.aircraftCode}</td>
+                <td>{item.model}</td>
+                <td>{item.manufacturer}</td>
+                <td>{item.firstClass}</td>
+                <td>{item.businessClass}</td>
+                <td>{item.economyClass}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

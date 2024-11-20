@@ -1,19 +1,19 @@
 import axios from "./axios.customize.js";
 
 const fetchPostsAPI = () => {
-  const URL = "/posts";
+  const URL = "/api/posts";
   return axios.get(URL);
 };
 const fetchPlanesAPI = () => {
-  const URL = "/planes";
+  const URL = "/api/planes";
   return axios.get(URL);
 };
 const fetchFlightsAPI = () => {
-  const URL = "/flights";
+  const URL = "/api/flights";
   return axios.get(URL);
 };
 const fetchPassengersAPI = () => {
-  const URL = "/passengers";
+  const URL = "/api/passengers";
   return axios.get(URL);
 };
 

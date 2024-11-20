@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
 import "./flightTable.css";
+import { fetchFlightsAPI } from "../../services/api.service";
+import { useEffect, useState } from "react";
 
 const FlightTable = () => {
+  const [flightData, setFlightData] = useState([]);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    const res = await fetchFlightsAPI();
+    setFlightData(res.data);
+  };
   return (
     <div className="flight-table">
       <table>
@@ -19,134 +31,20 @@ const FlightTable = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>Scheduled</td>
-            <td>
-              <Link to="/schedule-flight">
-                <div>Edit</div>
-              </Link>
-              <div>Remove</div>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>Arrived</td>
-            <td>
-              <div>Edit</div>
-              <div>Remove</div>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>In Air</td>
-            <td>
-              <div>Edit</div>
-              <div>Remove</div>
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>Delayed</td>
-            <td>
-              <div>Edit</div>
-              <div>Remove</div>
-            </td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>In Air</td>
-            <td>
-              <div>Edit</div>
-              <div>Remove</div>
-            </td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>In Air</td>
-            <td>
-              <div>Edit</div>
-              <div>Remove</div>
-            </td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>In Air</td>
-            <td>
-              <div>Edit</div>
-              <div>Remove</div>
-            </td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>In Air</td>
-            <td>
-              <div>Edit</div>
-              <div>Remove</div>
-            </td>
-          </tr>
-          <tr>
-            <td>9</td>
-            <td>VN972</td>
-            <td>QAL003</td>
-            <td>Mumbai</td>
-            <td>Hanoi</td>
-            <td>2024-05-05 23:46:00</td>
-            <td>2024-05-06 01:45:00</td>
-            <td>In Air</td>
-            <td>
-              <div>Edit</div>
-              <div>Remove</div>
-            </td>
-          </tr>
+          {flightData.map((item, index) => {
+            return (
+              <tr className="flight-item">
+                <td>{index + 1}</td>
+                <td>{item.flightCode}</td>
+                <td>{item.aircraftCode}</td>
+                <td>{item.source}</td>
+                <td>{item.destination}</td>
+                <td>{item.departureTime}</td>
+                <td>{item.arrivalTime}</td>
+                <td>{item.flightStatus}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
