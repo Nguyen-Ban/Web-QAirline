@@ -32,7 +32,7 @@ const Home = () => {
       setCurrentImageIndex((prevIndex) => 
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       );
-    }, 5000); 
+    }, 2700); 
     return () => clearInterval(intervalId);
   }, [images.length]);
 

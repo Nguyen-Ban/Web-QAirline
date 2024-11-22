@@ -34,9 +34,9 @@ const Search = () => {
 
     return (
         <div data-aos='fade-up' data-aos-duration='1500' className="search container section">
-            <div data-aos='fade-up' data-aos-duration='1500' className="title">
+            {/*<div data-aos='fade-up' data-aos-duration='1500' className="title">
                 Find your flights
-            </div>
+            </div>*/}
             <div data-aos='fade-up' data-aos-duration='1500' className="titleContainer">
                 <div className="searchTitle">Search</div>
                 <div className="blank"></div>
