@@ -12,7 +12,8 @@ const PostTable = () => {
 
   const loadData = async () => {
     const res = await fetchPostsAPI();
-    setPostData(res.data);
+    console.log(res);
+    setPostData(res);
   };
   return (
     <div className="post-table">

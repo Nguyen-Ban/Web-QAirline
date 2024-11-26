@@ -12,7 +12,7 @@ const FlightTable = () => {
 
   const loadData = async () => {
     const res = await fetchFlightsAPI();
-    setFlightData(res.data);
+    setFlightData(res);
   };
   return (
     <div className="flight-table">
@@ -21,7 +21,7 @@ const FlightTable = () => {
           <tr>
             <th>#</th>
             <th>Flight Code</th>
-            <th>Aircraft Code</th>
+            <th>Airplane Code</th>
             <th>Source</th>
             <th>Destination</th>
             <th>Departure Time</th>
@@ -36,7 +36,7 @@ const FlightTable = () => {
               <tr className="flight-item">
                 <td>{index + 1}</td>
                 <td>{item.flightCode}</td>
-                <td>{item.aircraftCode}</td>
+                <td>{item.airplaneCode}</td>
                 <td>{item.source}</td>
                 <td>{item.destination}</td>
                 <td>{item.departureTime}</td>

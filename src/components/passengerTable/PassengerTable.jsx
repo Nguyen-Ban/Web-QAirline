@@ -10,7 +10,7 @@ const PassengerTable = () => {
   }, []);
   const loadData = async () => {
     const res = await fetchPassengersAPI();
-    setPassengerData(res.data);
+    setPassengerData(res);
   };
   return (
     <div className="passenger-table">
