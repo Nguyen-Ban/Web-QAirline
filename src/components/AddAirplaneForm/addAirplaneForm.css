@@ -1,7 +1,7 @@
-/* Container for the Add Aircraft Form */
+/* Container for the Add airplane Form */
 
 /* Form Labels */
-.add-aircraft-form label {
+.add-airplane-form label {
   font-weight: bold;
   color: #4b5876;
   display: block;
@@ -9,9 +9,9 @@
 }
 
 /* Text Input and Select Styling */
-.add-aircraft-form input[type="text"],
-.add-aircraft-form input[type="number"],
-.add-aircraft-form select {
+.add-airplane-form input[type="text"],
+.add-airplane-form input[type="number"],
+.add-airplane-form select {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1.5rem;
@@ -22,14 +22,14 @@
 }
 
 /* Seat Configuration Inline Labels */
-.add-aircraft-form .seat-config label {
+.add-airplane-form .seat-config label {
   display: inline-block;
   margin-right: 0.5rem;
   font-weight: normal;
 }
 
 /* Seat Configuration Inputs */
-.add-aircraft-form .seat-config-options input[type="number"] {
+.add-airplane-form .seat-config-options input[type="number"] {
   width: 60px;
   display: inline-block;
   padding: 0.5rem;
@@ -39,13 +39,13 @@
   font-size: 1rem;
 }
 
-.add-aircraft-form .seat-config-options {
+.add-airplane-form .seat-config-options {
   display: flex;
   gap: 15px;
 }
 
 /* Submit Button */
-.add-aircraft-form input[type="submit"] {
+.add-airplane-form input[type="submit"] {
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
@@ -56,6 +56,6 @@
   color: #fff;
 }
 
-.add-aircraft-form input[type="submit"]:hover {
+.add-airplane-form input[type="submit"]:hover {
   background-color: #218838;
 }

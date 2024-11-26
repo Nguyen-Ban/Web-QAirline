@@ -1,12 +1,12 @@
-import "./addAircraftForm.css";
+import "./addAirplaneForm.css";
 
-const AddAircraftForm = () => {
+const AddAirplaneForm = () => {
   return (
-    <div className="add-aircraft-form">
+    <div className="add-airplane-form">
       <form action="">
         <div>
-          <label htmlFor="aircraft-code">Enter Aircraft Code</label>
-          <input type="text" name="aircraft-code" id="aircraft-code" />
+          <label htmlFor="airplane-code">Enter Airplane Code</label>
+          <input type="text" name="airplane-code" id="airplane-code" />
         </div>
         <div>
           <label htmlFor="select-manufacturer">Select Manufacturer</label>
@@ -48,4 +48,4 @@ const AddAircraftForm = () => {
   );
 };
 
-export default AddAircraftForm;
+export default AddAirplaneForm;

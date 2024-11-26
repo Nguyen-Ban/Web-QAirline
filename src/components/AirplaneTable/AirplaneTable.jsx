@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import "./aircraftTable.css";
+import "./airplaneTable.css";
 import { useEffect, useState } from "react";
-import { fetchPlanesAPI } from "../../../services/api.service";
+import { fetchPlanesAPI } from "../../services/api.service";
 
-const AircraftTable = () => {
-  const [aircraftData, setAircraftData] = useState([]);
+const AirplaneTable = () => {
+  const [airplaneData, setAirplaneData] = useState([]);
 
   useEffect(() => {
     loadData();
@@ -12,15 +12,15 @@ const AircraftTable = () => {
 
   const loadData = async () => {
     const res = await fetchPlanesAPI();
-    setAircraftData(res.data);
+    setAirplaneData(res.data);
   };
   return (
-    <div className="aircraft-table">
+    <div className="airplane-table">
       <table>
         <thead>
           <tr>
             <th>#</th>
-            <th>Aircraft Code</th>
+            <th>Airplane Code</th>
             <th>Model</th>
             <th>Manufacturer</th>
             <th>First Class</th>
@@ -31,11 +31,11 @@ const AircraftTable = () => {
         </thead>
 
         <tbody>
-          {aircraftData.map((item, index) => {
+          {airplaneData.map((item, index) => {
             return (
-              <tr className="aircraft-item">
+              <tr className="airplane-item">
                 <td>{index + 1}</td>
-                <td>{item.aircraftCode}</td>
+                <td>{item.airplaneCode}</td>
                 <td>{item.model}</td>
                 <td>{item.manufacturer}</td>
                 <td>{item.firstClass}</td>
@@ -50,4 +50,4 @@ const AircraftTable = () => {
   );
 };
 
-export default AircraftTable;
+export default AirplaneTable;

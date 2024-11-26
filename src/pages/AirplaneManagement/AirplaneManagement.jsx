@@ -1,27 +1,27 @@
 import { Link } from "react-router-dom";
-import AircraftTable from "../../components/aircraftManagement/aircraftTable/AircraftTable";
-import "./aircraftManagement.css";
+import AirplaneTable from "../../components/AirplaneTable/AirplaneTable";
+import "./airplaneManagement.css";
 import { IoAdd } from "react-icons/io5";
 
-const AircraftManagement = () => {
+const AirplaneManagement = () => {
   return (
-    <div className="aircraft-management">
+    <div className="airplane-management">
       <div className="head-section">
-        Aircraft Details
-        <Link to="/add-aircraft">
+        Airplane Details
+        <Link to="/add-airplane">
           <div className="action">
             <button className="btn btn-main">
               <span>
                 <IoAdd />
               </span>
-              Add Aircraft
+              Add Airplane
             </button>
           </div>
         </Link>
       </div>
-      <AircraftTable />
+      <AirplaneTable />
     </div>
   );
 };
 
-export default AircraftManagement;
+export default AirplaneManagement;

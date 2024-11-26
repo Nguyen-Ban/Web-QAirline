@@ -1,5 +1,3 @@
-import Chart from "../../components/chart/Chart";
-import Widget from "../../components/widget/Widget";
 import { IoIosMenu } from "react-icons/io";
 import { IoAdd } from "react-icons/io5";
 

@@ -1,4 +1,4 @@
-import AddPostForm from "../../components/addPostForm/AddPostForm";
+import AddPostForm from "../../components/AddPostForm/AddPostForm";
 import "./addPost.css";
 
 const AddPost = () => {

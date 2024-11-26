@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { IoAdd } from "react-icons/io5";
 
-import PostTable from "../../components/postTable/PostTable";
+import PostTable from "../../components/PostTable/PostTable";
 import "./postManagement.css";
 
 const PostManagement = () => {

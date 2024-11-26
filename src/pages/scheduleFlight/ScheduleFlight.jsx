@@ -1,4 +1,4 @@
-import ScheduleFlightForm from "../../components/scheduleFlightForm/ScheduleFlightForm";
+import ScheduleFlightForm from "../../components/ScheduleFlightForm/ScheduleFlightForm";
 import "./scheduleFlight.css";
 
 const ScheduleFlight = () => {

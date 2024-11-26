@@ -2,9 +2,9 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Dashboard from "./pages/dashboard/Dashboard.jsx";
-import AircraftManagement from "./pages/aircraftManagement/AircraftManagement.jsx";
-import AddAircraft from "./pages/addAircraft/AddAircraft.jsx";
+import Dashboard from "./pages/Dashboard/Dashboard.jsx";
+import AirplaneManagement from "./pages/AirplaneManagement/AirplaneManagement.jsx";
+import AddAirplane from "./pages/addAirplane/AddAirplane.jsx";
 import FlightManagement from "./pages/flightManagement/FlightManagement.jsx";
 import ScheduleFlight from "./pages/scheduleFlight/ScheduleFlight.jsx";
 import PostManagement from "./pages/postManagement/PostManagement.jsx";
@@ -29,12 +29,12 @@ const router = createBrowserRouter([
         element: <AddPost />,
       },
       {
-        path: "/aircraft-management",
-        element: <AircraftManagement />,
+        path: "/airplane-management",
+        element: <AirplaneManagement />,
       },
       {
-        path: "/add-aircraft",
-        element: <AddAircraft />,
+        path: "/add-airplane",
+        element: <AddAirplane />,
       },
       {
         path: "/flight-management",

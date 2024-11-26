@@ -54,12 +54,12 @@ const Sidebar = () => {
               </li>
             </NavLink>
 
-            <NavLink to="/aircraft-management">
+            <NavLink to="/airplane-management">
               <li>
                 <span className="aircraft-icon">
                   <FaPlane />
                 </span>
-                <span>Aircraft Management</span>
+                <span>Airplane Management</span>
               </li>
             </NavLink>
             <NavLink to="/flight-management">

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import FlightTable from "../../components/flightTable/FlightTable";
+import FlightTable from "../../components/FlightTable/FlightTable";
 import "./flightManagement.css";
 import { IoAdd } from "react-icons/io5";
 

@@ -1,4 +1,4 @@
-import PassengerTable from "../../components/passengerTable/PassengerTable";
+import PassengerTable from "../../components/PassengerTable/PassengerTable";
 import "./passengerList.css";
 
 const PassengerList = () => {
