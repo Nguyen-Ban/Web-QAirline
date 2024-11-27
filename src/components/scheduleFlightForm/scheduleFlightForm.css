@@ -22,7 +22,8 @@
 }
 
 /* Submit Button */
-.schedule-flight-form input[type="submit"] {
+.schedule-flight-form .submit {
+  display: inline-block;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
@@ -33,6 +34,6 @@
   color: #fff;
 }
 
-.schedule-flight-form input[type="submit"]:hover {
+.schedule-flight-form .submit:hover {
   background-color: #218838;
 }

@@ -12,6 +12,17 @@ const fetchPostsAPI = async () => {
   return res;
 };
 
+const createPostAPI = async ({ title, category, description, detail }) => {
+  const URL = "api/posts";
+  const data = {
+    title,
+    category,
+    description,
+    detail,
+  };
+  return axios.post(URL, data);
+};
+
 const fetchAirplanesAPI = async () => {
   const URL = "/api/airplanes";
   const response = await axios.get(URL);
@@ -22,6 +33,22 @@ const fetchAirplanesAPI = async () => {
     capacity: item.capacity,
   }));
   return res;
+};
+
+const createAirplaneAPI = async ({
+  airplaneCode,
+  model,
+  manufacturer,
+  capacity,
+}) => {
+  const URL = "api/airplanes";
+  const data = {
+    airplaneCode,
+    model,
+    manufacturer,
+    capacity,
+  };
+  return axios.post(URL, data);
 };
 
 const fetchFlightsAPI = async () => {
@@ -39,6 +66,26 @@ const fetchFlightsAPI = async () => {
   return res;
 };
 
+const createFlightAPI = async ({
+  flightCode,
+  airplaneCode,
+  source,
+  destination,
+  departureTime,
+  arrivalTime,
+}) => {
+  const URL = "api/flights";
+  const data = {
+    flightCode,
+    airplaneCode,
+    source,
+    destination,
+    departureTime,
+    arrivalTime,
+  };
+  return axios.post(URL, data);
+};
+
 const fetchPassengersAPI = async () => {
   const URL = "/api/passengers";
   const response = await axios.get(URL);
@@ -52,9 +99,25 @@ const fetchPassengersAPI = async () => {
   return res;
 };
 
+const createPassengerAPI = async ({ name, dob, gender, flight, contact }) => {
+  const URL = "api/passengers";
+  const data = {
+    name,
+    dob,
+    gender,
+    flight,
+    contact,
+  };
+  return axios.post(URL, data);
+};
+
 export {
   fetchPostsAPI,
   fetchAirplanesAPI,
   fetchFlightsAPI,
   fetchPassengersAPI,
+  createPostAPI,
+  createAirplaneAPI,
+  createFlightAPI,
+  createPassengerAPI,
 };

@@ -23,7 +23,8 @@
   box-shadow: 0 0 4px rgba(57, 106, 255, 0.2);
 }
 
-.add-post-form input[type="submit"] {
+.add-post-form .action div {
+  display: inline-block;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
