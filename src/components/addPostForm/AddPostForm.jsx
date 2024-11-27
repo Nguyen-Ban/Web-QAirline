@@ -17,7 +17,7 @@ const AddPostForm = () => {
       description,
       detail,
     });
-    setNotification("Post Created Successfully");
+    if (res) setNotification("Post Created Successfully");
   };
 
   return (

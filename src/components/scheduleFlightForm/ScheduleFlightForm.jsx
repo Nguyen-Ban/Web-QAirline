@@ -20,7 +20,7 @@ const ScheduleFlightForm = () => {
       departureTime,
       arrivalTime,
     });
-    setNotification("Schedule Flight Successfully");
+    if (res) setNotification("Schedule Flight Successfully");
   };
   return (
     <div className="schedule-flight-form">
