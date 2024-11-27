@@ -1,14 +1,33 @@
 //import React, {useState} from 'react'
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../main.scss';
 
 import logo from '../../assets/logo.png'
 
 const Navbar = () => {
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 0) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     return (
         <div className="main">
             <div className="navBarWrapper">
-                <div className="navBar flex">
+                <div className={`navBar flex ${isScrolled ? 'scrolled' : ''}`}>
                     <div className="logoDiv">
                         <img src={logo} className="Logo"/>
                     </div>
@@ -22,7 +41,7 @@ const Navbar = () => {
                     </div>
 
                     <button className="btn flex">
-                        Log in
+                        <Link to="/login">Log in</Link>
                     </button>
                 </div>
             </div>

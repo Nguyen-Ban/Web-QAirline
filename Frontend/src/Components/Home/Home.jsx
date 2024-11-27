@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import '../../main.scss';
 
-import homeImage from '../../assets//homeImage/homeImage.png'
+import homeImage from '../../assets/homeImage/homeImage.png'
 import homeImage2 from '../../assets/homeImage/homeImage2.jpg'
 import homeImage3 from '../../assets/homeImage/homeImage3.jpg'
 import homeImage4 from '../../assets/homeImage/homeImage4.jpg'

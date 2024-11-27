@@ -404,10 +404,10 @@ const Baggage = () => {
                 return renderSpecialBaggageContent();
             case 'restricted':
                 return renderRestrictedItem();
-            case 'delayed':
+            /*case 'delayed':
                 return <div>Delayed Baggage Content</div>;
             case 'damaged':
-                return <div>Damaged Baggage Content</div>;
+                return <div>Damaged Baggage Content</div>;*/
             default:
                 return null;
         }
@@ -435,7 +435,7 @@ const Baggage = () => {
                     >
                         Restricted Items
                     </li>
-                    <li
+                    {/*<li
                         className={selectedSection === 'delayed' ? 'active' : ''}
                         onClick={() => setSelectedSection('delayed')}
                     >
@@ -446,7 +446,7 @@ const Baggage = () => {
                         onClick={() => setSelectedSection('damaged')}
                     >
                         Damaged Baggage
-                    </li>
+                    </li>*/}
                 </ul>
             </div>
             <div className="main-content">

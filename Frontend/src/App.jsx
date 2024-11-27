@@ -18,6 +18,7 @@ import FlightMeal from './Components/Footer/FlightMeal';
 import OtherService from './Components/Footer/OtherService';
 import TripAtGlance from './Components/Footer/TripAtGlance';
 import Baggage from './Components/Footer/Baggage';
+import Login from './Components/Login/Login';
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="/other-service" element={<OtherService />} />
             <Route path="/trip-glance" element={<TripAtGlance />} />
             <Route path="/baggage" element={<Baggage />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </main>
         <Footer />
