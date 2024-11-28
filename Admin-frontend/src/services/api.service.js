@@ -28,25 +28,31 @@ const fetchAirplanesAPI = async () => {
   const response = await axios.get(URL);
   const res = response.data.map((item) => ({
     airplaneCode: item.airplaneCode,
-    model: item.model,
     manufacturer: item.manufacturer,
-    capacity: item.capacity,
+    model: item.model,
+    first: item.first,
+    business: item.business,
+    economy: item.economy,
   }));
   return res;
 };
 
 const createAirplaneAPI = async ({
   airplaneCode,
-  model,
   manufacturer,
-  capacity,
+  model,
+  first,
+  business,
+  economy,
 }) => {
   const URL = "api/airplanes";
   const data = {
     airplaneCode,
-    model,
     manufacturer,
-    capacity,
+    model,
+    first,
+    business,
+    economy,
   };
   return axios.post(URL, data);
 };

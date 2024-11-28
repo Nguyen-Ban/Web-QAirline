@@ -45,10 +45,10 @@ const AddPostForm = () => {
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value=""></option>
-            <option value="introduction">Introduction</option>
-            <option value="promotion">Promotion</option>
-            <option value="announcement">Announcement</option>
-            <option value="news">News</option>
+            <option value="Introduction">Introduction</option>
+            <option value="Promotion">Promotion</option>
+            <option value="Announcement">Announcement</option>
+            <option value="News">News</option>
           </select>
         </div>
         <div>

@@ -20,6 +20,7 @@ const ScheduleFlightForm = () => {
       departureTime,
       arrivalTime,
     });
+    console.log(res);
     if (res) setNotification("Schedule Flight Successfully");
   };
   return (
@@ -58,9 +59,9 @@ const ScheduleFlightForm = () => {
             onChange={(e) => setSource(e.target.value)}
           >
             <option value=""></option>
-            <option value="hanoi">Hanoi</option>
-            <option value="hcmCity">Ho Chi Minh City</option>
-            <option value="mumbai">Mumbai</option>
+            <option value="Hanoi">Hanoi</option>
+            <option value="Ho Chi Minh City">Ho Chi Minh City</option>
+            <option value="Mumbai">Mumbai</option>
           </select>
         </div>
         <div>
@@ -72,9 +73,9 @@ const ScheduleFlightForm = () => {
             onChange={(e) => setDestination(e.target.value)}
           >
             <option value=""></option>
-            <option value="phuQuoc">Phu Quoc</option>
-            <option value="daNang">Da Nang</option>
-            <option value="london">London</option>
+            <option value="Phu Quoc">Phu Quoc</option>
+            <option value="Da Nang">Da Nang</option>
+            <option value="London">London</option>
           </select>
         </div>
         <div>

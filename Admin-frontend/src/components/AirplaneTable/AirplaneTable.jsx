@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import "./airplaneTable.css";
 import { useEffect, useState } from "react";
 import { fetchAirplanesAPI } from "../../services/api.service";
@@ -23,7 +22,9 @@ const AirplaneTable = () => {
             <th>Airplane Code</th>
             <th>Model</th>
             <th>Manufacturer</th>
-            <th>Capacity</th>
+            <th>First</th>
+            <th>Business</th>
+            <th>Economy</th>
             <th className="action">Action</th>
           </tr>
         </thead>
@@ -36,7 +37,9 @@ const AirplaneTable = () => {
                 <td>{item.airplaneCode}</td>
                 <td>{item.model}</td>
                 <td>{item.manufacturer}</td>
-                <td>{item.capacity}</td>
+                <td>{item.first}</td>
+                <td>{item.business}</td>
+                <td>{item.economy}</td>
               </tr>
             );
           })}

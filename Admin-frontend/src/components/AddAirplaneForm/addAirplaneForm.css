@@ -45,7 +45,8 @@
 }
 
 /* Submit Button */
-.add-airplane-form input[type="submit"] {
+.add-airplane-form .submit {
+  display: inline-block;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
@@ -56,6 +57,6 @@
   color: #fff;
 }
 
-.add-airplane-form input[type="submit"]:hover {
+.add-airplane-form .submit:hover {
   background-color: #218838;
 }
