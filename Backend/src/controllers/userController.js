@@ -12,6 +12,16 @@ exports.getFlights = async (req, res) => {
     }
 };
 
+exports.getPlanes = async (req, res) => {
+    try {
+      const planes = await Plane.findAll();
+      res.json(planes);
+    } catch (error) {
+      console.error("Error fetching planes:", error);
+      res.status(400).json({ error: error.message });
+    }
+  };
+
 // Khách hàng - Tìm kiếm chuyến bay
 exports.searchFlights = async (req, res) => {
     const { departure, destination } = req.query;

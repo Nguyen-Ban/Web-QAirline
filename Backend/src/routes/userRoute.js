@@ -4,6 +4,7 @@ const userController = require('../controllers/userController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Routes cho khách hàng
+router.get('/planes', userController.getFlights);
 router.get('/flights', userController.getFlights);
 router.get('/flights/search', userController.searchFlights);
 router.post('/reservations', authMiddleware.verifyToken, userController.bookTicket);

@@ -17,7 +17,8 @@ const Plane = sequelize.define('Plane', {
     },
     seatCapacity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: 'seat_capacity',
     }
 }, {
     timestamps: true,
