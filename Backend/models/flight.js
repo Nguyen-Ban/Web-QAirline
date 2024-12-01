@@ -43,9 +43,11 @@ const Flight = sequelize.define('Flight', {
             key: 'id'
         },
         field: 'plane_id'
-    }
+    },
 }, {
     timestamps: true,
+    createdAt: 'created_at',  
+    updatedAt: 'updated_at',
     tableName: 'Flights'
 });
 

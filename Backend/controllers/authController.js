@@ -18,9 +18,9 @@ exports.login = async (req, res) => {
             }
         });
 
-        if(user && (await bcrypt.compare(password, user.password))) {
-            const token = jwt.sign({ id: user.id, role: user.role }, 'secretkey', { expiresIn: '1h'});
-            res.json({ message: "Login successful", token});
+        if (user && (await bcrypt.compare(password, user.password))) {
+            const token = jwt.sign({ id: user.id, role: user.role }, 'secretkey', { expiresIn: '1h' });
+            res.json({ message: "Login successful", token });
         } else {
             res.status(401).json({ error: "Invalid credentials" });
         }
@@ -51,6 +51,17 @@ exports.register = async (req, res) => {
 
         const user = await User.create({ username, password: hashedPassword, email, role });
         res.status(201).json(user);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.getCurrentUser = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.userId, {
+            attributes: ['id', 'username', 'email', 'role']
+        });
+        res.json(user);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

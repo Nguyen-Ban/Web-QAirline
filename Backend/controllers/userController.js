@@ -1,6 +1,7 @@
 const Flight = require('../models/flight');
 const Reservation = require('../models/reservation');
 const Plane = require('../models/plane');
+const { Op } = require('sequelize');  //추가함
 
 // Khách hàng - Xem tất cả chuyến bay
 exports.getFlights = async (req, res) => {
@@ -12,18 +13,33 @@ exports.getFlights = async (req, res) => {
     }
 };
 
+
+//수정함
 // Khách hàng - Tìm kiếm chuyến bay
 exports.searchFlights = async (req, res) => {
-    const { departure, destination } = req.query;
+    const { departure, destination, date } = req.query;
+    
     try {
-        const flights = await Flight.findAll({
-            where: { departure, destination }
-        });
-        res.json(flights);
+      const whereCondition = {};
+      
+      if (departure) whereCondition.departure = departure;
+      if (destination) whereCondition.destination = destination;
+      // Optional date filtering
+      if (date) {
+        whereCondition.departureTime = {
+          [Op.between]: [
+            new Date(date),
+            new Date(new Date(date).setHours(23, 59, 59))
+          ]
+        };
+      }
+  
+      const flights = await Flight.findAll({ where: whereCondition });
+      res.json(flights);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     }
-};
+  };
 
 // Khách hàng - Đặt vé
 exports.bookTicket = async (req, res) => {

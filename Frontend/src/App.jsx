@@ -18,7 +18,9 @@ import FlightMeal from './Components/Footer/FlightMeal';
 import OtherService from './Components/Footer/OtherService';
 import TripAtGlance from './Components/Footer/TripAtGlance';
 import Baggage from './Components/Footer/Baggage';
-import Login from './Components/Login/Login';
+import Login from './Components/Auth/Login';
+import Register from './Components/Auth/Register';
+import FlightSearch from './Components/Flights/FlightSearch';
 
 const App = () => {
   return (
@@ -47,6 +49,8 @@ const App = () => {
             <Route path="/trip-glance" element={<TripAtGlance />} />
             <Route path="/baggage" element={<Baggage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/search-flights" element={<FlightSearch />} />
           </Routes>
         </main>
         <Footer />
