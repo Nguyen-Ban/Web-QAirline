@@ -26,12 +26,54 @@ exports.getPlanes = async (req, res) => {
 exports.searchFlights = async (req, res) => {
     const { departure, destination } = req.query;
     try {
+        if (!departure || !destination) {
+            return res.status(400).json({ error: 'Departure and destination are required' });
+        }
+
         const flights = await Flight.findAll({
-            where: { departure, destination }
+            where: { departure, destination },
+            include: [
+                {
+                    model: Plane,
+                    attributes: ['model', 'manufacturer', 'seatCapacity'],
+                },
+                {
+                    model: flightPrice,
+                    attributes: ['class', 'price'],
+                },
+            ],
+            attributes: [
+                'id',
+                'flight_number',
+                'departure',
+                'destination',
+                'departure_time',
+                'arrival_time',
+                'status',
+            ]
         });
-        res.json(flights);
+
+        if (flights.length === 0) {
+            return res.status(404).json({ error: 'No flights found' });
+        }
+
+        const formattedFlights = flights.map((flight) => ({
+            id: flight.id,
+            flightNumber: flight.flight_number,
+            departure: flight.departure,
+            destination: flight.destination,
+            departureTime: flight.departure_time,
+            arrivalTime: flight.arrival_time,
+            status: flight.status,
+            plane: flight.Plane,
+            prices: flight.FlightPrices,
+        }));
+
+
+        res.json(formattedFlights);
     } catch (error) {
         res.status(400).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
     }
 };
 

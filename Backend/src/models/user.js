@@ -25,6 +25,16 @@ const User = sequelize.define('User', {
         type: DataTypes.ENUM('customer', 'admin'),
         allowNull: false,
         defaultValue: 'customer'
+    },
+    createAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        field: 'created_at'
+    },
+    updateAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        field: 'updated_at'
     }
 }, {
     timestamps: true,
