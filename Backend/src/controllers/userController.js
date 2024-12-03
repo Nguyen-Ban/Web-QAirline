@@ -164,8 +164,48 @@ exports.getPlanes = async (req, res) => {
 // Quản trị viên - Đăng thông tin máy bay
 exports.createPlane = async (req, res) => {
     try {
-        const plane = await Plane.create(req.body);
+        const { planeCode, model, manufacturer, seatCapacity } = req.body;
+        const plane = await Plane.create({
+            id: planeCode,
+            model,
+            manufacturer,
+            seatCapacity
+        });
         res.status(201).json(plane);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.updatePlane = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { model, manufacturer, seatCapacity } = req.body;
+        const [update] = await Plane.update({
+            model,
+            manufacturer,
+            seatCapacity
+        }, { where: { id } });
+        if (update) {
+            const updatedPlane = await Plane.findByPk(id);
+            res.json({ message: 'Plane updated', updatedPlane });
+        } else {
+            res.status(404).json({ error: 'Plane not found' });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.deletePlane = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleted = await Plane.destroy({ where: { id } });
+        if (deleted) {
+            res.json({ message: 'Plane deleted' });
+        } else {
+            res.status(404).json({ error: 'Plane not found' });
+        }
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
