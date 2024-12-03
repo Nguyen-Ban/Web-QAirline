@@ -3,6 +3,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 //import { useNavigate } from 'react-router-dom';
 
+import plane from '../../assets/login_plane.jpg'
+
 const propTypesShape = {
     formData: PropTypes.shape({
         termsAccepted: PropTypes.bool.isRequired,
@@ -169,50 +171,57 @@ function MemberInfoStep({ formData, setFormData, errors, onSubmit }) {
                 e.preventDefault();
                 onSubmit();
             }}>
-                <div className="form-group">
-                    <label>Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleInputChange}
-                    />
-                    {errors.username && <p className="error">{errors.username}</p>}
-                </div>
+                <div className="register-container">
+                    <div className="image-container">
+                        <img src={plane} className="Plane" />
+                    </div>
 
-                <div className="form-group">
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                    />
-                    {errors.email && <p className="error">{errors.email}</p>}
-                </div>
+                    <div className="form-container">
+                        <div className="form-group">
+                            <label>Username</label>
+                            <input
+                                type="text"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleInputChange}
+                            />
+                            {errors.username && <p className="error">{errors.username}</p>}
+                        </div>
 
-                <div className="form-group">
-                    <label>Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                    />
-                    {errors.password && <p className="error">{errors.password}</p>}
-                </div>
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                            />
+                            {errors.email && <p className="error">{errors.email}</p>}
+                        </div>
 
-                <div className="form-group">
-                    <label>Confirm Password</label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleInputChange}
-                    />
-                    {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
-                </div>
+                        <div className="form-group">
+                            <label>Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleInputChange}
+                            />
+                            {errors.password && <p className="error">{errors.password}</p>}
+                        </div>
 
+                        <div className="form-group">
+                            <label>Confirm Password</label>
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleInputChange}
+                            />
+                            {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+                        </div>
+                    </div>
+                </div>
                 <div className="step-navigation">
                     <button type="submit">Complete Registration</button>
                 </div>
