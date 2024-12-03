@@ -14,6 +14,8 @@ router.get('/reservations', authMiddleware.verifyToken, userController.getReserv
 // Routes cho quản trị viên
 router.post('/planes', authMiddleware.verifyAdmin, userController.createPlane);
 router.post('/flights', authMiddleware.verifyAdmin, userController.createFlight);
+router.put('/flights/:id', authMiddleware.verifyAdmin, userController.updateFlight);
+router.delete('/flights/:id', authMiddleware.verifyAdmin, userController.deleteFlight);
 router.get('/admin/flights', authMiddleware.verifyAdmin, userController.getFlightsStats);
 router.put('/flights/:id/delay', authMiddleware.verifyAdmin, userController.delayFlight);
 
