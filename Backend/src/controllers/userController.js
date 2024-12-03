@@ -1,6 +1,8 @@
 const Flight = require('../models/flight');
 const Reservation = require('../models/reservation');
 const Plane = require('../models/plane');
+const flightPrice = require('../models/flightPrice');
+const Post = require('../models/post');
 
 // Khách hàng - Xem tất cả chuyến bay
 exports.getFlights = async (req, res) => {
@@ -240,6 +242,66 @@ exports.getReservations = async (req, res) => {
     try {
         const reservations = await Reservation.findAll({ where: { userId: req.userId } });
         res.json(reservations);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Quản trị viên - Xem bài viết
+exports.getPosts = async (req, res) => {
+    try {
+        const posts = await Post.findAll();
+        res.json(posts);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.createPost = async (req, res) => {
+    try {
+        const { title, category, description, detail } = req.body;
+        const post = await Post.create({
+            title,
+            category,
+            description,
+            detail
+        });
+        res.status(201).json(post);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.updatePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, category, description, detail } = req.body;
+        const [update] = await Post.update({
+            title,
+            category,
+            description,
+            detail
+        }, { where: { postId: id } });
+        if (update) {
+            const updatedPost = await Post.findByPk(id);
+            res.json({ message: 'Post updated', updatedPost });
+        } else {
+            res.status(404).json({ error: 'Post not found' });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+exports.deletePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleted = await Post.destroy({ where: { postId: id } });
+        if (deleted) {
+            res.json({ message: 'Post deleted' });
+        } else {
+            res.status(404).json({ error: 'Post not found' });
+        }
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

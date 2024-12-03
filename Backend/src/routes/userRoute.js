@@ -15,10 +15,16 @@ router.get('/reservations', authMiddleware.verifyToken, userController.getReserv
 router.post('/planes', authMiddleware.verifyAdmin, userController.createPlane);
 router.put('/planes/:id', authMiddleware.verifyAdmin, userController.updatePlane);
 router.delete('/planes/:id', authMiddleware.verifyAdmin, userController.deletePlane);
+
 router.post('/flights', authMiddleware.verifyAdmin, userController.createFlight);
 router.put('/flights/:id', authMiddleware.verifyAdmin, userController.updateFlight);
 router.delete('/flights/:id', authMiddleware.verifyAdmin, userController.deleteFlight);
 router.get('/admin/flights', authMiddleware.verifyAdmin, userController.getFlightsStats);
 router.put('/flights/:id/delay', authMiddleware.verifyAdmin, userController.delayFlight);
+
+router.put('/posts/:id', authMiddleware.verifyAdmin, userController.updatePost);
+router.get('/posts', userController.getPosts);
+router.post('/posts', authMiddleware.verifyAdmin, userController.createPost);
+router.delete('/posts/:id', authMiddleware.verifyAdmin, userController.deletePost);
 
 module.exports = router;
