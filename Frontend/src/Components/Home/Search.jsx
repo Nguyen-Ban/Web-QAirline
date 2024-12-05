@@ -7,6 +7,7 @@ import barcode from '../../assets/barcode.png'
 import adult from '../../assets/adult.png'
 import child from '../../assets/child.png'
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import Aos from 'aos'
 import 'aos/dist/aos.css'
@@ -41,7 +42,7 @@ const Search = () => {
                 <div className="searchTitle">Search</div>
                 <div className="blank"></div>
             </div>
-            <div  className="sectionContainer grid">
+            <div className="sectionContainer grid">
                 <div className="country">
                     <div className="leftSide">
                         <div className="departure">
@@ -112,7 +113,7 @@ const Search = () => {
 
                     <div className="bottonInfo">
                         <div className="selectGroup">
-                            
+
                         </div>
                         <img src={adult} className="adult" />
                         <label htmlFor="adults">Adults:</label>
@@ -154,7 +155,10 @@ const Search = () => {
                             <option value="first-class">First Class</option>
                         </select>
                     </div>
-                    <button className="searchBtn">Search</button>
+                    <button className="searchBtn">
+                        <Link to="/search-flights" style={{ color: 'white' }}>Search</Link>
+                    </button>
+
                 </div>
             </div>
         </div>

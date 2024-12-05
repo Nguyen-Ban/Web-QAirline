@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { MdFlightTakeoff } from "react-icons/md";
+import { FaUser, FaArrowRight } from "react-icons/fa";
+import { IoSearchSharp } from "react-icons/io5";
+import { PiSeatFill } from "react-icons/pi";
 import { IoMdSwap } from "react-icons/io";
-import { FaArrowRight } from "react-icons/fa6";
 
 const FlightSearch = () => {
     // State management
@@ -12,19 +15,24 @@ const FlightSearch = () => {
         destination: '',
         tripType: 'oneway',
         departureDate: '',
-        returnDate: ''
+        returnDate: '',
+        adults: 1,
+        children: 0,
+        travelClass: 'Economy'
     });
-    const [sortOption, setSortOption] = useState('departure_asc');
+
+    const [sortOption, setSortOption] = useState('cheapest');
     const [uniqueDepartures, setUniqueDepartures] = useState([]);
     const [uniqueDestinations, setUniqueDestinations] = useState([]);
     const [searchError, setSearchError] = useState('');
+    const [isPassengerDropdownOpen, setIsPassengerDropdownOpen] = useState(false);
 
     // Initial data load
     useEffect(() => {
         const fetchFlights = async () => {
             try {
                 const response = await axios.get('http://localhost:4000/api/users/flights');
-                
+
                 if (response.data && response.data.length > 0) {
                     // Set all flights
                     setFlights(response.data);
@@ -39,12 +47,29 @@ const FlightSearch = () => {
                 }
             } catch (error) {
                 console.error('Error fetching flights:', error);
-                // Log the error, but don't set an error message
             }
         };
 
         fetchFlights();
     }, []);
+
+    // Passenger count adjustment
+    const adjustPassengerCount = (type, increment) => {
+        setSearchParams(prev => {
+            const currentCount = prev[type];
+            const maxCount = type === 'adults' ? 10 : 5;
+
+            // Calculate new count
+            const newCount = increment
+                ? Math.min(currentCount + 1, maxCount)
+                : Math.max(currentCount - 1, 0);
+
+            return {
+                ...prev,
+                [type]: newCount
+            };
+        });
+    };
 
     // Search parameter change handler
     const handleSearchParamChange = (e) => {
@@ -80,6 +105,7 @@ const FlightSearch = () => {
                 departure: searchParams.departure,
                 destination: searchParams.destination,
                 tripType: searchParams.tripType,
+                travelClass: searchParams.travelClass,
                 ...(searchParams.departureDate && { departureDate: searchParams.departureDate }),
                 ...(searchParams.tripType === 'roundtrip' && searchParams.returnDate && { returnDate: searchParams.returnDate })
             };
@@ -105,25 +131,36 @@ const FlightSearch = () => {
     };
 
     // Sort option change handler
-    const handleSortChange = (e) => {
-        setSortOption(e.target.value);
-    };
+    // const handleSortChange = (e) => {
+    //     setSortOption(e.target.value);
+    // };
 
     // Sort flights
     const sortFlights = (flightsToSort) => {
         return flightsToSort.sort((a, b) => {
             switch (sortOption) {
-                case 'departure_asc':
+                case 'cheapest': {
+                    // Find the price for the selected travel class
+                    const getPriceForClass = (flight) => {
+                        const priceObj = flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase());
+                        return priceObj ? priceObj.price : Infinity;
+                    };
+                    return getPriceForClass(a) - getPriceForClass(b);
+                }
+                case 'departure': {
                     return new Date(a.departureTime) - new Date(b.departureTime);
-                case 'departure_desc':
-                    return new Date(b.departureTime) - new Date(a.departureTime);
-                case 'duration_asc': {
+                }
+                case 'arrival': {
+                    return new Date(a.arrivalTime) - new Date(b.arrivalTime);
+                }
+                case 'duration': {
                     const aDuration = new Date(a.arrivalTime) - new Date(a.departureTime);
                     const bDuration = new Date(b.arrivalTime) - new Date(b.departureTime);
                     return aDuration - bDuration;
                 }
-                default:
+                default: {
                     return 0;
+                }
             }
         });
     };
@@ -137,14 +174,107 @@ const FlightSearch = () => {
         <div className="flight-search-container">
             <div className="search-section">
                 <div className="search-inputs">
-                    <div className="departure-destination-wrapper">
+                    <div className="first-row">
+                        {/* Trip Type Dropdown */}
+                        <div className="trip-type-dropdown">
+                            <MdFlightTakeoff />
+                            <select
+                                name="tripType"
+                                value={searchParams.tripType}
+                                onChange={handleSearchParamChange}
+                            >
+                                <option value="oneway">One Way</option>
+                                <option value="roundtrip">Round Trip</option>
+                            </select>
+                        </div>
+
+                        {/* Passenger Dropdown */}
+                        <div
+                            className="passenger-dropdown"
+                            onClick={() => setIsPassengerDropdownOpen(!isPassengerDropdownOpen)}
+                        >
+                            <FaUser />
+                            <span>
+                                {searchParams.adults} Adult, {searchParams.children} Child
+                            </span>
+                            {isPassengerDropdownOpen && (
+                                <div className="passenger-selector">
+                                    <div className="passenger-type">
+                                        <span>Adult</span>
+                                        <div className="counter">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    adjustPassengerCount('adults', false);
+                                                }}
+                                                disabled={searchParams.adults <= 1}
+                                            >
+                                                -
+                                            </button>
+                                            <span>{searchParams.adults}</span>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    adjustPassengerCount('adults', true);
+                                                }}
+                                                disabled={searchParams.adults >= 10}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="passenger-type">
+                                        <span>Child</span>
+                                        <div className="counter">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    adjustPassengerCount('children', false);
+                                                }}
+                                                disabled={searchParams.children <= 0}
+                                            >
+                                                -
+                                            </button>
+                                            <span>{searchParams.children}</span>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    adjustPassengerCount('children', true);
+                                                }}
+                                                disabled={searchParams.children >= 5}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Travel Class Dropdown */}
+                        <div className="class-dropdown">
+                            <PiSeatFill />
+                            <select
+                                name="travelClass"
+                                value={searchParams.travelClass}
+                                onChange={handleSearchParamChange}
+                            >
+                                <option value="Economy">Economy</option>
+                                <option value="Business">Business</option>
+                                <option value="First">First</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="second-row">
+                        {/* Departure and Destination Selects */}
                         <select
                             name="departure"
                             value={searchParams.departure}
                             onChange={handleSearchParamChange}
-                            className="departure-select"
+                            
                         >
-                            <option value="">Select Departure</option>
+                            <option value="">From</option>
                             {uniqueDepartures.map(departure => (
                                 <option key={departure} value={departure}>{departure}</option>
                             ))}
@@ -158,108 +288,137 @@ const FlightSearch = () => {
                             name="destination"
                             value={searchParams.destination}
                             onChange={handleSearchParamChange}
-                            className="destination-select"
                         >
-                            <option value="">Select Destination</option>
+                            <option value="">To</option>
                             {uniqueDestinations.map(destination => (
                                 <option key={destination} value={destination}>{destination}</option>
                             ))}
                         </select>
+
                     </div>
-
-                    <select
-                        name="tripType"
-                        value={searchParams.tripType}
-                        onChange={handleSearchParamChange}
-                        className="trip-type-select"
-                    >
-                        <option value="oneway">One Way</option>
-                        <option value="roundtrip">Round Trip</option>
-                    </select>
-
+                    {/* Date Inputs */}
                     <input
-                        type="date"
-                        name="departureDate"
-                        value={searchParams.departureDate}
-                        onChange={handleSearchParamChange}
-                        className="departure-date"
-                    />
-
-                    {searchParams.tripType === 'roundtrip' && (
-                        <input
                             type="date"
-                            name="returnDate"
-                            value={searchParams.returnDate}
+                            name="departureDate"
+                            value={searchParams.departureDate}
                             onChange={handleSearchParamChange}
-                            className="return-date"
+                            placeholder="Departure Date"
+                            className="date-input"
                         />
-                    )}
+
+                        {searchParams.tripType === 'roundtrip' && (
+                            <input
+                                type="date"
+                                name="returnDate"
+                                value={searchParams.returnDate}
+                                onChange={handleSearchParamChange}
+                                placeholder="Return Date"
+                                className="date-input"
+                            />
+                        )}
+
+                    {/* Search Button */}
+                    <button onClick={searchFlights} className="search-btn">
+                        <IoSearchSharp />
+                        Search
+                    </button>
 
                     {searchError && (
                         <div className="search-error-message">
                             {searchError}
                         </div>
                     )}
-
-                    <button onClick={searchFlights} className="search-button">Search</button>
-                </div>
-
-                <div className="sort-section">
-                    <p className="sort-by">Sort by: </p>
-                    <select
-                        value={sortOption}
-                        onChange={handleSortChange}
-                        className="sort-select"
-                    >
-                        <option value="departure_asc">Earliest Departure</option>
-                        <option value="departure_desc">Latest Departure</option>
-                        <option value="duration_asc">Shortest Flight Duration</option>
-                    </select>
                 </div>
             </div>
 
+            {/* Sort Options */}
+            <div className="sort-options">
+                <button
+                    onClick={() => setSortOption('cheapest')}
+                    className={sortOption === 'cheapest' ? 'active' : ''}
+                    aria-label="Sort by cheapest"
+                >
+                    Cheapest
+                </button>
+                <button
+                    onClick={() => setSortOption('departure')}
+                    className={sortOption === 'departure' ? 'active' : ''}
+                    aria-label="Sort by departure time"
+                >
+                    Departure Time
+                </button>
+                <button
+                    onClick={() => setSortOption('arrival')}
+                    className={sortOption === 'arrival' ? 'active' : ''}
+                    aria-label="Sort by arrival time"
+                >
+                    Arrival Time
+                </button>
+                <button
+                    onClick={() => setSortOption('duration')}
+                    className={sortOption === 'duration' ? 'active' : ''}
+                    aria-label="Sort by flight duration"
+                >
+                    Flight Duration
+                </button>
+            </div>
+
+
+            {/* Flights Grid */}
             <div className="flights-grid">
-                {displayFlights.map(flight => (
-                    <div key={flight.id} className="flight-card">
-                        <div className="flight-details">
-                            <div className="flight-route">
-                                <span className="departure-city">{flight.departure}</span>
-                                <span className="route-arrow"> <FaArrowRight /></span>
-                                <span className="destination-city">{flight.destination}</span>
-                            </div>
-                            <div className="flight-times">
-                                <div className="departure-time">
-                                    <span>Departure:</span>
-                                    <span>{new Date(flight.departureTime).toLocaleString()}</span>
-                                </div>
-                                <div className="arrival-time">
-                                    <span>Arrival:</span>
-                                    <span>{new Date(flight.arrivalTime).toLocaleString()}</span>
-                                </div>
-                            </div>
-                            <div className="flight-info">
-                                <div className="flight-number">
-                                    <span>Flight Number:</span>
-                                    <span>{flight.flightNumber}</span>
-                                </div>
-                                <div className="flight-status">
-                                    <span>Status:</span>
-                                    <span>{flight.status}</span>
-                                </div>
-                            </div>
-                            {flight.prices && (
-                                <div className="flight-prices">
-                                    {flight.prices.map(price => (
-                                        <div key={price.class}>
-                                            <span>{price.class} Class:</span>
-                                            <span>${price.price}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                {displayFlights.length === 0 ? (
+                    <div className="no-flights-message">
+                        No flights found matching your search criteria.
                     </div>
-                ))}
+                ) : (
+                    displayFlights.map(flight => (
+                        <div key={flight.id} className="flight-card">
+                            <div className="flight-details">
+                                <div className="flight-route-section">
+                                    <div className="flight-route">
+                                        <span className="departure-city">{flight.departure}</span>
+                                        <span className="route-arrow"> <FaArrowRight /></span>
+                                        <span className="destination-city">{flight.destination}</span>
+                                    </div>
+                                    <div className="flight-times">
+                                        <div className="departure-time">
+                                            <span>Departure:</span>
+                                            <span>{flight.departureTime
+                                                ? new Date(flight.departureTime).toLocaleString()
+                                                : 'Not Available'}</span>
+                                        </div>
+                                        <div className="arrival-time">
+                                            <span>Arrival:</span>
+                                            <span>{flight.arrivalTime
+                                                ? new Date(flight.arrivalTime).toLocaleString()
+                                                : 'Not Available'}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flight-info">
+                                        <div className="plane-details">
+                                            <span>Aircraft:</span>
+                                            <span>{/*flight.plane.manufacturer*/} {flight.plane.model}</span>
+                                        </div>
+                                        <div className="seat-capacity">
+                                            <span>Seat Capacity:</span>
+                                            <span>{flight.plane.seatCapacity}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flight-price-section">
+                                    {flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase()) && (
+                                        <div className="selected-class-price">
+                                            <span>{searchParams.travelClass} Class:</span>
+                                            <span>
+                                                ${flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase()).price}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );
