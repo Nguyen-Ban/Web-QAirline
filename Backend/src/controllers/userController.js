@@ -7,8 +7,45 @@ const Post = require('../models/post');
 // Khách hàng - Xem tất cả chuyến bay
 exports.getFlights = async (req, res) => {
     try {
-        const flights = await Flight.findAll();
-        res.json(flights);
+        const flights = await Flight.findAll({
+            include: [
+                {
+                    model: Plane,
+                    attributes: ['model', 'manufacturer', 'seatCapacity'],
+                },
+                {
+                    model: FlightPrice,
+                    attributes: ['class', 'price'],
+                },
+            ],
+            attributes: [
+                'id',
+                'flightNumber',
+                'departure',
+                'destination',
+                'departureTime',
+                'arrivalTime',
+                'status',
+            ]
+        });
+
+        const formattedFlights = flights.map((flight) => ({
+            id: flight.id,
+            flightNumber: flight.flightNumber,
+            departure: flight.departure,
+            destination: flight.destination,
+            departureTime: flight.departureTime,
+            arrivalTime: flight.arrivalTime,
+            status: flight.status,
+            plane: flight.Plane,
+            prices: flight.FlightPrices.map((price) => ({
+                class: price.class,
+                price: price.price,
+                seatCount: price.seatCount,
+            })),
+        }));
+
+        res.json(formattedFlights);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -31,16 +68,16 @@ exports.searchFlights = async (req, res) => {
                 },
                 {
                     model: flightPrice,
-                    attributes: ['class', 'price'],
+                    attributes: ['class', 'price', 'seatCount'],
                 },
             ],
             attributes: [
                 'id',
-                'flight_number',
+                'flightNumber',
                 'departure',
                 'destination',
-                'departure_time',
-                'arrival_time',
+                'departureTime',
+                'arrivalTime',
                 'status',
             ]
         });
@@ -51,14 +88,18 @@ exports.searchFlights = async (req, res) => {
 
         const formattedFlights = flights.map((flight) => ({
             id: flight.id,
-            flightNumber: flight.flight_number,
+            flightNumber: flight.flightNumber,
             departure: flight.departure,
             destination: flight.destination,
-            departureTime: flight.departure_time,
-            arrivalTime: flight.arrival_time,
+            departureTime: flight.departureTime,
+            arrivalTime: flight.arrivalTime,
             status: flight.status,
             plane: flight.Plane,
-            prices: flight.FlightPrices,
+            prices: flight.FlightPrices.map((price) => ({
+                class: price.class,
+                price: price.price,
+                seatCount: price.seatCount,
+            })),
         }));
 
 

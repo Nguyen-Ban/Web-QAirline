@@ -24,6 +24,12 @@ const FlightPrice = sequelize.define('FlightPrice', {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
+  seatCount: { // Thêm cột mới để lưu số lượng ghế
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0, // Giá trị mặc định
+    field: 'seat_count',
+  },
 }, {
   timestamps: false,
   tableName: 'FlightPrices',
