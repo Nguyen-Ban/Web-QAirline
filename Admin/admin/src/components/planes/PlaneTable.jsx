@@ -1,6 +1,6 @@
 import React from "react";
 import DataTable from "../ui/dataTable/DataTable";
-import { fetchPlanesAPI, deletePlaneAPI } from "../../services/api.service"; // Import API cho planes
+import { fetchPlanesAPI } from "../../services/PlaneApi.js"; 
 
 const PlaneTable = () => {
   const columns = [
