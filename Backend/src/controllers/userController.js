@@ -15,7 +15,7 @@ exports.getFlights = async (req, res) => {
                 },
                 {
                     model: FlightPrice,
-                    attributes: ['class', 'price'],
+                    attributes: ['class', 'price', 'seatCount'],
                 },
             ],
             attributes: [
@@ -116,7 +116,7 @@ exports.createFlight = async (req, res) => {
         const { flightCode, planeCode, departure, destination, departureTime, arrivalTime, flightStatus } = req.body;
         const flight = await Flight.create({
             flightNumber: flightCode,
-            planeId: planeCode,
+            planeCode,
             departure,
             destination,
             departureTime,
@@ -162,7 +162,7 @@ exports.updateFlight = async (req, res) => {
         const { flightCode, planeCode, departure, destination, departureTime, arrivalTime, flightStatus } = req.body;
         const [update] = await Flight.update({
             flightNumber: flightCode,
-            planeId: planeCode,
+            planeCode,
             departure,
             destination,
             departureTime,
@@ -209,7 +209,7 @@ exports.createPlane = async (req, res) => {
     try {
         const { planeCode, model, manufacturer, seatCapacity } = req.body;
         const plane = await Plane.create({
-            id: planeCode,
+            planeCode,
             model,
             manufacturer,
             seatCapacity
