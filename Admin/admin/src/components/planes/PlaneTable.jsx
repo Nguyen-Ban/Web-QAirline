@@ -1,6 +1,6 @@
 import React from "react";
 import DataTable from "../ui/dataTable/DataTable";
-import { fetchPlanesAPI } from "../../services/PlaneApi.js"; 
+import { fetchPlanesAPI } from "../../services/PlaneApi.js";
 
 const PlaneTable = () => {
   const columns = [
@@ -15,8 +15,6 @@ const PlaneTable = () => {
     <DataTable
       columns={columns}
       fetchData={fetchPlanesAPI} // Gọi API lấy dữ liệu máy bay
-      onDelete={deletePlaneAPI} // Gọi API xóa máy bay
-      editUrl="/edit-plane" // Đường dẫn sửa máy bay
     />
   );
 };

@@ -10,14 +10,7 @@ const PostTable = () => {
     { header: "Description", field: "description" },
   ];
 
-  return (
-    <DataTable
-      columns={columns}
-      fetchData={fetchPostsAPI}
-      onDelete={deletePostAPI}
-      editUrl="/edit-post"
-    />
-  );
+  return <DataTable columns={columns} fetchData={fetchPostsAPI} />;
 };
 
 export default PostTable;
