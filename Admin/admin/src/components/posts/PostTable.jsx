@@ -1,6 +1,6 @@
 import React from "react";
 import DataTable from "../ui/dataTable/DataTable";
-import { fetchPostsAPI, deletePostAPI } from "../../services/api.service";
+import { fetchPostsAPI } from "../../services/PostApi.js";
 
 const PostTable = () => {
   const columns = [
