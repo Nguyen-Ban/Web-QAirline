@@ -44,6 +44,12 @@ const Flight = sequelize.define('Flight', {
         },
         field: 'plane_id'
     },
+    seatCount: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.getDataValue('seatCount') || 0;
+        }
+    }
 }, {
     timestamps: true,
     createdAt: 'created_at',  

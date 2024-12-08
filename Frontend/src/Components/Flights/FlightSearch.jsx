@@ -165,6 +165,25 @@ const FlightSearch = () => {
         });
     };
 
+    // Flights rendering logic modification
+    const calculateTotalPrice = (flight) => {
+        const priceEntry = flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase());
+        if (!priceEntry) return 0;
+
+        // Calculate price for adults
+        const adultPrice = priceEntry.price * searchParams.adults;
+
+        // Calculate price for children (70% of adult price)
+        const childPrice = priceEntry.price * 0.7 * searchParams.children;
+
+        return adultPrice + childPrice;
+    };
+
+    const getAvailableSeatCount = (flight) => {
+        const seatCountEntry = flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase());
+        return seatCountEntry ? seatCountEntry.seatCount : 0;
+    };
+
     // Determine flights to render (pre-/post-search)
     const displayFlights = filteredFlights.length > 0
         ? sortFlights(filteredFlights)
@@ -272,7 +291,7 @@ const FlightSearch = () => {
                             name="departure"
                             value={searchParams.departure}
                             onChange={handleSearchParamChange}
-                            
+
                         >
                             <option value="">From</option>
                             {uniqueDepartures.map(departure => (
@@ -298,24 +317,24 @@ const FlightSearch = () => {
                     </div>
                     {/* Date Inputs */}
                     <input
+                        type="date"
+                        name="departureDate"
+                        value={searchParams.departureDate}
+                        onChange={handleSearchParamChange}
+                        placeholder="Departure Date"
+                        className="date-input"
+                    />
+
+                    {searchParams.tripType === 'roundtrip' && (
+                        <input
                             type="date"
-                            name="departureDate"
-                            value={searchParams.departureDate}
+                            name="returnDate"
+                            value={searchParams.returnDate}
                             onChange={handleSearchParamChange}
-                            placeholder="Departure Date"
+                            placeholder="Return Date"
                             className="date-input"
                         />
-
-                        {searchParams.tripType === 'roundtrip' && (
-                            <input
-                                type="date"
-                                name="returnDate"
-                                value={searchParams.returnDate}
-                                onChange={handleSearchParamChange}
-                                placeholder="Return Date"
-                                className="date-input"
-                            />
-                        )}
+                    )}
 
                     {/* Search Button */}
                     <button onClick={searchFlights} className="search-btn">
@@ -399,9 +418,9 @@ const FlightSearch = () => {
                                             <span>Aircraft:</span>
                                             <span>{/*flight.plane.manufacturer*/} {flight.plane.model}</span>
                                         </div>
-                                        <div className="seat-capacity">
-                                            <span>Seat Capacity:</span>
-                                            <span>{flight.plane.seatCapacity}</span>
+                                        <div className="seat-count">
+                                            <span>Available {searchParams.travelClass} Seats: </span>
+                                            <span>{getAvailableSeatCount(flight)}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -409,9 +428,9 @@ const FlightSearch = () => {
                                     {flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase()) && (
                                         <div className="selected-class-price">
                                             <span>{searchParams.travelClass} Class:</span>
-                                            <span>
-                                                ${flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase()).price}
-                                            </span>
+                                            <div>
+                                                <span>Total Price: ${calculateTotalPrice(flight).toFixed(2)}</span>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

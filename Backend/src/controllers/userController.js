@@ -16,7 +16,7 @@ exports.getFlights = async (req, res) => {
                 },
                 {
                     model: FlightPrice,
-                    attributes: ['class', 'price'],
+                    attributes: ['class', 'price', 'seatCount'],
                 },
             ],
             attributes: [
