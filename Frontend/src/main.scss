@@ -439,36 +439,43 @@ h2 {
   .titleContainer {
     display: flex;
     width: 102%;
+
+    .searchTitle,
+    .statusTitle {
+      flex: 1;
+      max-width: 50%;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background-color: var(--grayText);
+      color: white;
+      border-radius: 25px 25px 0 0;
+      padding: 20px;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.active {
+        background-color: var(--grayBg);
+        color: var(--blackColor);
+
+        opacity: 1;
+      }
+    }
   }
 
-  .searchTitle {
-    flex: 1;
-    max-width: 26.5%;
-    background-color: var(--grayBg);
-    border-radius: 25px 25px 0 0;
-    padding: 20px;
-    color: var(--blackColor);
-    font-size: 1.5rem;
-  }
-
-  .blank {
-    flex: 3;
-    max-width: 75%;
-    background-color: var(--grayText);
-    border-radius: 25px 25px 0 0;
-    padding: 20px;
-  }
 
   .sectionContainer {
     flex-direction: column;
     display: flex;
     flex-direction: row;
     width: 102%;
-    background-color: var(--grayBg);
+    background-color: white;
     border-radius: 0 0 25px 25px;
     padding: 10px;
     height: 300px;
     align-items: flex-start;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
   }
 
 
@@ -508,12 +515,15 @@ h2 {
         border: 1px solid var(--grayText);
         font-size: 1rem;
         border: none;
+        text-align: center;
+        align-items: center;
       }
 
       .iconDiv {
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 10px;
       }
 
       .barcode {
@@ -644,7 +654,52 @@ h2 {
     margin-right: 16px;
   }
 
+  .statusSearchContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 100px;
+    align-items: flex-start;
+    padding: 27px;
+
+    .statusInputGroup {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 30px;
+
+      label {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+
+      input {
+        width: 110%;
+        padding: 5px;
+        border: none;
+        border-bottom: 1.8px solid var(--grayText);
+        text-align: center;
+        font-size: 1.4rem;
+      }
+    }
+
+    .statusSearchBtn {
+      padding: 1rem 2.3rem;
+      background: var(--primaryColor);
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--whiteColor);
+      position: absolute;
+      right: 35px;
+      margin-top: 196px;
+      margin-right: 16px;
+      font-size: 14px;
+   }
+  }
 }
+
 
 //Book scss
 .bookPage {
@@ -1151,6 +1206,32 @@ h2 {
   margin-top: 100px;
   margin-right: 100px;
 
+  .categoryFilter {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    button {
+      padding: 8px 15px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #eef6fc;
+      }
+
+      &.active {
+        background-color: #cce7ff;
+        font-weight: bold;
+        border-color: #007bff;
+      }
+    }
+  }
+
   .noticeTitle {
     text-align: center;
     margin-bottom: 30px;
@@ -1184,6 +1265,12 @@ h2 {
       font-size: 1.5rem;
     }
 
+    .noticeCategory {
+      color: #666;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
     p {
       line-height: 2;
     }
@@ -1193,7 +1280,6 @@ h2 {
     }
   }
 
-  /* 날짜 스타일: 오른쪽 상단 */
   .noticeDate {
     margin-top: 10px;
     align-self: flex-end;
@@ -1201,19 +1287,16 @@ h2 {
     font-size: 0.9rem;
   }
 
-  /* 300자 제한과 줄바꿈 처리 */
-  .noticeItem p {
+  .noticeItem p:not(.noticeCategory) {
     overflow-wrap: break-word;
     white-space: normal;
     max-height: 4.5em;
-    /* 줄바꿈 제한 (3줄) */
     overflow: hidden;
     margin-right: 40px;
     margin-left: 20px;
     margin-bottom: 5px;
   }
 
-  /* 제목과 내용 간 공간 조정 */
   .noticeItem h3 {
     margin-bottom: 20px;
     margin-left: 10px;
@@ -1227,12 +1310,18 @@ h2 {
     background: #f9f9f9;
 
     h2 {
-      margin-bottom: 30px; // Notice Content 1과 본문 간 간격
+      margin-bottom: 30px;
+    }
+
+    .noticeCategory {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 1rem;
     }
 
     p {
-      line-height: 1.8; // 본문 줄 간 간격
-      margin-bottom: 15px; // 각 문단 간 간격
+      line-height: 1.8;
+      margin-bottom: 15px;
     }
 
     .noticeDate {
@@ -1240,59 +1329,44 @@ h2 {
     }
   }
 
-  .noticeDetail h2 {
-    margin-bottom: 20px;
-    /* 제목과 내용 간 간격 */
-  }
-
-  .noticeDetail p {
-    margin-bottom: 10px;
-    overflow-wrap: break-word;
-    white-space: normal;
-    max-height: 4.5em;
-    line-height: 1.8
-  }
-
-  /* 'Back to List' 버튼 스타일 */
   .noticeDetail button {
     padding: 10px 15px;
     background-color: white;
     color: var(--textColor);
-    border-color: 1px solid var(--textColor);
+    border: 1px solid var(--textColor);
     border-radius: 7px;
     cursor: pointer;
     margin-top: 15px;
   }
 
-  /* 페이지네이션 */
   .pagination {
     display: flex;
     justify-content: center;
     margin-top: 20px;
     gap: 5px;
-  }
 
-  .pagination button {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    background: #fff;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
+    button {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
 
-  .pagination button:hover {
-    background: #eef6fc;
-  }
+      &:hover {
+        background: #eef6fc;
+      }
 
-  .pagination button.active {
-    background: #cce7ff;
-    font-weight: bold;
-  }
+      &.active {
+        background: #cce7ff;
+        font-weight: bold;
+      }
 
-  .pagination button:disabled {
-    background: #f1f1f1;
-    cursor: not-allowed;
+      &:disabled {
+        background: #f1f1f1;
+        cursor: not-allowed;
+      }
+    }
   }
 }
 
@@ -2818,6 +2892,8 @@ h2 {
   }
 }
 
+
+
 //profile on login
 .profile-container {
   position: relative;
@@ -3245,6 +3321,106 @@ h2 {
       width: 100%;
       left: 0;
       right: 0;
+    }
+  }
+}
+
+//Status scss
+.status {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 60px;
+
+  .titleContainer {
+    display: flex;
+    width: 102%;
+    background-color: var(--grayBg);
+    border-radius: 25px 25px 0 0;
+    padding: 36px;
+    color: var(--blackColor);
+    font-size: 2rem;
+    align-items: center; 
+    justify-content: center;
+    font-weight: 600;
+  }
+
+  .sectionContainer {
+    width: 102%;
+    background-color: white;
+    border-radius: 0 0 25px 25px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
+  }
+
+  .statusSearchInfoContainer {
+    margin-bottom: 20px;
+    background-color: var(--grayBg);
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 30px;
+
+    .flightSearchInfo {
+      display: flex;
+      gap: 20px;
+
+      .infoItem {
+        flex: 1;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .flightResultsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .flightCard {
+      border: 1px solid var(--grayText);
+      border-radius: 10px;
+      padding: 55px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .flightHeader {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        .flightNumber {
+          font-weight: bold;
+          font-size: 1.4rem;
+          margin-bottom: 25px;
+        }
+
+        .flightStatus {
+          text-transform: capitalize;
+          color: var(--primaryColor);
+          font-weight: 600;
+          font-size: 1.9rem;
+          margin-bottom: 30px;
+        }
+      }
+
+      .flightRoute {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        font-size: 1.3rem;
+        font-weight: 550;
+      }
+
+      .flightTimes {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+      }
     }
   }
 }

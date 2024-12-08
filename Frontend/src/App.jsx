@@ -21,6 +21,7 @@ import Baggage from './Components/Footer/Baggage';
 import Login from './Components/Auth/Login';
 import Register from './Components/Auth/Register';
 import FlightSearch from './Components/Flights/FlightSearch';
+import Status from './Components/Flights/Status';
 
 const App = () => {
   return (
@@ -51,6 +52,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/search-flights" element={<FlightSearch />} />
+            <Route path="/status" element={<Status />} />
           </Routes>
         </main>
         <Footer />

@@ -16,7 +16,7 @@ const Post = sequelize.define('Post', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    decription: {
+    description: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -26,6 +26,8 @@ const Post = sequelize.define('Post', {
     },
 }, {
     timestamps: true,
+    createdAt: 'created_at', 
+    updatedAt: 'updated_at',
     tableName: 'Posts',
 });
 

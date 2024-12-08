@@ -1,35 +1,50 @@
-import  { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Notice = () => {
-  // 임의의 공지 데이터 생성 (30개)
-  const notices = Array.from({ length: 28 }, (_, index) => ({
-    id: index + 1,
-    title: `Notice Title ${index + 1}`,
-    content: `Notice Content ${index + 1} testtesttesttesttesttesttesttesttestvtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestvtesttesttesttesttesttesttesttesttesttestvtesttesttesttestvtesttesttesttesttestvtesttesttesttesttesttesttesttesttesttesttesttestvtesttesttesttesttesttesttest`,
-    date: `2024-11-${String(index % 30 + 1).padStart(2, "0")}`,
-  }));
-
-  // 상태 관리
+  const [notices, setNotices] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedNotice, setSelectedNotice] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const noticesPerPage = 10;
 
-  const noticesPerPage = 10; 
-  const totalPages = Math.ceil(notices.length / noticesPerPage);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/users/posts');
+        setNotices(response.data);
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      }
+    };
 
-  // 현재 페이지에 표시할 공지 목록 계산
-  const currentNotices = notices.slice(
+    fetchPosts();
+  }, []);
+
+  const categories = ['All', ...new Set(notices.map(notice => notice.category))];
+
+  const filteredNotices = selectedCategory === 'All'
+    ? notices
+    : notices.filter(notice => notice.category === selectedCategory);
+
+  const totalPages = Math.ceil(filteredNotices.length / noticesPerPage);
+  
+  const currentNotices = filteredNotices.slice(
     (currentPage - 1) * noticesPerPage,
     currentPage * noticesPerPage
   );
 
-  // 페이지 변경 함수
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    setSelectedNotice(null); // 선택된 공지 초기화
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+    setSelectedNotice(null);
   };
 
-  // 공지 클릭 핸들러
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setSelectedNotice(null);
+  };
+
   const handleNoticeClick = (notice) => {
     setSelectedNotice(notice);
   };
@@ -37,36 +52,50 @@ const Notice = () => {
   return (
     <div className="noticePage">
       <h1 className="noticeTitle">Notices</h1>
+      <br />
       <br/>
+      <div className="categoryFilter">
+        {categories.map(category => (
+          <button
+            key={category}
+            className={selectedCategory === category ? 'active' : ''}
+            onClick={() => handleCategorySelect(category)}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
       <p className="noticeCount">All: ({notices.length})</p>
 
-      {/* 공지 목록 표시 */}
       {selectedNotice ? (
         <div className="noticeDetail">
           <h2>{selectedNotice.title}</h2>
-          <p>{selectedNotice.content}</p>
-          <p className="noticeDate"><strong>Date:</strong> {selectedNotice.date}</p>
+          <p className="noticeCategory">Category: {selectedNotice.category}</p>
+          <p>{selectedNotice.detail}</p>
+          <p className="noticeDate">
+            <strong>Date:</strong> {new Date(selectedNotice.created_at).toLocaleDateString()}
+          </p>
           <button onClick={() => setSelectedNotice(null)}>Back to List</button>
         </div>
       ) : (
         <div className="noticeList">
           {currentNotices.map((notice) => (
             <div
-              key={notice.id}
+              key={notice.postid}
               className="noticeItem"
               onClick={() => handleNoticeClick(notice)}
             >
               <h3>{notice.title}</h3>
-              <p>
-                {notice.content.slice(0, 300)}...   {/* 미리보기 300글자 */}
+              <p className="noticeCategory">{notice.category}</p>
+              <p>{notice.description.slice(0, 300)}...</p>
+              <p className="noticeDate">
+                {new Date(notice.created_at).toLocaleDateString()}
               </p>
-              <p className="noticeDate">{notice.date}</p>
             </div>
           ))}
         </div>
       )}
 
-      {/* 페이지네이션 */}
       <div className="pagination">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
