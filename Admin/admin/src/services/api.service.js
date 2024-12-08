@@ -1,20 +1,5 @@
 import axios from "./axios.customize.js";
 
-const fetchPostsAPI = async () => {
-  const URL = "/api/posts";
-  const response = await axios.get(URL);
-  const data = await response.data;
-  console.log(data);
-  const res = response.data.map((item) => ({
-    id: item.postId,
-    title: item.title,
-    category: item.category,
-    description: item.description,
-    detail: item.detail,
-  }));
-  return res;
-};
-
 const fetchPostByIdAPI = async (id) => {
   const URL = `/api/posts/${id}`;
   const response = await axios.get(URL);
@@ -29,17 +14,6 @@ const fetchPostByIdAPI = async (id) => {
   return res;
 };
 
-const createPostAPI = async ({ title, category, description, detail }) => {
-  const URL = "api/posts";
-  const data = {
-    title,
-    category,
-    description,
-    detail,
-  };
-  return axios.post(URL, data);
-};
-
 const updatePostAPI = async ({ id, title, category, description, detail }) => {
   const URL = `/api/posts/${id}`;
   const data = {
@@ -49,11 +23,6 @@ const updatePostAPI = async ({ id, title, category, description, detail }) => {
     detail,
   };
   return axios.put(URL, data);
-};
-
-const deletePostAPI = async (id) => {
-  const URL = `/api/posts/${id}`;
-  return axios.delete(URL);
 };
 
 const fetchPlanesAPI = async () => {
@@ -184,11 +153,8 @@ const createPassengerAPI = async ({ name, dob, gender, flight, contact }) => {
 };
 
 export {
-  fetchPostsAPI,
   fetchPostByIdAPI,
-  createPostAPI,
   updatePostAPI,
-  deletePostAPI,
   fetchPlanesAPI,
   fetchPlaneByCodeAPI,
   createPlaneAPI,

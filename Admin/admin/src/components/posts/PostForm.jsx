@@ -1,58 +1,48 @@
 import React from "react";
 import GeneralForm from "../ui/generalForm/GeneralForm";
+import { createPostAPI } from "../../services/API/Posts";
+import "./PostForm.css";
 
 const PostForm = () => {
   const formFields = [
     {
       name: "title",
       label: "Title",
-      type: "input",
-      placeholder: "Enter post title",
-      rules: [{ required: true, message: "Title is required" }],
+      type: "text",
+      rules: [{ required: true, message: "Please enter the title!" }],
+      placeholder: "Enter the post title",
     },
     {
       name: "category",
       label: "Category",
       type: "select",
-      placeholder: "Select category",
+      rules: [{ required: true, message: "Please select a category!" }],
+      placeholder: "Select a category",
       options: [
-        { label: "Technology", value: "tech" },
-        { label: "Lifestyle", value: "lifestyle" },
-        { label: "Education", value: "education" },
+        { value: "introduction", label: "Introduction" },
+        { value: "promotion", label: "Promotion" },
+        { value: "notification", label: "Notification" },
+        { value: "news", label: "News" },
       ],
-      rules: [{ required: true, message: "Category is required" }],
     },
     {
-      name: "summary",
-      label: "Summary",
+      name: "description",
+      label: "Description",
       type: "textarea",
-      placeholder: "Enter post summary",
-      rules: [{ required: true, message: "Summary is required" }],
+      rules: [{ required: true, message: "Please enter the description!" }],
+      placeholder: "Write a brief description",
     },
     {
-      name: "content",
-      label: "Content",
-      type: "rich-text", // Sử dụng TinyMCE làm editor
-      rules: [{ required: true, message: "Content is required" }],
-    },
-    {
-      name: "publishDate",
-      label: "Publish Date",
-      type: "datepicker",
-      rules: [{ required: true, message: "Select a publish date" }],
-    },
-    {
-      name: "agree",
-      label: "I confirm all data is accurate",
-      type: "checkbox",
-      rules: [{ required: true, message: "Please agree before submitting" }],
+      name: "detail",
+      label: "Detail",
+      type: "textarea",
+      rules: [{ required: true, message: "Please provide the details!" }],
     },
   ];
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Form Values:", values);
-    const { content } = values;
-    console.log("HTML Content:", content); // Giá trị của nội dung được biên tập
+    const res = await createPostAPI(values);
   };
 
   const onFinishFailed = (errorInfo) => {

@@ -4,7 +4,7 @@ const sequelize = require("../../config/sequelize");
 const Post = sequelize.define(
   "Post",
   {
-    postid: {
+    postId: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,

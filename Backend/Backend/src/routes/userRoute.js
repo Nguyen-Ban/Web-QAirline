@@ -24,33 +24,15 @@ router.get(
 );
 
 // Routes cho quản trị viên
-router.post("/planes", authMiddleware.verifyAdmin, userController.createPlane);
-router.put(
-  "/planes/:id",
-  authMiddleware.verifyAdmin,
-  userController.updatePlane
-);
-router.delete(
-  "/planes/:id",
-  authMiddleware.verifyAdmin,
-  userController.deletePlane
-);
+router.get("/models", userController.getModelsByManufacturer);
 
-router.post(
-  "/flights",
-  authMiddleware.verifyAdmin,
-  userController.createFlight
-);
-router.put(
-  "/flights/:id",
-  authMiddleware.verifyAdmin,
-  userController.updateFlight
-);
-router.delete(
-  "/flights/:id",
-  authMiddleware.verifyAdmin,
-  userController.deleteFlight
-);
+router.post("/planes", userController.createPlane);
+router.put("/planes/:id", userController.updatePlane);
+router.delete("/planes/:id", userController.deletePlane);
+
+router.post("/flights", userController.createFlight);
+router.put("/flights/:id", userController.updateFlight);
+router.delete("/flights/:id", userController.deleteFlight);
 router.get(
   "/admin/flights",
   authMiddleware.verifyAdmin,
@@ -62,13 +44,9 @@ router.put(
   userController.delayFlight
 );
 
-router.put("/posts/:id", authMiddleware.verifyAdmin, userController.updatePost);
+router.put("/posts/:id", userController.updatePost);
 router.get("/posts", userController.getPosts);
-router.post("/posts", authMiddleware.verifyAdmin, userController.createPost);
-router.delete(
-  "/posts/:id",
-  authMiddleware.verifyAdmin,
-  userController.deletePost
-);
+router.post("/posts", userController.createPost);
+router.delete("/posts/:id", userController.deletePost);
 
 module.exports = router;

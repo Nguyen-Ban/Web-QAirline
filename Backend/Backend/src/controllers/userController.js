@@ -4,6 +4,38 @@ const Plane = require("../models/plane");
 const flightPrice = require("../models/flightPrice");
 const Post = require("../models/post");
 
+exports.getModelsByManufacturer = async (req, res) => {
+  const { manufacturer } = req.query;
+
+  if (!manufacturer) {
+    return res.status(400).json({ message: "Manufacturer is required" });
+  }
+
+  try {
+    // Truy vấn các model của nhà sản xuất từ bảng Planes
+    const models = await Plane.findAll({
+      attributes: ["model"], // Chỉ lấy cột model
+      where: {
+        manufacturer: manufacturer, // Lọc theo manufacturer
+      },
+      distinct: true, // Đảm bảo mỗi model chỉ xuất hiện một lần
+      order: [["model", "ASC"]], // Sắp xếp theo model (tùy chọn)
+    });
+
+    if (models.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No models found for the specified manufacturer" });
+    }
+
+    res.json(models); // Trả về danh sách các model
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error fetching models", error: err.message });
+  }
+};
+
 // Khách hàng - Xem tất cả chuyến bay
 exports.getFlights = async (req, res) => {
   try {

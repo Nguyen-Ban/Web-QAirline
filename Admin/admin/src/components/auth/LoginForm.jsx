@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./LoginForm.css";
-import { LoginApi } from "../../services/AuthAPI";
+import { LoginAPI } from "../../services/API/Auth";
 import { message, notification } from "antd";
 import { useState } from "react";
 
@@ -31,7 +31,7 @@ const LoginForm = () => {
       return;
     }
 
-    const res = await LoginApi(email, password);
+    const res = await LoginAPI(email, password);
     console.log(res);
 
     if (res.data) {

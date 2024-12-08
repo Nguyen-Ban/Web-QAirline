@@ -62,3 +62,11 @@ VALUES
     ('New Routes to Europe', 'news', 'We are now flying to more cities in Europe.', 'Details about new routes to Europe.'),
     ('Company Introduction', 'introduction', 'Learn more about our airline company.', 'Introduction details.'),
     ('Important Update on Flight Schedules', 'notification', 'Changes in flight schedules due to weather conditions.', 'Details on the updated schedule.');
+
+
+
+
+-- ('Special Holiday Discounts', 'promotion', 'Don\'t miss out on special holiday discounts for flights!', 'Details about discounted fares during the holiday season.'),
+-- ('New Lounge Openings', 'news', 'We have opened new lounges in key international airports.', 'Explore the amenities available in our new airport lounges.'),
+-- ('Get to Know Our History', 'introduction', 'Discover the journey of our airline over the years.', 'A detailed look at the milestones we\'ve achieved since inception.'),
+-- ('Security Advisory Update', 'notification', 'Important security updates for all passengers.', 'Ensure you are aware of the new security procedures at airports.');

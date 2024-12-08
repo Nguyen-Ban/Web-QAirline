@@ -3,7 +3,6 @@ import App from "./App.jsx";
 import { ThemeProvider } from "./contexts/ThemeContext.jsx";
 import { SidebarProvider } from "./contexts/SidebarContext.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Dashboard } from "./pages/index.js";
 import { StrictMode } from "react";
 import Posts from "./pages/posts/Posts.jsx";
 import Planes from "./pages/planes/Planes.jsx";
@@ -12,6 +11,8 @@ import PostForm from "./components/posts/PostForm.jsx";
 import PlaneForm from "./components/planes/PlaneForm.jsx";
 import Auth from "./pages/auth/Auth.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
+import FlightForm from "./components/flights/FlightForm.jsx";
+import Dashboard from "./pages/dashboard/Dashboard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/flights",
         element: <Flights />,
+      },
+      {
+        path: "/add-flight",
+        element: <FlightForm />,
       },
     ],
   },

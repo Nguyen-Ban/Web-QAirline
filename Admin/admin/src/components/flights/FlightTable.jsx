@@ -1,25 +1,47 @@
 import React from "react";
 import DataTable from "../ui/dataTable/DataTable";
-import { fetchFlightsAPI } from "../../services/api.service"; // Import API cho flights
+import { fetchFlightsAPI, deleteFlightAPI } from "../../services/API/Flights"; // API lấy và xóa dữ liệu chuyến bay
 
 const FlightTable = () => {
   const columns = [
-    { header: "#", field: null, render: (_, __, index) => index + 1 },
-    { header: "Flight Code", field: "flightCode" }, // Cột "Flight Code"
-    { header: "Plane Code", field: "planeCode" }, // Cột "Plane Code"
-    { header: "Departure", field: "departure" }, // Cột "Departure"
-    { header: "Destination", field: "destination" }, // Cột "Destination"
-    { header: "Departure Time", field: "departureTime" }, // Cột "Departure Time"
-    { header: "Arrival Time", field: "arrivalTime" }, // Cột "Arrival Time"
-    { header: "Flight Status", field: "flightStatus" }, // Cột "Flight Status"
+    {
+      title: "Flight Number",
+      dataIndex: "flightNumber",
+      key: "flightNumber", // Mã chuyến bay
+    },
+    {
+      title: "Departure",
+      dataIndex: "departure",
+      key: "departure", // Nơi đi
+    },
+    {
+      title: "Destination",
+      dataIndex: "destination",
+      key: "destination", // Nơi đến
+    },
+    {
+      title: "Departure Time",
+      dataIndex: "departureTime",
+      key: "departureTime", // Thời gian khởi hành
+    },
+    {
+      title: "Arrival Time",
+      dataIndex: "arrivalTime",
+      key: "arrivalTime", // Thời gian đến
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status", // Trạng thái chuyến bay
+    },
   ];
 
   return (
     <DataTable
       columns={columns}
-      fetchData={fetchFlightsAPI} // Gọi API lấy dữ liệu chuyến bay
-      //   onDelete={deleteFlightAPI} // Gọi API xóa chuyến bay
-      editUrl="/edit-flight" // Đường dẫn sửa chuyến bay
+      api={fetchFlightsAPI} // Truyền API lấy dữ liệu chuyến bay
+      onDelete={deleteFlightAPI} // Truyền API xóa chuyến bay
+      editUrl="/flights/edit" // URL chỉnh sửa chuyến bay
     />
   );
 };

@@ -1,20 +1,37 @@
 import React from "react";
 import DataTable from "../ui/dataTable/DataTable";
-import { fetchPlanesAPI } from "../../services/PlaneApi.js";
+import { fetchPlanesAPI, deletePlaneAPI } from "../../services/API/Planes"; // API lấy và xóa dữ liệu máy bay
 
 const PlaneTable = () => {
   const columns = [
-    { header: "#", field: null, render: (_, __, index) => index + 1 },
-    { header: "Plane Code", field: "planeCode" }, // Cột "Plane Code"
-    { header: "Model", field: "model" }, // Cột "Model"
-    { header: "Manufacturer", field: "manufacturer" }, // Cột "Manufacturer"
-    { header: "Seat Capacity", field: "seatCapacity" }, // Cột "Seat Capacity"
+    {
+      title: "Plane Code",
+      dataIndex: "planeCode",
+      key: "planeCode", // Mã máy bay
+    },
+    {
+      title: "Model",
+      dataIndex: "model",
+      key: "model", // Mẫu máy bay
+    },
+    {
+      title: "Manufacturer",
+      dataIndex: "manufacturer",
+      key: "manufacturer", // Nhà sản xuất máy bay
+    },
+    {
+      title: "Seat Capacity",
+      dataIndex: "seatCapacity",
+      key: "seatCapacity", // Sức chứa ghế
+    },
   ];
 
   return (
     <DataTable
       columns={columns}
-      fetchData={fetchPlanesAPI} // Gọi API lấy dữ liệu máy bay
+      api={fetchPlanesAPI} // Truyền API lấy dữ liệu máy bay
+      onDelete={deletePlaneAPI} // Truyền API xóa máy bay
+      editUrl="/planes/edit" // URL chỉnh sửa máy bay
     />
   );
 };

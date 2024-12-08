@@ -1,34 +1,36 @@
 import React from "react";
 import GeneralForm from "../ui/generalForm/GeneralForm";
+import { createPlaneAPI } from "../../services/API/Planes"; // Import the createPlaneAPI function
+import "./PlaneForm.css"; // Import CSS for PlaneForm
 
 const PlaneForm = () => {
   const formFields = [
     {
       name: "planeCode",
       label: "Plane Code",
-      type: "input",
+      type: "text",
       placeholder: "Enter plane code",
       rules: [{ required: true, message: "Plane code is required" }],
     },
     {
       name: "model",
       label: "Model",
-      type: "input",
+      type: "text",
       placeholder: "Enter plane model",
       rules: [{ required: true, message: "Model is required" }],
     },
     {
       name: "manufacturer",
       label: "Manufacturer",
-      type: "input",
+      type: "text",
       placeholder: "Enter manufacturer name",
       rules: [{ required: true, message: "Manufacturer is required" }],
     },
     {
-      name: "seat_capacity",
+      name: "seatCapacity",
       label: "Seat Capacity",
-      type: "input",
-      placeholder: "Enter seat capacity",
+      type: "number",
+      placeholder: "0",
       rules: [
         { required: true, message: "Seat capacity is required" },
         { pattern: /^[0-9]+$/, message: "Please enter a valid number" },
@@ -36,9 +38,11 @@ const PlaneForm = () => {
     },
   ];
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Form Values:", values);
-    // Logic to handle the form submission, like calling an API to create a plane
+    const res = await createPlaneAPI(values);
+    console.log("Plane created:", res);
+    // Handle success, for example redirect or show success message
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -46,13 +50,14 @@ const PlaneForm = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="plane-form-container">
       <h2>Create a Plane</h2>
       <GeneralForm
         fields={formFields}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         submitText="Create Plane"
+        layout="horizontal" // Pass horizontal layout
       />
     </div>
   );

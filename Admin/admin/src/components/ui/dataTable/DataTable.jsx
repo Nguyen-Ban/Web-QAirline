@@ -1,76 +1,92 @@
 import React, { useState, useEffect } from "react";
+import { Table, Button, Space, Tooltip } from "antd";
 import { Link } from "react-router-dom";
-import "./DataTable.css";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
+import "./DataTable.css";
 
-const DataTable = ({ columns, fetchData, onDelete, editUrl }) => {
+const DataTable = ({ columns, api, onDelete, editUrl }) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [pagination.current]);
 
   const loadData = async () => {
     setLoading(true); // Start loading
-    const res = await fetchData();
-    setData(res);
-    setLoading(false); // End loading once data is fetched
+    try {
+      const res = await api();
+      const formattedData = res.map((item, index) => ({
+        ...item,
+        key: item.id || index, // Ensure unique key
+      }));
+      setData(formattedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setData([]);
+    } finally {
+      setLoading(false); // End loading
+    }
   };
 
   const handleRemove = async (id) => {
     const res = await onDelete(id);
-    if (res?.success) {
+    console.log(res);
+    if (res.data) {
+      console.log(res);
       loadData();
     }
   };
 
-  if (loading) {
-    return <div></div>; // You can replace with a skeleton loader
-  }
+  // Add row number calculation
+  const rowNumberColumn = {
+    title: "No",
+    render: (_, __, index) =>
+      (pagination.current - 1) * pagination.pageSize + index + 1,
+    width: 60,
+  };
+
+  // Extend columns to include action buttons and row number
+  const extendedColumns = [
+    rowNumberColumn,
+    ...columns,
+    {
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <Space>
+          <Tooltip title="Edit">
+            <Link to={`${editUrl}/${record.id}`}>
+              <Button icon={<FaRegEdit />} />
+            </Link>
+          </Tooltip>
+          <Tooltip title="Remove">
+            <Button
+              icon={<MdDeleteOutline />}
+              onClick={() => handleRemove(record.id)}
+              danger
+            />
+          </Tooltip>
+        </Space>
+      ),
+    },
+  ];
 
   return (
-    <div className="data-table">
-      <table>
-        <thead>
-          <tr>
-            {columns.map((col, index) => (
-              <th key={index}>{col.header}</th>
-            ))}
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
-              {columns.map((col, colIndex) => (
-                <td key={colIndex}>
-                  {col.render
-                    ? col.render(item[col.field], item, index)
-                    : item[col.field]}
-                </td>
-              ))}
-              <td className="action">
-                <Link to={`${editUrl}/${item.id}`}>
-                  <div className="icon-wrapper">
-                    <FaRegEdit className="icon" />
-                    <span className="tooltip">Edit</span>
-                  </div>
-                </Link>
-                <div
-                  className="icon-wrapper"
-                  onClick={() => handleRemove(item.id)}
-                >
-                  <MdDeleteOutline className="icon" />
-                  <span className="tooltip">Remove</span>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Table
+      columns={extendedColumns}
+      dataSource={data}
+      loading={loading}
+      rowKey="id"
+      pagination={{
+        pageSize: pagination.pageSize,
+        current: pagination.current,
+        onChange: (page) => setPagination({ ...pagination, current: page }),
+      }}
+      className="data-table"
+    />
   );
 };
 

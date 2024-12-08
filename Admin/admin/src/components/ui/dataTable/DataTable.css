@@ -4,6 +4,7 @@
   margin: 25px 0;
   box-shadow: var(--default-shadow);
   border-radius: 1rem;
+  background-color: var(--pure-white);
 }
 
 .data-table::-webkit-scrollbar {
@@ -33,32 +34,10 @@
   min-width: 800px;
 }
 
-.data-table table thead tr {
-  background-color: var(--heavy-blue);
-  color: white;
-  text-align: left;
-}
-
 .data-table table th,
 .data-table table td {
   padding: 12px 15px;
   text-align: left;
-}
-
-.data-table table tbody tr {
-  border-bottom: 1px solid #dddddd;
-}
-
-.data-table table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
-}
-
-.data-table table tbody tr:hover {
-  background-color: #e2e2e2;
-}
-
-.data-table table tbody tr:active {
-  background-color: #d1d1d1;
 }
 
 .data-table .action {
@@ -67,43 +46,4 @@
   justify-content: center;
   gap: 8px;
   position: relative;
-}
-
-.data-table .icon-wrapper {
-  position: relative; /* Container bao quanh icon và tooltip */
-}
-
-.data-table .icon {
-  width: 3rem;
-  height: 4rem;
-  color: var(--heavy-blue);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.data-table .icon-wrapper:hover .icon {
-  transform: translateY(-3px); /* Icon nổi lên khi hover */
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)); /* Shadow cho icon */
-}
-
-.data-table .tooltip {
-  position: absolute;
-  bottom: -25px; /* Đặt tooltip ở dưới icon */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--heavy-blue);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 1.2rem;
-  white-space: nowrap;
-  opacity: 0; /* Ẩn tooltip mặc định */
-  visibility: hidden; /* Không hiện tooltip mặc định */
-  transition: all 0.3s ease; /* Hiệu ứng chuyển động mượt */
-}
-
-.data-table .icon-wrapper:hover .tooltip {
-  opacity: 1; /* Hiển thị tooltip khi hover */
-  visibility: visible; /* Kích hoạt tooltip */
-  transform: translate(-50%, -5px); /* Tooltip nổi lên một chút khi hover */
 }

@@ -1,50 +1,45 @@
 import React from "react";
 import GeneralForm from "../ui/generalForm/GeneralForm";
+import { createFlightAPI } from "../../services/API/Flights"; // Import the createFlightAPI function
+import { notification } from "antd"; // Import notification from Ant Design
 
 const FlightForm = () => {
   const formFields = [
     {
-      name: "flightCode",
-      label: "Flight Code",
-      type: "input",
-      placeholder: "Enter flight code",
-      rules: [{ required: true, message: "Flight code is required" }],
-    },
-    {
-      name: "planeCode",
-      label: "Plane Code",
-      type: "input",
-      placeholder: "Enter plane code",
-      rules: [{ required: true, message: "Plane code is required" }],
+      name: "flightNumber",
+      label: "Flight Number",
+      type: "text",
+      placeholder: "Enter flight number",
+      rules: [{ required: true, message: "Flight number is required" }],
     },
     {
       name: "departure",
       label: "Departure",
-      type: "input",
+      type: "text",
       placeholder: "Enter departure location",
-      rules: [{ required: true, message: "Departure is required" }],
+      rules: [{ required: true, message: "Departure location is required" }],
     },
     {
       name: "destination",
       label: "Destination",
-      type: "input",
-      placeholder: "Enter destination",
-      rules: [{ required: true, message: "Destination is required" }],
+      type: "text",
+      placeholder: "Enter destination location",
+      rules: [{ required: true, message: "Destination location is required" }],
     },
     {
       name: "departureTime",
       label: "Departure Time",
-      type: "datetime",
+      type: "datepicker",
       rules: [{ required: true, message: "Departure time is required" }],
     },
     {
       name: "arrivalTime",
       label: "Arrival Time",
-      type: "datetime",
+      type: "datepicker",
       rules: [{ required: true, message: "Arrival time is required" }],
     },
     {
-      name: "flightStatus",
+      name: "status",
       label: "Flight Status",
       type: "select",
       options: [
@@ -57,13 +52,41 @@ const FlightForm = () => {
     },
   ];
 
-  const onFinish = (values) => {
-    console.log("Form Values:", values);
-    // Logic to handle the form submission, like calling an API to create a flight
+  const openNotification = (type, message, description) => {
+    notification[type]({
+      message: message,
+      description: description,
+    });
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.error("Form Failed:", errorInfo);
+  const onFinish = async (values) => {
+    console.log("Form Values:", values);
+    try {
+      const res = await createFlightAPI(values); // Call createFlightAPI with form values
+      console.log("Flight created:", res);
+
+      // Check the result and show notification accordingly
+      if (res && res.data) {
+        openNotification(
+          "success",
+          "Flight Created Successfully!",
+          "Your flight has been successfully created."
+        );
+      } else {
+        openNotification(
+          "error",
+          "Flight Creation Failed",
+          "The response was invalid. Please try again."
+        );
+      }
+    } catch (error) {
+      console.error("Error creating flight:", error);
+      openNotification(
+        "error",
+        "Flight Creation Failed",
+        "An error occurred while creating the flight."
+      );
+    }
   };
 
   return (
@@ -71,8 +94,7 @@ const FlightForm = () => {
       <h2>Create a Flight</h2>
       <GeneralForm
         fields={formFields}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        onFinish={onFinish} // Pass onFinish directly
         submitText="Create Flight"
       />
     </div>
