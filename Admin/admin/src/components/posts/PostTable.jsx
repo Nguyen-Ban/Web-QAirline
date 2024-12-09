@@ -24,7 +24,7 @@ const PostTable = () => {
   return (
     <DataTable
       columns={columns}
-      api={fetchPostsAPI} // Truyền API lấy dữ liệu
+      apiData={fetchPostsAPI} // Truyền API lấy dữ liệu
       onDelete={deletePostAPI} // Truyền API xóa dữ liệu
       editUrl="/posts/edit" // URL chỉnh sửa bài viết
     />

@@ -1,10 +1,10 @@
 // FlightApi.js
 import axios from "../axios.customize.js";
+import dayjs from "dayjs";
 
 const fetchFlightsAPI = async () => {
   const URL = "/api/users/flights"; // Đường dẫn API cho flights
-  const response = await axios.get(URL);
-  const data = await response.data;
+  const data = await axios.get(URL);
 
   // Định dạng lại dữ liệu để dễ sử dụng trong DataTable
   const flights = data.map((item) => ({
@@ -12,13 +12,27 @@ const fetchFlightsAPI = async () => {
     flightNumber: item.flightNumber,
     departure: item.departure,
     destination: item.destination,
-    departureTime: item.departureTime,
-    arrivalTime: item.arrivalTime,
+    departureTime: dayjs(item.departureTime).format("YYYY-MM-DD HH:mm:ss"),
+    arrivalTime: dayjs(item.arrivalTime).format("YYYY-MM-DD HH:mm:ss"),
     status: item.status,
   }));
-  console.log(flights);
 
   return flights;
+};
+
+const fetchFlightByIdAPI = async (id) => {
+  const URL = `/api/users/flights/${id}`;
+  const data = await axios.get(URL);
+  const res = {
+    id: data.id,
+    flightNumber: data.flightNumber,
+    departure: data.departure,
+    destination: data.destination,
+    departureTime: dayjs(data.departureTime),
+    arrivalTime: dayjs(data.arrivalTime),
+    status: data.status,
+  };
+  return res;
 };
 
 const createFlightAPI = async ({
@@ -42,9 +56,37 @@ const createFlightAPI = async ({
   return axios.post(URL, data); // Return the promise from axios.post
 };
 
+const updateFlightAPI = async ({
+  id,
+  flightNumber,
+  departure,
+  destination,
+  departureTime,
+  arrivalTime,
+  status,
+}) => {
+  const URL = `/api/users/flights/${id}`;
+  const data = {
+    flightCode: flightNumber,
+    departure,
+    destination,
+    departureTime,
+    arrivalTime,
+    status,
+  };
+  const res = await axios.put(URL, data);
+  return res;
+};
+
 const deleteFlightAPI = async (id) => {
   const URL = `/api/users/flights/${id}`; // Đường dẫn API xóa chuyến bay
   return axios.delete(URL);
 };
 
-export { fetchFlightsAPI, createFlightAPI, deleteFlightAPI };
+export {
+  fetchFlightsAPI,
+  fetchFlightByIdAPI,
+  createFlightAPI,
+  updateFlightAPI,
+  deleteFlightAPI,
+};

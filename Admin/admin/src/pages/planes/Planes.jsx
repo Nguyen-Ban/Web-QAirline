@@ -5,7 +5,11 @@ import PlaneTable from "../../components/planes/PlaneTable"; // Giả sử bạn
 const Planes = () => {
   return (
     <div className="planes">
-      <PageHeader title="PLANES" buttonText="Add new" buttonLink="/add-plane" />
+      <PageHeader
+        title="PLANES"
+        buttonText="Add new"
+        buttonLink="/planes/add"
+      />
       <PlaneTable />
     </div>
   );

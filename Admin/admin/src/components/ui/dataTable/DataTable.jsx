@@ -5,24 +5,20 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import "./DataTable.css";
 
-const DataTable = ({ columns, api, onDelete, editUrl }) => {
+const DataTable = ({ columns, apiData, onDelete, editUrl }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
   useEffect(() => {
     loadData();
-  }, [pagination.current]);
+  }, []);
 
   const loadData = async () => {
     setLoading(true); // Start loading
     try {
-      const res = await api();
-      const formattedData = res.map((item, index) => ({
-        ...item,
-        key: item.id || index, // Ensure unique key
-      }));
-      setData(formattedData);
+      const res = await apiData();
+      setData(res);
     } catch (error) {
       console.error("Error fetching data:", error);
       setData([]);
@@ -34,7 +30,7 @@ const DataTable = ({ columns, api, onDelete, editUrl }) => {
   const handleRemove = async (id) => {
     const res = await onDelete(id);
     console.log(res);
-    if (res.data) {
+    if (res) {
       console.log(res);
       loadData();
     }

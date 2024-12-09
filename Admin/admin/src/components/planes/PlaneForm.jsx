@@ -1,9 +1,7 @@
 import React from "react";
 import GeneralForm from "../ui/generalForm/GeneralForm";
-import { createPlaneAPI } from "../../services/API/Planes"; // Import the createPlaneAPI function
-import "./PlaneForm.css"; // Import CSS for PlaneForm
 
-const PlaneForm = () => {
+const PlaneForm = ({ onFinish, initialValues = {}, submitText }) => {
   const formFields = [
     {
       name: "planeCode",
@@ -38,26 +36,14 @@ const PlaneForm = () => {
     },
   ];
 
-  const onFinish = async (values) => {
-    console.log("Form Values:", values);
-    const res = await createPlaneAPI(values);
-    console.log("Plane created:", res);
-    // Handle success, for example redirect or show success message
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.error("Form Failed:", errorInfo);
-  };
-
   return (
-    <div className="plane-form-container">
-      <h2>Create a Plane</h2>
+    <div style={{ padding: "20px" }}>
+      <h2>{submitText}</h2>
       <GeneralForm
         fields={formFields}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        submitText="Create Plane"
-        layout="horizontal" // Pass horizontal layout
+        initialValues={initialValues} // Dynamically set initial values
+        onFinish={onFinish} // Pass internal submission handler
+        submitText={submitText}
       />
     </div>
   );

@@ -10,6 +10,7 @@ const { Option } = Select;
 const GeneralForm = ({
   fields,
   onFinish,
+  initialValues,
   submitText = "Submit",
   layout = "horizontal",
 }) => {
@@ -21,19 +22,13 @@ const GeneralForm = ({
     setEditorValue(content);
   };
 
-  const onSubmit = (values) => {
-    console.log("Form Values:", values);
-    if (onFinish) {
-      onFinish(values);
-    }
-  };
-
   return (
     <div>
       <Form
         form={form}
         layout={layout}
-        onFinish={onSubmit}
+        onFinish={onFinish}
+        initialValues={initialValues}
         className={`general-form ${
           layout === "horizontal" ? "horizontal-form" : ""
         }`}

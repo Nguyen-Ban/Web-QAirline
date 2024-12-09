@@ -27,11 +27,11 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => {
     // Modify response data here, if needed
-    if (response.data && response.data.data) return response.data;
+    if (response.data) return response.data;
     return response;
   },
   (error) => {
-    if (error.response && error.response.data) return error.response.data;
+    if (error.response) return error.response.data;
     return Promise.reject(error);
   }
 );

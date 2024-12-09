@@ -29,7 +29,7 @@ const PlaneTable = () => {
   return (
     <DataTable
       columns={columns}
-      api={fetchPlanesAPI} // Truyền API lấy dữ liệu máy bay
+      apiData={fetchPlanesAPI} // Truyền API lấy dữ liệu máy bay
       onDelete={deletePlaneAPI} // Truyền API xóa máy bay
       editUrl="/planes/edit" // URL chỉnh sửa máy bay
     />

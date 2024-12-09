@@ -1,9 +1,8 @@
 import React from "react";
 import GeneralForm from "../ui/generalForm/GeneralForm";
-import { createPostAPI } from "../../services/API/Posts";
-import "./PostForm.css";
+import { notification } from "antd"; // Notification from Ant Design
 
-const PostForm = () => {
+const PostForm = ({ onFinish, initialValues = {}, submitText }) => {
   const formFields = [
     {
       name: "title",
@@ -40,23 +39,14 @@ const PostForm = () => {
     },
   ];
 
-  const onFinish = async (values) => {
-    console.log("Form Values:", values);
-    const res = await createPostAPI(values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.error("Form Failed:", errorInfo);
-  };
-
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Create a Post</h2>
+      <h2>{submitText}</h2>
       <GeneralForm
         fields={formFields}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        submitText="Publish Post"
+        initialValues={initialValues} // Dynamically set initial values
+        onFinish={onFinish} // Pass internal submission handler
+        submitText={submitText}
       />
     </div>
   );

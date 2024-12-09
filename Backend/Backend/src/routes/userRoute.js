@@ -26,9 +26,13 @@ router.get(
 // Routes cho quản trị viên
 router.get("/models", userController.getModelsByManufacturer);
 
+router.get("/planes/:id", userController.getPlaneById);
+
 router.post("/planes", userController.createPlane);
 router.put("/planes/:id", userController.updatePlane);
 router.delete("/planes/:id", userController.deletePlane);
+
+router.get("/flights/:id", userController.getFlightById);
 
 router.post("/flights", userController.createFlight);
 router.put("/flights/:id", userController.updateFlight);
@@ -46,6 +50,7 @@ router.put(
 
 router.put("/posts/:id", userController.updatePost);
 router.get("/posts", userController.getPosts);
+router.get("/posts/:id", userController.getPostById);
 router.post("/posts", userController.createPost);
 router.delete("/posts/:id", userController.deletePost);
 

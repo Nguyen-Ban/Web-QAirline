@@ -1,9 +1,7 @@
 import React from "react";
-import GeneralForm from "../ui/generalForm/GeneralForm";
-import { createFlightAPI } from "../../services/API/Flights"; // Import the createFlightAPI function
-import { notification } from "antd"; // Import notification from Ant Design
+import GeneralForm from "../ui/generalForm/GeneralForm"; // General form component
 
-const FlightForm = () => {
+const FlightForm = ({ onFinish, initialValues = {}, submitText }) => {
   const formFields = [
     {
       name: "flightNumber",
@@ -52,50 +50,14 @@ const FlightForm = () => {
     },
   ];
 
-  const openNotification = (type, message, description) => {
-    notification[type]({
-      message: message,
-      description: description,
-    });
-  };
-
-  const onFinish = async (values) => {
-    console.log("Form Values:", values);
-    try {
-      const res = await createFlightAPI(values); // Call createFlightAPI with form values
-      console.log("Flight created:", res);
-
-      // Check the result and show notification accordingly
-      if (res && res.data) {
-        openNotification(
-          "success",
-          "Flight Created Successfully!",
-          "Your flight has been successfully created."
-        );
-      } else {
-        openNotification(
-          "error",
-          "Flight Creation Failed",
-          "The response was invalid. Please try again."
-        );
-      }
-    } catch (error) {
-      console.error("Error creating flight:", error);
-      openNotification(
-        "error",
-        "Flight Creation Failed",
-        "An error occurred while creating the flight."
-      );
-    }
-  };
-
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Create a Flight</h2>
+      <h2>{submitText}</h2>
       <GeneralForm
         fields={formFields}
-        onFinish={onFinish} // Pass onFinish directly
-        submitText="Create Flight"
+        initialValues={initialValues} // Dynamically set initial values for editing
+        onFinish={onFinish} // Pass onFinish to handle form submission
+        submitText={submitText} // Pass the submit text (Create or Update)
       />
     </div>
   );

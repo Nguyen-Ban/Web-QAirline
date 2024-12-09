@@ -83,6 +83,27 @@ exports.getFlights = async (req, res) => {
   }
 };
 
+exports.getFlightById = async (req, res) => {
+  const { id } = req.params; // Extract the ID from the URL parameters
+
+  try {
+    const flight = await Flight.findOne({
+      where: {
+        id, // Search for the Flight by postId
+      },
+    });
+
+    // Check if the Flight was found
+    if (!flight) {
+      return res.status(404).json({ error: "Flight not found" });
+    }
+
+    res.json(flight); // Return the flight details in the response
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // Khách hàng - Tìm kiếm chuyến bay
 exports.searchFlights = async (req, res) => {
   const { departure, destination } = req.query;
@@ -256,6 +277,27 @@ exports.getPlanes = async (req, res) => {
   }
 };
 
+exports.getPlaneById = async (req, res) => {
+  const { id } = req.params; // Extract the ID from the URL parameters
+
+  try {
+    const plane = await Plane.findOne({
+      where: {
+        id, // Search for the plane by postId
+      },
+    });
+
+    // Check if the plane was found
+    if (!plane) {
+      return res.status(404).json({ error: "Plane not found" });
+    }
+
+    res.json(plane); // Return the plane details in the response
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // Quản trị viên - Đăng thông tin máy bay
 exports.createPlane = async (req, res) => {
   try {
@@ -353,6 +395,27 @@ exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll();
     res.json(posts);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getPostById = async (req, res) => {
+  const { id } = req.params; // Extract the ID from the URL parameters
+
+  try {
+    const post = await Post.findOne({
+      where: {
+        postId: id, // Search for the post by postId
+      },
+    });
+
+    // Check if the post was found
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.json(post); // Return the post details in the response
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

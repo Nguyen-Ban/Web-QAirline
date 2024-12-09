@@ -13,6 +13,12 @@ import Auth from "./pages/auth/Auth.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import FlightForm from "./components/flights/FlightForm.jsx";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
+import EditPostForm from "./components/posts/EditPostForm.jsx";
+import EditPlaneForm from "./components/planes/EditPlaneForm.jsx";
+import AddPostForm from "./components/posts/AddPostForm.jsx";
+import AddPlaneForm from "./components/planes/AddPlaneForm.jsx";
+import AddFlightForm from "./components/flights/AddFlightForm.jsx";
+import EditFlightForm from "./components/flights/EditFlightForm.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,24 +34,36 @@ const router = createBrowserRouter([
         element: <Posts />,
       },
       {
-        path: "/add-post",
-        element: <PostForm />,
+        path: "/posts/add",
+        element: <AddPostForm />,
+      },
+      {
+        path: "/posts/edit/:id",
+        element: <EditPostForm />,
       },
       {
         path: "/planes",
         element: <Planes />,
       },
       {
-        path: "/add-plane",
-        element: <PlaneForm />,
+        path: "/planes/add",
+        element: <AddPlaneForm />,
+      },
+      {
+        path: "/planes/edit/:id",
+        element: <EditPlaneForm />,
       },
       {
         path: "/flights",
         element: <Flights />,
       },
       {
-        path: "/add-flight",
-        element: <FlightForm />,
+        path: "/flights/add",
+        element: <AddFlightForm />,
+      },
+      {
+        path: "/flights/edit/:id",
+        element: <EditFlightForm />,
       },
     ],
   },

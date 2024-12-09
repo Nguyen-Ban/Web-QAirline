@@ -7,7 +7,7 @@ const Flights = () => {
       <PageHeader
         title="FLIGHTS"
         buttonText="Add new"
-        buttonLink="/add-flight"
+        buttonLink="/flights/add"
       />{" "}
       {/* Cập nhật link thêm chuyến bay */}
       <FlightTable /> {/* Thay PostTable bằng FlightTable */}
