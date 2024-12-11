@@ -54,4 +54,6 @@ router.get("/posts/:id", userController.getPostById);
 router.post("/posts", userController.createPost);
 router.delete("/posts/:id", userController.deletePost);
 
+router.get("/admins", userController.getAdmins);
+
 module.exports = router;
