@@ -19,6 +19,9 @@ import AddPostForm from "./components/posts/AddPostForm.jsx";
 import AddPlaneForm from "./components/planes/AddPlaneForm.jsx";
 import AddFlightForm from "./components/flights/AddFlightForm.jsx";
 import EditFlightForm from "./components/flights/EditFlightForm.jsx";
+import Admins from "./pages/admins/Admins.jsx";
+import AdminProfile from "./pages/adminProfile/AdminProfile.jsx";
+import AddAdminForm from "./components/admins/AddAdminForm.jsx";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +67,19 @@ const router = createBrowserRouter([
       {
         path: "/flights/edit/:id",
         element: <EditFlightForm />,
+      },
+
+      {
+        path: "/admins",
+        element: <Admins />,
+      },
+      {
+        path: "/admins/add",
+        element: <AddAdminForm />,
+      },
+      {
+        path: "/profile",
+        element: <AdminProfile />,
       },
     ],
   },

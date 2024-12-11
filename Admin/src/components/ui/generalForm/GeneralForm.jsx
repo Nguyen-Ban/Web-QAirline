@@ -44,6 +44,18 @@ const GeneralForm = ({
                     <Input placeholder={placeholder} {...rest} />
                   </Form.Item>
                 );
+              case "email":
+                return (
+                  <Form.Item key={name} {...commonProps} labelAlign="left">
+                    <Input type="email" placeholder={placeholder} {...rest} />
+                  </Form.Item>
+                );
+              case "password":
+                return (
+                  <Form.Item key={name} {...commonProps} labelAlign="left">
+                    <Input.Password placeholder={placeholder} {...rest} />
+                  </Form.Item>
+                );
               case "number":
                 return (
                   <Form.Item key={name} {...commonProps} labelAlign="left">

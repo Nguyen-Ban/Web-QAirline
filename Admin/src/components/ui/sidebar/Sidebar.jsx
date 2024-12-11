@@ -2,6 +2,12 @@ import { useContext, useEffect, useRef } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { LIGHT_THEME } from "../../../constants/themeConstants";
 import { MdOutlineHighQuality } from "react-icons/md";
+import { GrUserManager } from "react-icons/gr";
+import { FaPersonWalkingLuggage } from "react-icons/fa6";
+import { FaRegUserCircle } from "react-icons/fa";
+import { LuUserCog } from "react-icons/lu";
+import { LuUser } from "react-icons/lu";
+import { RiAccountCircleLine } from "react-icons/ri";
 
 import {
   MdOutlineAttachMoney,
@@ -98,7 +104,7 @@ const Sidebar = () => {
             <li className="menu-item">
               <NavLink to="/#" className="menu-link">
                 <span className="menu-link-icon">
-                  <MdOutlinePeople className="icon" />
+                  <FaPersonWalkingLuggage className="icon" />
                 </span>
                 <span className="menu-link-text">Customer</span>
               </NavLink>
@@ -109,21 +115,21 @@ const Sidebar = () => {
         <div className="sidebar-menu sidebar-menu2">
           <ul className="menu-list">
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/admins" className="menu-link">
                 <span className="menu-link-icon">
-                  <MdOutlineSettings className="icon" />
+                  <LuUserCog className="icon" />
                 </span>
-                <span className="menu-link-text">Settings</span>
+                <span className="menu-link-text">Admins</span>
               </Link>
             </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link">
+            {/* <li className="menu-item">
+              <Link to="/customer-accounts" className="menu-link">
                 <span className="menu-link-icon">
-                  <MdOutlineLogout className="icon" />
+                  <LuUser className="icon" />
                 </span>
-                <span className="menu-link-text">Logout</span>
+                <span className="menu-link-text">Customer Account</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

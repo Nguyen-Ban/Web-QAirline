@@ -208,5 +208,6 @@
 }
 
 .sidebar-menu2 {
+  border-top: 1px solid white;
   margin-top: auto;
 }

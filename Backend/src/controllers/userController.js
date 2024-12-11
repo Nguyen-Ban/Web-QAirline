@@ -3,6 +3,7 @@ const Reservation = require("../models/reservation");
 const Plane = require("../models/plane");
 const flightPrice = require("../models/flightPrice");
 const Post = require("../models/post");
+const User = require("../models/user");
 
 exports.getModelsByManufacturer = async (req, res) => {
   const { manufacturer } = req.query;
@@ -470,6 +471,26 @@ exports.deletePost = async (req, res) => {
       res.status(404).json({ error: "Post not found" });
     }
   } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getAdmins = async (req, res) => {
+  try {
+    const admins = await User.findAll({ where: { role: "admin" } });
+
+    // Corrected mapping to return specific fields
+    const adminsData = admins.map((item) => {
+      return {
+        id: item.id,
+        username: item.username,
+        email: item.email,
+      };
+    });
+
+    res.json(adminsData);
+  } catch (error) {
+    console.error("Error fetching users with admin role:", error);
     res.status(400).json({ error: error.message });
   }
 };

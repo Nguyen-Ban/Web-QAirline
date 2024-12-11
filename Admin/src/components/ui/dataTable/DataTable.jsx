@@ -5,7 +5,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import "./DataTable.css";
 
-const DataTable = ({ columns, apiData, onDelete, editUrl }) => {
+const DataTable = ({ columns, apiData, onDelete, editUrl, hideActions }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
@@ -29,9 +29,7 @@ const DataTable = ({ columns, apiData, onDelete, editUrl }) => {
 
   const handleRemove = async (id) => {
     const res = await onDelete(id);
-    console.log(res);
     if (res) {
-      console.log(res);
       loadData();
     }
   };
@@ -42,32 +40,36 @@ const DataTable = ({ columns, apiData, onDelete, editUrl }) => {
     render: (_, __, index) =>
       (pagination.current - 1) * pagination.pageSize + index + 1,
     width: 60,
+    key: "rowNumber",
   };
 
-  // Extend columns to include action buttons and row number
+  // Action column
+  const actionsColumn = {
+    title: "Actions",
+    key: "actions",
+    render: (text, record) => (
+      <Space>
+        <Tooltip title="Edit">
+          <Link to={`${editUrl}/${record.id}`}>
+            <Button icon={<FaRegEdit />} />
+          </Link>
+        </Tooltip>
+        <Tooltip title="Remove">
+          <Button
+            icon={<MdDeleteOutline />}
+            onClick={() => handleRemove(record.id)}
+            danger
+          />
+        </Tooltip>
+      </Space>
+    ),
+  };
+
+  // Combine columns
   const extendedColumns = [
     rowNumberColumn,
     ...columns,
-    {
-      title: "Actions",
-      key: "actions",
-      render: (text, record) => (
-        <Space>
-          <Tooltip title="Edit">
-            <Link to={`${editUrl}/${record.id}`}>
-              <Button icon={<FaRegEdit />} />
-            </Link>
-          </Tooltip>
-          <Tooltip title="Remove">
-            <Button
-              icon={<MdDeleteOutline />}
-              onClick={() => handleRemove(record.id)}
-              danger
-            />
-          </Tooltip>
-        </Space>
-      ),
-    },
+    ...(hideActions ? [] : [actionsColumn]), // Conditionally include the actions column
   ];
 
   return (

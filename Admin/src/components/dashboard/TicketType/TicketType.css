@@ -1,0 +1,67 @@
+.content-area-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cột trên màn hình lớn */
+  margin-top: 12px;
+  gap: 16px; /* Khoảng cách giữa các card */
+}
+
+@media (max-width: 992px) {
+  .content-area-cards {
+    grid-template-columns: repeat(2, 1fr); /* 2 cột trên màn hình trung bình */
+  }
+}
+
+@media (max-width: 576px) {
+  .content-area-cards {
+    grid-template-columns: 100%; /* 1 cột trên màn hình nhỏ */
+  }
+}
+
+.content-area-cards .area-card {
+  background-color: var(--secondary-color); /* Màu nền trắng */
+  display: flex;
+  flex-direction: column; /* Sắp xếp theo cột */
+  align-items: flex-start;
+  border-radius: 8px; /* Bo góc mềm mại */
+  padding: 20px;
+  box-shadow: var(--light-shadow1); /* Hiệu ứng bóng nhẹ */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hiệu ứng hover */
+}
+
+.content-area-cards .area-card:hover {
+  transform: translateY(-4px); /* Hiệu ứng nổi lên khi hover */
+  box-shadow: var(--light-shadow2); /* Bóng mạnh hơn khi hover */
+}
+
+@media (max-width: 768px) {
+  .content-area-cards .area-card {
+    padding: 16px; /* Giảm padding trên màn hình nhỏ */
+  }
+}
+
+.content-area-cards .area-card .info-title {
+  color: var(--primary-color); /* Màu chữ tiêu đề */
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.content-area-cards .area-card .info-value {
+  color: var(--primary-color); /* Màu chữ giá trị */
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.content-area-cards .area-card .info-text {
+  color: var(--primary-color); /* Màu chữ thông tin phụ */
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.content-area-cards .area-card .area-card-icon {
+  font-size: 28px;
+  color: var(--primary-color); /* Màu của icon */
+  margin-bottom: 12px; /* Khoảng cách với nội dung */
+}

@@ -34,9 +34,9 @@ const LoginForm = () => {
     const res = await LoginAPI(email, password);
     console.log(res);
 
-    if (res.data) {
+    if (res) {
       message.success("Login Successfully");
-      localStorage.setItem("access_token", res.data.token);
+      localStorage.setItem("access_token", res.token);
       navigate("/");
     } else {
       notification.error({

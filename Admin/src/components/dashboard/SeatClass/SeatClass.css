@@ -1,0 +1,25 @@
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các phần tử "xuống dòng" khi không đủ chỗ */
+  justify-content: center; /* Căn giữa các phần tử */
+  align-items: flex-start;
+  gap: 20px; /* Khoảng cách giữa các phần tử */
+  padding: 20px;
+}
+
+.chart-container,
+.table-container {
+  flex: 1 1 100%; /* Mặc định chiếm 100% chiều rộng */
+  max-width: 500px; /* Giới hạn chiều rộng tối đa */
+}
+
+.table-container {
+  margin-top: 20px; /* Khoảng cách giữa biểu đồ và bảng */
+}
+
+@media screen and (min-width: 768px) {
+  .chart-container,
+  .table-container {
+    flex: 1 1 45%; /* Khi màn hình lớn hơn 768px, chiếm khoảng 45% */
+  }
+}
