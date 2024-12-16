@@ -4445,6 +4445,141 @@ h2 {
   }
 }
 
+.reservation-success-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  @include flex-center;
+  z-index: 1000;
+  
+  .reservation-success-modal {
+      background-color: white;
+      border-radius: var(--borderColor);
+      width: 500px;
+      max-width: 90%;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      animation: modalSlideIn 0.4s ease-out;
+      
+      .modal-header {
+          text-align: center;
+          margin-bottom: 20px;
+          
+          h2 {
+              color: var(--primaryColor);
+              font-size: 24px;
+              margin-bottom: 15px;
+          }
+          
+          .checkmark-icon {
+              @include flex-center;
+              width: 80px;
+              height: 80px;
+              border-radius: 50%;
+              background-color: rgba(76, 175, 80, 0.1);
+              margin: 0 auto;
+              
+              svg {
+                  width: 50px;
+                  height: 50px;
+              }
+          }
+      }
+      
+      .modal-content {
+          .booking-info {
+              background-color: var(--grayBg);
+              border-radius: 8px;
+              padding: 20px;
+              
+              .booking-reference {
+                  text-align: center;
+                  margin-bottom: 20px;
+                  
+                  span {
+                      display: block;
+                      color: #7F8C8D;
+                      margin-bottom: 5px;
+                  }
+                  
+                  strong {
+                      font-size: 20px;
+                      color: var(--secondaryColor);
+                  }
+              }
+              
+              .flight-details {
+                  display: flex;
+                  justify-content: space-between;
+                  
+                  > div {
+                      flex: 1;
+                      text-align: center;
+                      
+                      h3 {
+                          color: var(--primaryColor);
+                          margin-bottom: 10px;
+                      }
+                      
+                      p {
+                          color: #34495E;
+                          margin: 5px 0;
+                      }
+                  }
+              }
+          }
+      }
+      
+      .modal-actions {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+          
+          button {
+              flex: 1;
+              margin: 0 10px;
+              padding: 12px 20px;
+              border: none;
+              border-radius: 6px;
+              font-weight: 600;
+              transition: all 0.3s ease;
+              
+              &.close-btn {
+                  background-color: #E7E9EB;
+                  color: var(--primaryColor);
+                  
+                  &:hover {
+                      background-color: #D5D8DC;
+                  }
+              }
+              
+              &.view-bookings-btn {
+                  background-color: var(--secondaryColor);
+                  color: white;
+                  
+                  &:hover {
+                      background-color: darken(#0a9396, 10%);
+                  }
+              }
+          }
+      }
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+      opacity: 0;
+      transform: translateY(-50px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
 // Reservation Success Modal Styles
 .my-booking-container {
   max-width: 1200px;
