@@ -22,11 +22,22 @@ import EditFlightForm from "./components/flights/EditFlightForm.jsx";
 import Admins from "./pages/admins/Admins.jsx";
 import AdminProfile from "./pages/adminProfile/AdminProfile.jsx";
 import AddAdminForm from "./components/admins/AddAdminForm.jsx";
+import PrivateRoute from "./pages/private.route.jsx";
+import Customers from "./pages/customers/Customers.jsx";
+import AdminForm from "./components/admins/AdminForm.jsx";
 
 const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <Auth />,
+  },
+  {
     path: "/",
-    element: <App />,
+    element: (
+      <PrivateRoute>
+        <App />
+      </PrivateRoute>
+    ),
     children: [
       {
         index: true,
@@ -50,11 +61,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/planes/add",
-        element: <AddPlaneForm />,
+        element: <PlaneForm />,
       },
       {
         path: "/planes/edit/:id",
-        element: <EditPlaneForm />,
+        element: <PlaneForm />,
       },
       {
         path: "/flights",
@@ -62,11 +73,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/flights/add",
-        element: <AddFlightForm />,
+        element: <FlightForm />,
       },
       {
         path: "/flights/edit/:id",
-        element: <EditFlightForm />,
+        element: <FlightForm />,
+      },
+      {
+        path: "/customers",
+        element: <Customers />,
       },
 
       {
@@ -75,17 +90,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/admins/add",
-        element: <AddAdminForm />,
+        element: <AdminForm />,
       },
       {
         path: "/profile",
         element: <AdminProfile />,
       },
     ],
-  },
-  {
-    path: "/login",
-    element: <Auth />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

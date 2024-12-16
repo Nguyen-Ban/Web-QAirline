@@ -14,6 +14,7 @@ import { CgMenu } from "react-icons/cg";
 
 import avatar from "../../../assets/images/avatar.jpg";
 import { AuthContext } from "../../../contexts/AuthContext";
+import UserDropdown from "../../userDropdown/UserDropdown";
 
 const Header = () => {
   const { openSidebar } = useContext(SidebarContext);
@@ -44,9 +45,10 @@ const Header = () => {
             )}
           </div>
         </div>
-        <div className="item avatar-item">
+        <UserDropdown />
+        {/* <div className="item avatar-item">
           <img src={avatar} alt="avatar" className="avatar" />
-        </div>
+        </div> */}
       </div>
     </div>
   );

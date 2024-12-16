@@ -3,6 +3,9 @@ import AreaCard from "./AreaCard";
 import { DollarOutlined } from "@ant-design/icons";
 import "./TicketType.css";
 import { fetchTicketTypeAPI } from "../../../services/API/Dashboard";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { FaArrowRight } from "react-icons/fa6";
+import { IoTicketOutline } from "react-icons/io5";
 
 const TicketType = () => {
   const [data, setData] = useState(null);
@@ -36,17 +39,19 @@ const TicketType = () => {
   return (
     <section className="content-area-cards">
       <AreaCard
-        icon={<DollarOutlined style={{ fontSize: 24, color: "#475be8" }} />}
+        icon={<IoTicketOutline style={{ fontSize: 24, color: "#475be8" }} />}
         title="Total Bookings"
         value={`${data.total} Tickets`}
       />
       <AreaCard
-        icon={<DollarOutlined style={{ fontSize: 24, color: "#4ce13f" }} />}
+        icon={<FaArrowRight style={{ fontSize: 24, color: "#4ce13f" }} />}
         title="One-Way"
         value={`${data.oneWay} Bookings`}
       />
       <AreaCard
-        icon={<DollarOutlined style={{ fontSize: 24, color: "#4ce13f" }} />}
+        icon={
+          <FaArrowRightArrowLeft style={{ fontSize: 24, color: "#4ce13f" }} />
+        }
         title="Round-Trip"
         value={`${data.roundTrip} Bookings`}
       />

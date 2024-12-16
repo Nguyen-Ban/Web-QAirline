@@ -10,10 +10,12 @@ import {
 } from "react-router-dom";
 import Header from "./components/ui/header/Header";
 import Sidebar from "./components/ui/sidebar/Sidebar";
+import { getAccountAPI } from "./services/API/Auth";
+import { AuthContext } from "./contexts/AuthContext";
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
-
+  const { setUser } = useContext(AuthContext);
   // adding dark-mode class if the dark mode is set on to the body tag
   useEffect(() => {
     if (theme === DARK_THEME) {
@@ -22,6 +24,18 @@ function App() {
       document.body.classList.remove("dark-mode");
     }
   }, [theme]);
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const fetchUserInfo = async () => {
+    const res = await getAccountAPI();
+    if (res) {
+      setUser(res);
+      console.log(res);
+    }
+  };
 
   return (
     <div className="page-wrapper">

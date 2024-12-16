@@ -102,11 +102,11 @@ const Sidebar = () => {
               </NavLink>
             </li>
             <li className="menu-item">
-              <NavLink to="/#" className="menu-link">
+              <NavLink to="/customers" className="menu-link">
                 <span className="menu-link-icon">
                   <FaPersonWalkingLuggage className="icon" />
                 </span>
-                <span className="menu-link-text">Customer</span>
+                <span className="menu-link-text">Customers</span>
               </NavLink>
             </li>
           </ul>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Space, Tooltip } from "antd";
+import { Table, Button, Space, Tooltip, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
@@ -27,11 +27,19 @@ const DataTable = ({ columns, apiData, onDelete, editUrl, hideActions }) => {
     }
   };
 
-  const handleRemove = async (id) => {
-    const res = await onDelete(id);
-    if (res) {
-      loadData();
-    }
+  const handleRemove = (id) => {
+    // Show confirmation modal before proceeding
+    Modal.confirm({
+      title: "Are you sure you want to delete this item?",
+      okText: "Yes",
+      cancelText: "No",
+      onOk: async () => {
+        const res = await onDelete(id);
+        if (res) {
+          loadData();
+        }
+      },
+    });
   };
 
   // Add row number calculation

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./MostRoutes.css";
 import {
   BarChart,
   Bar,
@@ -33,28 +34,31 @@ const MostRoutes = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error">{error}</div>;
   }
 
-  // Sort and get the top 10 most booked routes
   const topRoutes = routeBookingData
     .sort((a, b) => b.bookings - a.bookings)
     .slice(0, 10);
 
   return (
-    <div>
-      <h2>Top Booked Routes</h2>
-      <ResponsiveContainer width="100%" height={400}>
+    <div className="most-routes-container">
+      <h2 className="most-routes-title">Top Booked Routes</h2>
+      <ResponsiveContainer
+        width="100%"
+        height={400}
+        className="bar-chart-container"
+      >
         <BarChart data={topRoutes} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" />
           <YAxis type="category" dataKey="route" width={150} />
           <Tooltip />
-          <Bar dataKey="bookings" fill="#8884d8" name="Bookings" />
+          <Bar dataKey="bookings" fill="#376fd0" name="Bookings" />
         </BarChart>
       </ResponsiveContainer>
     </div>

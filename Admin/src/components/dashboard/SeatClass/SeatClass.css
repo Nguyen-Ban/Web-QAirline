@@ -1,4 +1,5 @@
-.dashboard-container {
+.seatclass-container {
+  font-size: 1.2rem;
   display: flex;
   flex-wrap: wrap; /* Cho phép các phần tử "xuống dòng" khi không đủ chỗ */
   justify-content: center; /* Căn giữa các phần tử */
@@ -22,4 +23,42 @@
   .table-container {
     flex: 1 1 45%; /* Khi màn hình lớn hơn 768px, chiếm khoảng 45% */
   }
+}
+
+/*  */
+/* Table container */
+.table-container {
+  margin: 20px auto;
+  font-family: "Lato", sans-serif;
+  font-size: 1.2rem;
+  color: #2b5081; /* Màu xanh chủ đạo */
+}
+
+/* Table styles */
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: #f9f9f9; /* Màu nền nhạt */
+  border: 1px solid #2b5081;
+}
+
+.table-container th {
+  background-color: #376fd0; /* Header màu xanh đậm */
+  color: #ffffff; /* Chữ trắng */
+  padding: 12px 8px;
+  font-weight: 700;
+  border: 1px solid #2b5081;
+}
+
+.table-container td {
+  padding: 12px 8px;
+  color: #333333; /* Chữ đen xám */
+  border: 1px solid #ddd; /* Viền nhạt */
+}
+
+/* Hover effect for table rows */
+.table-container tr:hover {
+  background-color: #e6f0fa; /* Màu xanh nhạt khi hover */
+  transition: background-color 0.3s ease;
 }

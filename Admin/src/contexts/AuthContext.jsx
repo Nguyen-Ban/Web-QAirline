@@ -1,16 +1,18 @@
 import { createContext, useState } from "react";
 
 export const AuthContext = createContext({
-  email: "",
-  // username: "",
   id: "",
+  username: "",
+  email: "",
+  role: "",
 });
 
 export const AuthProvider = (props) => {
   const [user, setUser] = useState({
-    email: "admin@gmail.com",
-    // username: "",
     id: "",
+    username: "",
+    email: "",
+    role: "",
   });
 
   return (

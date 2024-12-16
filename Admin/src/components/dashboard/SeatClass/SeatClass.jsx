@@ -52,7 +52,7 @@ const SeatClass = () => {
   );
 
   return (
-    <div className="dashboard-container">
+    <div className="seatclass-container">
       {/* Pie Chart */}
       <div className="chart-container">
         <h3 style={{ textAlign: "center" }}>Seat Class Distribution</h3>

@@ -1,8 +1,11 @@
 import React from "react";
-import GeneralForm from "../ui/generalForm/GeneralForm";
-import { notification } from "antd"; // Notification from Ant Design
+import { Form, Input, Button, Select, notification } from "antd";
+import { useNavigate } from "react-router-dom";
+import { createAdminAPI } from "../../services/API/Admins";
 
-const AdminForm = ({ onFinish, initialValues = {}, submitText }) => {
+const AdminForm = () => {
+  const navigate = useNavigate();
+
   const formFields = [
     {
       name: "username",
@@ -38,16 +41,57 @@ const AdminForm = ({ onFinish, initialValues = {}, submitText }) => {
     },
   ];
 
+  const onFinish = async (values) => {
+    try {
+      const res = await createAdminAPI(values); // Call API to create the admin
+      Notification("success", "Create Admin Successfully!");
+      navigate("/admins"); // Redirect to admins list or another page
+    } catch (error) {
+      console.error("Error creating admin:", error);
+      Notification("error", "Failed to create Admin");
+    }
+  };
+
+  const Notification = (type, message, description) => {
+    notification[type]({
+      message: message,
+      description: description,
+    });
+  };
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>{submitText}</h2>
-      <GeneralForm
-        fields={formFields}
-        initialValues={initialValues} // Dynamically set initial values
-        onFinish={onFinish} // Pass the internal submission handler
-        submitText={submitText}
-      />
-    </div>
+    <Form onFinish={onFinish} layout="vertical">
+      {formFields.map((field) => (
+        <Form.Item
+          key={field.name}
+          name={field.name}
+          label={field.label}
+          rules={field.rules}
+          initialValue=""
+        >
+          {field.type === "select" ? (
+            <Select placeholder={field.placeholder}>
+              {field.options.map((option) => (
+                <Select.Option key={option.value} value={option.value}>
+                  {option.label}
+                </Select.Option>
+              ))}
+            </Select>
+          ) : (
+            <Input
+              type={field.type}
+              placeholder={field.placeholder}
+              autoComplete="off"
+            />
+          )}
+        </Form.Item>
+      ))}
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Create Admin
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

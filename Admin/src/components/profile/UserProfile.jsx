@@ -1,64 +1,79 @@
-import { Form } from "antd";
 import React, { useState } from "react";
-import { Card, Avatar, Input, Button, Row, Col, Typography } from "antd";
-import { EditOutlined, CheckOutlined } from "@ant-design/icons";
+import {
+  Card,
+  Avatar,
+  Row,
+  Col,
+  Typography,
+  Button,
+  Modal,
+  Input,
+  Dropdown,
+  Menu,
+} from "antd";
+import { DownOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
 const UserProfile = ({ user }) => {
-  const [editingField, setEditingField] = useState(null); // Track which field is being edited
-  const [username, setUsername] = useState(user.username); // Current username
-  const [email, setEmail] = useState(user.email); // Current email
-  const [confirmedUsername, setConfirmedUsername] = useState(user.username); // Confirmed username
-  const [confirmedEmail, setConfirmedEmail] = useState(user.email); // Confirmed email
+  const [isEditProfileModalVisible, setIsEditProfileModalVisible] =
+    useState(false);
+  const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] =
+    useState(false);
 
-  const handleEditClick = (field) => {
-    // Only allow switching fields if no field is being edited
-    if (editingField === field) {
-      // If the same field is clicked again, toggle off
-      setEditingField(null);
+  // For Edit Profile
+  const [newUsername, setNewUsername] = useState(user.username);
+  const [newEmail, setNewEmail] = useState(user.email);
+
+  // For Change Password
+  const [currentPassword, setCurrentPassword] = useState(""); // Current password
+  const [newPassword, setNewPassword] = useState(""); // New password
+  const [confirmNewPassword, setConfirmNewPassword] = useState(""); // Confirm new password
+
+  // Handle Edit Profile Save
+  const handleEditProfileSave = () => {
+    console.log("Editing profile:", { newUsername, newEmail });
+    setIsEditProfileModalVisible(false);
+  };
+
+  // Handle Change Password Save
+  const handleChangePasswordSave = () => {
+    if (newPassword !== confirmNewPassword) {
+      alert("Passwords do not match!");
     } else {
-      setEditingField(field);
+      console.log("Changing password:", { currentPassword, newPassword });
+      setIsChangePasswordModalVisible(false);
     }
   };
 
-  const handleConfirmEdit = (field) => {
-    if (field === "username") {
-      setConfirmedUsername(username); // Sync username with confirmedUsername
-    } else if (field === "email") {
-      setConfirmedEmail(email); // Sync email with confirmedEmail
-    }
-    setEditingField(null); // Exit editing mode for the current field
+  const handleCancel = () => {
+    setIsEditProfileModalVisible(false);
+    setIsChangePasswordModalVisible(false);
   };
 
-  const handleSave = () => {
-    // Send confirmed values to the backend
-    console.log("Saving new values:", {
-      username: confirmedUsername,
-      email: confirmedEmail,
-    });
-    // Reset fields to confirmed state
-    setUsername(confirmedUsername);
-    setEmail(confirmedEmail);
-  };
-
-  const handleDiscard = () => {
-    // Reset fields to initial values (original user data)
-    setUsername(user.username);
-    setEmail(user.email);
-    setConfirmedUsername(user.username);
-    setConfirmedEmail(user.email);
-    setEditingField(null); // Exit editing mode
-  };
-
-  // Show buttons only if confirmed values differ from original
-  const hasChanges =
-    confirmedUsername !== user.username || confirmedEmail !== user.email;
+  // Menu for Dropdown
+  const menu = (
+    <Menu>
+      <Menu.Item key="1" onClick={() => setIsEditProfileModalVisible(true)}>
+        Edit Profile
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => setIsChangePasswordModalVisible(true)}>
+        Change Password
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
-    <Card style={{ width: "100%", maxWidth: "600px", margin: "auto" }}>
+    <Card
+      style={{
+        width: "100%",
+        maxWidth: "600px",
+        margin: "auto",
+        position: "relative",
+      }}
+    >
       <Row gutter={16}>
-        {/* Avatar and Upload Section */}
+        {/* Avatar Section */}
         <Col span={6}>
           <div
             style={{
@@ -72,13 +87,6 @@ const UserProfile = ({ user }) => {
               src={user.avatarUrl || "https://via.placeholder.com/100"}
               style={{ marginBottom: 16 }}
             />
-            <Button
-              type="primary"
-              icon={<EditOutlined />}
-              onClick={() => alert("Upload avatar logic")}
-            >
-              Upload
-            </Button>
           </div>
         </Col>
 
@@ -93,29 +101,7 @@ const UserProfile = ({ user }) => {
                 <Text strong>Username:</Text>
               </Col>
               <Col span={14}>
-                {editingField === "username" ? (
-                  <Input
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)} // Update username state
-                  />
-                ) : (
-                  <Text>{confirmedUsername}</Text>
-                )}
-              </Col>
-              <Col span={2}>
-                {editingField === "username" ? (
-                  <Button
-                    type="link"
-                    icon={<CheckOutlined />}
-                    onClick={() => handleConfirmEdit("username")}
-                  />
-                ) : (
-                  <Button
-                    type="link"
-                    icon={<EditOutlined />}
-                    onClick={() => handleEditClick("username")}
-                  />
-                )}
+                <Text>{user.username}</Text>
               </Col>
             </Row>
 
@@ -125,87 +111,82 @@ const UserProfile = ({ user }) => {
                 <Text strong>Email:</Text>
               </Col>
               <Col span={14}>
-                {editingField === "email" ? (
-                  <Input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)} // Update email state
-                  />
-                ) : (
-                  <Text>{confirmedEmail}</Text>
-                )}
-              </Col>
-              <Col span={2}>
-                {editingField === "email" ? (
-                  <Button
-                    type="link"
-                    icon={<CheckOutlined />}
-                    onClick={() => handleConfirmEdit("email")}
-                  />
-                ) : (
-                  <Button
-                    type="link"
-                    icon={<EditOutlined />}
-                    onClick={() => handleEditClick("email")}
-                  />
-                )}
+                <Text>{user.email}</Text>
               </Col>
             </Row>
           </div>
-
-          {/* Save and Discard Buttons */}
-          {hasChanges && (
-            <div
-              style={{
-                marginTop: 24,
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "10px",
-              }}
-            >
-              <Button type="primary" onClick={handleSave}>
-                Save Changes
-              </Button>
-              <Button onClick={handleDiscard} danger>
-                Discard
-              </Button>
-            </div>
-          )}
         </Col>
       </Row>
+
+      {/* Dropdown Button for Edit Profile and Change Password */}
+      <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
+        <Button
+          type="link"
+          icon={<DownOutlined />}
+          style={{ position: "absolute", top: 16, right: 16 }}
+        >
+          Manage Profile
+        </Button>
+      </Dropdown>
+
+      {/* Modal for Edit Profile */}
+      <Modal
+        title="Edit Profile"
+        visible={isEditProfileModalVisible}
+        onOk={handleEditProfileSave}
+        onCancel={handleCancel}
+        okText="Save"
+        cancelText="Cancel"
+        centered
+      >
+        {/* Username */}
+        <Input
+          placeholder="New Username"
+          value={newUsername}
+          onChange={(e) => setNewUsername(e.target.value)}
+          style={{ marginBottom: 8 }}
+        />
+        {/* Email */}
+        <Input
+          placeholder="New Email"
+          value={newEmail}
+          onChange={(e) => setNewEmail(e.target.value)}
+        />
+      </Modal>
+
+      {/* Modal for Change Password */}
+      <Modal
+        title="Change Password"
+        visible={isChangePasswordModalVisible}
+        onOk={handleChangePasswordSave}
+        onCancel={handleCancel}
+        okText="Save"
+        cancelText="Cancel"
+        centered
+      >
+        {/* Current Password */}
+        <Input.Password
+          placeholder="Current Password"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+          style={{ marginBottom: 8 }}
+        />
+        {/* New Password */}
+        <Input.Password
+          placeholder="New Password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          style={{ marginBottom: 8 }}
+        />
+        {/* Confirm New Password */}
+        <Input.Password
+          placeholder="Confirm New Password"
+          value={confirmNewPassword}
+          onChange={(e) => setConfirmNewPassword(e.target.value)}
+        />
+      </Modal>
     </Card>
   );
 };
 
 export default UserProfile;
-
-{
-  /* Password
-            <Row style={{ marginTop: 12 }}>
-              <Col span={8}>
-                <Text strong>Password:</Text>
-              </Col>
-              <Col span={16}>
-                {passwordEditing ? (
-                  <div>
-                    <Input.Password
-                      placeholder="Current Password"
-                      style={{ marginBottom: 8 }}
-                    />
-                    <Input.Password
-                      placeholder="New Password"
-                      style={{ marginBottom: 8 }}
-                    />
-                    <Input.Password placeholder="Confirm New Password" />
-                  </div>
-                ) : (
-                  <Text>********</Text>
-                )}
-                <Button
-                  type="link"
-                  icon={passwordEditing ? <CheckOutlined /> : <EditOutlined />}
-                  onClick={handlePasswordEditClick}
-                />
-              </Col>
-            </Row>
-          </div> */
-}

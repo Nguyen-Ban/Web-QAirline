@@ -69,10 +69,22 @@ const deletePlaneAPI = async (id) => {
   return axios.delete(URL);
 };
 
+const fetchManufacturersAPI = async () => {
+  const url = "/api/users/manufacturers";
+  return axios.get(url);
+};
+
+const fetchModelsByManufacturerAPI = async (manufacturer) => {
+  const url = `/api/users/models?manufacturer=${manufacturer}`;
+  return axios.get(url);
+};
+
 export {
   fetchPlanesAPI,
   fetchPlaneByIdAPI,
   createPlaneAPI,
   updatePlaneAPI,
   deletePlaneAPI,
+  fetchManufacturersAPI,
+  fetchModelsByManufacturerAPI,
 };

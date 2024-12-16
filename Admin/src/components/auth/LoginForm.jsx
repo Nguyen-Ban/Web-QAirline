@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import "./LoginForm.css";
 import { LoginAPI } from "../../services/API/Auth";
 import { message, notification } from "antd";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const LoginForm = () => {
     password: "",
   });
 
+  const { setUser } = useContext(AuthContext);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData((prevData) => ({
@@ -37,6 +39,7 @@ const LoginForm = () => {
     if (res) {
       message.success("Login Successfully");
       localStorage.setItem("access_token", res.token);
+      setUser(res.user);
       navigate("/");
     } else {
       notification.error({
@@ -68,6 +71,9 @@ const LoginForm = () => {
             name="password"
             value={loginData.password}
             onChange={handleChange}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") handleSubmitBtn();
+            }}
             required
           />
           <label>Password</label>

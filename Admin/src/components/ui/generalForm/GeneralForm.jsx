@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Select, DatePicker, Button, Checkbox, Radio } from "antd";
+import { Form, Input, Select, Button, Checkbox, Radio } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import "./GeneralForm.css";
 import "./tinymce.css";
@@ -13,13 +13,18 @@ const GeneralForm = ({
   initialValues,
   submitText = "Submit",
   layout = "horizontal",
+  onFieldChange,
 }) => {
   const [editorValue, setEditorValue] = useState("");
-  const [form] = Form.useForm(); // Initialize form
-  const apiKey = import.meta.env.VITE_TINYMCE_API_KEY;
+  const [form] = Form.useForm();
 
   const handleEditorChange = (content) => {
     setEditorValue(content);
+    onFieldChange?.(content, "editor"); // Send editor change to onFieldChange
+  };
+
+  const handleInputChange = (value, name) => {
+    onFieldChange?.(value, name); // Pass value and field name to parent
   };
 
   return (
@@ -41,19 +46,11 @@ const GeneralForm = ({
               case "text":
                 return (
                   <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <Input placeholder={placeholder} {...rest} />
-                  </Form.Item>
-                );
-              case "email":
-                return (
-                  <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <Input type="email" placeholder={placeholder} {...rest} />
-                  </Form.Item>
-                );
-              case "password":
-                return (
-                  <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <Input.Password placeholder={placeholder} {...rest} />
+                    <Input
+                      placeholder={placeholder}
+                      onChange={(e) => handleInputChange(e.target.value, name)}
+                      {...rest}
+                    />
                   </Form.Item>
                 );
               case "number":
@@ -62,39 +59,20 @@ const GeneralForm = ({
                     <Input
                       type="number"
                       placeholder={placeholder}
+                      onChange={(e) => handleInputChange(e.target.value, name)}
                       {...rest}
-                      className="number-input"
-                    />
-                  </Form.Item>
-                );
-              case "textarea":
-                return (
-                  <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <TextArea placeholder={placeholder} {...rest} />
-                  </Form.Item>
-                );
-              case "rich-text":
-                return (
-                  <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <Editor
-                      apiKey={apiKey}
-                      value={editorValue}
-                      init={{
-                        height: 500,
-                        menubar: false,
-                        plugins: ["link", "image"],
-                        toolbar:
-                          "bold italic underline | alignleft aligncenter alignright | link image | numlist bullist | forecolor backcolor",
-                      }}
-                      onEditorChange={handleEditorChange}
                     />
                   </Form.Item>
                 );
               case "select":
                 return (
                   <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <Select placeholder={placeholder} {...rest}>
-                      {options.map((option) => (
+                    <Select
+                      placeholder={placeholder}
+                      onChange={(value) => handleInputChange(value, name)}
+                      {...rest}
+                    >
+                      {options?.map((option) => (
                         <Option key={option.value} value={option.value}>
                           {option.label}
                         </Option>
@@ -102,28 +80,28 @@ const GeneralForm = ({
                     </Select>
                   </Form.Item>
                 );
-              case "datepicker":
+              case "editor":
                 return (
                   <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <DatePicker placeholder={placeholder} {...rest} />
+                    <Editor
+                      apiKey="your-tinymce-api-key" // Add your API key if needed
+                      value={editorValue}
+                      init={{
+                        height: 200,
+                        menubar: false,
+                      }}
+                      onEditorChange={handleEditorChange}
+                    />
                   </Form.Item>
                 );
-              case "checkbox":
+              case "textarea":
                 return (
                   <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <Checkbox {...rest}>{label}</Checkbox>
-                  </Form.Item>
-                );
-              case "radio":
-                return (
-                  <Form.Item key={name} {...commonProps} labelAlign="left">
-                    <Radio.Group {...rest}>
-                      {options.map((option) => (
-                        <Radio key={option.value} value={option.value}>
-                          {option.label}
-                        </Radio>
-                      ))}
-                    </Radio.Group>
+                    <TextArea
+                      placeholder={placeholder}
+                      onChange={(e) => handleInputChange(e.target.value, name)}
+                      {...rest}
+                    />
                   </Form.Item>
                 );
               default:
