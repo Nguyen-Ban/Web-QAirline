@@ -54,7 +54,7 @@ const Home = () => {
           <div className="intro">
             <p data-aos='fade-up' data-aos-duration='2000' className="phrase">Fly to Your Dream Destination</p>
             <p className="explanation">Join us for a safe and comfortable journey with the best airlines. Our commitment to excellence ensures that your travel experience is nothing short of exceptional, from takeoff to landing</p>
-            <button className="bookBtn"><Link to="/book">Book now</Link></button>
+            <button className="bookBtn"><Link to="/search-flights">Book now</Link></button>
           </div>
         </div>
       </div>

@@ -11,6 +11,8 @@ router.post('/reservations', authMiddleware.verifyToken, userController.bookTick
 router.delete('/reservations/:id', authMiddleware.verifyToken, userController.cancelTicket);
 router.get('/reservations', authMiddleware.verifyToken, userController.getReservations);
 
+router.get('/flightprices', userController.getFlightPrices); 
+
 // Routes cho quản trị viên
 router.post('/planes', authMiddleware.verifyAdmin, userController.createPlane);
 router.put('/planes/:id', authMiddleware.verifyAdmin, userController.updatePlane);

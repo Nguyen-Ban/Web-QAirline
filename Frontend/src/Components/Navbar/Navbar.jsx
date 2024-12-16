@@ -38,7 +38,7 @@ const Navbar = () => {
         try {
             const response = await axios.get('http://localhost:4000/api/auth/current-user', {
                 headers: { 
-                    'Authorization': token 
+                    'Authorization': `Bearer ${token}`
                 }
             });
             setUserInfo(response.data);
@@ -70,6 +70,7 @@ const Navbar = () => {
                             <li className="listItem"><Link to="/">Home</Link></li>
                             <li className="listItem"><Link to="/search-flights">Search Flights</Link></li>
                             <li className="listItem"><Link to="/about-us">About us</Link></li>
+                            <li className="listItem"><Link to="/my-trip">My Trips</Link></li>
                         </ul>
                     </div>
 
@@ -97,7 +98,7 @@ const Navbar = () => {
                                     </div>
                                     <ul className="dropdown-menu">
                                         <li><Link to="/profile">My Profile</Link></li>
-                                        <li><Link to="/bookings">My Bookings</Link></li>
+                                        <li><Link to="/my-booking">My Bookings</Link></li>
                                         <li onClick={handleLogout}>Log Out</li>
                                     </ul>
                                 </div>

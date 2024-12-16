@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MdFlightTakeoff } from "react-icons/md";
-import { FaUser, FaArrowRight } from "react-icons/fa";
+//import { FaUser, FaArrowRight } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
 import { PiSeatFill } from "react-icons/pi";
 import { IoMdSwap } from "react-icons/io";
+import { HiOutlineMail } from "react-icons/hi";
+import { HiMiniLockClosed } from "react-icons/hi2";
+
+import cancel from "../../assets/cancel.png";
+import arrow from "../../assets/flights_grid_arrow.png";
 
 const FlightSearch = () => {
     // State management
@@ -21,11 +27,27 @@ const FlightSearch = () => {
         travelClass: 'Economy'
     });
 
+    const [selectedOutboundFlights, setSelectedOutboundFlights] = useState([]);
+    //const [selectedOutboundFlight, setSelectedOutboundFlight] = useState(null);
+    const [selectedReturnFlight, setSelectedReturnFlight] = useState(null);
+    const [isSelectingReturnFlight, setIsSelectingReturnFlight] = useState(false);
+    const [showReturnFlightModal, setShowReturnFlightModal] = useState(false);
+
     const [sortOption, setSortOption] = useState('cheapest');
     const [uniqueDepartures, setUniqueDepartures] = useState([]);
     const [uniqueDestinations, setUniqueDestinations] = useState([]);
     const [searchError, setSearchError] = useState('');
     const [isPassengerDropdownOpen, setIsPassengerDropdownOpen] = useState(false);
+
+    const [showBookingTypeModal, setShowBookingTypeModal] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [loginEmail, setLoginEmail] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+    const [loginError, setLoginError] = useState('');
+    const [selectedFlightInfo, setSelectedFlightInfo] = useState({
+        outboundFlights: [],
+        returnFlight: null
+    });
 
     // Initial data load
     useEffect(() => {
@@ -167,6 +189,7 @@ const FlightSearch = () => {
 
     // Flights rendering logic modification
     const calculateTotalPrice = (flight) => {
+
         const priceEntry = flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase());
         if (!priceEntry) return 0;
 
@@ -179,15 +202,191 @@ const FlightSearch = () => {
         return adultPrice + childPrice;
     };
 
+    const calculateTotalTripPrice = () => {
+        const calculateClassPrice = (flight) => {
+            const priceEntry = flight.prices.find(
+                p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase()
+            );
+            if (!priceEntry) return 0;
+
+            const adultPrice = parseFloat(priceEntry.price) * searchParams.adults;
+            const childPrice = parseFloat(priceEntry.price) * 0.7 * searchParams.children;
+
+            return adultPrice + childPrice;
+        };
+
+        // 최신 선택된 출발편 기반 계산
+        const outboundPrice = selectedFlightInfo.outboundFlights.length > 0
+            ? calculateClassPrice(selectedFlightInfo.outboundFlights[selectedFlightInfo.outboundFlights.length - 1])
+            : 0;
+
+        // 돌아오는 편 가격 계산 (왕복 여정인 경우)
+        const returnPrice = (searchParams.tripType === 'roundtrip' && selectedFlightInfo.returnFlight)
+            ? calculateClassPrice(selectedFlightInfo.returnFlight)
+            : 0;
+
+        return outboundPrice + returnPrice;
+    };
+
+    const handleFlightSelect = (flight) => {
+        if (!isSelectingReturnFlight) {
+            // For round trip, allow multiple outbound flight selections
+            if (searchParams.tripType === 'roundtrip') {
+                /*setSelectedOutboundFlights(prev => {
+                    const isAlreadySelected = prev.some(f => f.id === flight.id);
+                    const updatedFlights = isAlreadySelected
+                        ? prev.filter(f => f.id !== flight.id)
+                        : [...prev, flight];
+
+                    // selectedFlightInfo 업데이트
+                    setSelectedFlightInfo(prev => ({
+                        ...prev,
+                        outboundFlights: updatedFlights
+                    }));
+
+                    return updatedFlights;
+                });*/
+                setSelectedOutboundFlights([flight]); // 마지막 선택된 항공편만 저장
+
+                setSelectedFlightInfo(prev => ({
+                    ...prev,
+                    outboundFlights: [flight], // 마지막 선택된 항공편만 저장
+                }));
+            } else {
+                // 편도 여정의 출발편 선택 로직
+                setSelectedOutboundFlights([flight]);
+                setSelectedFlightInfo(prev => ({
+                    ...prev,
+                    outboundFlights: [flight],
+                }));
+            }
+        } else {
+            // 돌아오는 편 선택 로직
+            setSelectedReturnFlight(flight);
+            setSelectedFlightInfo(prev => ({
+                ...prev,
+                returnFlight: flight,
+            }));
+            setIsSelectingReturnFlight(false);
+        }
+    };
+
+    const handleSelectReturnFlightClick = () => {
+        if (selectedOutboundFlights.length === 0) {
+            // 출발편 미선택 시 모달 표시
+            setShowReturnFlightModal(true);
+            return;
+        }
+
+        // 가장 최근에 선택된 출발 항공편 
+        const latestOutboundFlight = selectedOutboundFlights[selectedOutboundFlights.length - 1];
+
+        // 돌아오는 편 선택 모드로 전환
+        setIsSelectingReturnFlight(true);
+
+        // 필터링된 항공편과 오류 초기화
+        setFilteredFlights([]);
+        setSearchError('');
+
+        // 돌아오는 항공편 검색
+        const searchReturnFlights = async () => {
+            try {
+                const queryParams = {
+                    departure: latestOutboundFlight.destination,  // 출발지와 도착지 반대로
+                    destination: latestOutboundFlight.departure,
+                    departureDate: searchParams.returnDate,      // 돌아오는 날짜 추가
+                    tripType: 'oneway'
+                };
+
+                const response = await axios.get('http://localhost:4000/api/users/flights/search', {
+                    params: queryParams
+                });
+
+                // 돌아오는 항공편이 있는 경우에만 필터링
+                if (response.data && response.data.length > 0) {
+                    setFilteredFlights(response.data);
+                } else {
+                    // 돌아오는 항공편이 없는 경우 에러 메시지 
+                    setSearchError('No return flights found for the selected date and route.');
+                    setFilteredFlights([]);
+                }
+            } catch (error) {
+                console.error('Error searching return flights:', error);
+                setSearchError('Failed to search return flights. Please try again.');
+                setFilteredFlights([]);
+            }
+        };
+
+        searchReturnFlights();
+    };
+
     const getAvailableSeatCount = (flight) => {
         const seatCountEntry = flight.prices.find(p => p.class.toLowerCase() === searchParams.travelClass.toLowerCase());
         return seatCountEntry ? seatCountEntry.seatCount : 0;
     };
 
+    const handleProceedToBooking = () => {
+        setShowBookingTypeModal(true);
+        // 선택된 모든 항공편 정보를 localStorage에 저장
+        localStorage.setItem('selectedFlightInfo', JSON.stringify(selectedFlightInfo));
+
+        // 총 여행 가격을 localStorage에 저장
+        const totalTripPrice = calculateTotalTripPrice();
+        localStorage.setItem('totalTripPrice', totalTripPrice.toString());
+
+        // 여행 클래스 저장
+        localStorage.setItem('travelClass', searchParams.travelClass);
+
+        // 승객 수 저장
+        localStorage.setItem('adults', searchParams.adults.toString());
+        localStorage.setItem('children', searchParams.children.toString());
+
+    };
+
+    const handleBookingTypeSelect = (type) => {
+        localStorage.setItem('bookingType', type);
+        if (type === 'member') {
+            // Check if user is logged in
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Directly navigate to reservation page
+                window.location.href = '/reservation';
+            } else {
+                // Show login modal
+                setShowLoginModal(true);
+            }
+        } else {
+            // Non-member booking
+            window.location.href = '/reservation';
+        }
+        setShowBookingTypeModal(false);
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:4000/api/auth/login', {
+                email: loginEmail,
+                password: loginPassword
+            });
+            localStorage.setItem('token', response.data.token);
+            setShowLoginModal(false);
+            if (response.data.userId) {
+                localStorage.setItem('user', response.data.userId.toString());
+            }
+            window.location.href = '/reservation';
+        } catch (err) {
+            console.log('Error message:', err);
+            setLoginError('Invalid credentials');
+        }
+    };
+
     // Determine flights to render (pre-/post-search)
-    const displayFlights = filteredFlights.length > 0
-        ? sortFlights(filteredFlights)
-        : sortFlights(flights);
+    const displayFlights = isSelectingReturnFlight
+        ? filteredFlights
+        : (filteredFlights.length > 0
+            ? sortFlights(filteredFlights)
+            : sortFlights(flights));
 
     return (
         <div className="flight-search-container">
@@ -382,6 +581,17 @@ const FlightSearch = () => {
                 </button>
             </div>
 
+            {showReturnFlightModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>Notification</h2>
+                        <p>lease choose the departure flight first.</p>
+                        <button onClick={() => setShowReturnFlightModal(false)}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Flights Grid */}
             <div className="flights-grid">
@@ -391,12 +601,22 @@ const FlightSearch = () => {
                     </div>
                 ) : (
                     displayFlights.map(flight => (
-                        <div key={flight.id} className="flight-card">
+                        <div
+                            key={flight.id}
+                            className={`flight-card ${(isSelectingReturnFlight && selectedReturnFlight?.id === flight.id) ||
+                                (!isSelectingReturnFlight &&
+                                    selectedOutboundFlights.some(f => f.id === flight.id))
+                                ? 'selected-flight'
+                                : ''
+                                }`}
+                            onClick={() => handleFlightSelect(flight)}
+                        >
                             <div className="flight-details">
                                 <div className="flight-route-section">
                                     <div className="flight-route">
                                         <span className="departure-city">{flight.departure}</span>
-                                        <span className="route-arrow"> <FaArrowRight /></span>
+                                        {/*<span className="route-arrow"> <FaArrowRight /></span>*/}
+                                        <img src={arrow} alt="Arrow" className="arrow-image" />
                                         <span className="destination-city">{flight.destination}</span>
                                     </div>
                                     <div className="flight-times">
@@ -439,6 +659,101 @@ const FlightSearch = () => {
                     ))
                 )}
             </div>
+            {showBookingTypeModal && (
+                <div className="booking-type-modal">
+                    <div className="booking-type-content">
+                        <img
+                            src={cancel}
+                            alt="Cancel"
+                            className="close-modal-btn"
+                            onClick={() => setShowBookingTypeModal(false)}
+                        />
+                        <div
+                            className="booking-type-left"
+                            onClick={() => handleBookingTypeSelect('member')}
+                        >
+                            <h2>Member Booking</h2>
+                            <p>Book as a registered member with personalized benefits and exclusive perks</p>
+                        </div>
+                        <div
+                            className="booking-type-right"
+                            onClick={() => handleBookingTypeSelect('nonmember')}
+                        >
+                            <h2>Non-Member Booking</h2>
+                            <p>Quick and easy booking without registration process</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Login Modal */}
+            {showLoginModal && (
+                <div className="login-modal">
+                    <div className="login-modal-content">
+                        <img src={cancel} alt="Cancel" className="close-modal-btn" onClick={() => setShowLoginModal(false)} />
+                        <h2>Sign in</h2>
+                        {loginError && <div className="error-message">{loginError}</div>}
+                        <form onSubmit={handleLogin}>
+                            <div className="input-group">
+                                <HiOutlineMail className="icon" />
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email address"
+                                    value={loginEmail}
+                                    onChange={(e) => setLoginEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <input
+                                    type="password"
+                                    placeholder="Enter your Password"
+                                    value={loginPassword}
+                                    onChange={(e) => setLoginPassword(e.target.value)}
+                                    required
+                                />
+                                <HiMiniLockClosed className="icon" />
+                            </div>
+                            <button type="submit" className="login-btn">
+                                Login
+                            </button>
+                            <p className="create-account">
+                                No Account yet? <a href="/register">Register</a>
+                            </p>
+                        </form>
+                        <button
+                            className="close-modal-btn"
+                            onClick={() => setShowLoginModal(false)}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+
+
+            {(selectedOutboundFlights.length > 0 || selectedReturnFlight) && (
+                <div className="booking-navbar">
+                    <div className="total-price">
+                        Total Price: ${calculateTotalTripPrice().toFixed(2)}
+                    </div>
+                    {searchParams.tripType === 'roundtrip' && !selectedReturnFlight && (
+                        <button
+                            className="select-return-flight-btn"
+                            onClick={handleSelectReturnFlightClick}
+                            disabled={selectedOutboundFlights.length === 0}
+                        >
+                            Select Return Flight
+                        </button>
+                    )}
+                    {selectedOutboundFlights.length > 0 && (selectedReturnFlight || searchParams.tripType === 'oneway') && (
+                        <button className="proceed-to-booking-btn"
+                            onClick={handleProceedToBooking}>
+                            Proceed to Booking
+                        </button>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

@@ -35,7 +35,7 @@ const TripAtGlance = () => {
                     description: "Your trip starts with a flight ticket search! Select your destination and find the best flight ticket.",
                     action: {
                         label: "Book your ticket",
-                        link: "/book"
+                        link: "/reservation"
                     }
                 },
                 {

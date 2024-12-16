@@ -12,7 +12,7 @@ exports.getFlights = async (req, res) => {
             include: [
                 {
                     model: Plane,
-                    attributes: ['model', 'manufacturer', 'seatCapacity'],
+                    attributes: ['id', 'model', 'manufacturer', 'seatCapacity'],
                 },
                 {
                     model: FlightPrice,
@@ -105,7 +105,7 @@ exports.searchFlights = async (req, res) => {
                     },
                     {
                         model: FlightPrice,
-                        attributes: ['class', 'price'],
+                        attributes: ['class', 'price', 'seat_count'],
                     },
                 ],
                 attributes: [
@@ -145,6 +145,17 @@ exports.searchFlights = async (req, res) => {
     }
 };
 
+// Get info from flightprices 
+exports.getFlightPrices = async (req, res) => {
+    try {
+        const flightPrices = await FlightPrice.findAll();
+        res.json(flightPrices);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch flight prices' });
+    }
+};
+
 // Khách hàng - Đặt vé
 exports.bookTicket = async (req, res) => {
     try {
@@ -154,6 +165,7 @@ exports.bookTicket = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
 
 // Khách hàng - Hủy vé
 exports.cancelTicket = async (req, res) => {

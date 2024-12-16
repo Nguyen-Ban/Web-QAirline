@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ScrollToTop from './Components/ScrollToTop';
 import Navbar from './Components/Navbar/Navbar';
 import Home from './Components/Home/Home';
-import Book from './Components/Book/Book';
+import Reservation from './Components/Reservation/Reservation';
 import AboutUs from './Components/AboutUs/AboutUs';
 import Search from './Components/Home/Search';
 import Support from './Components/Home/Support';
@@ -22,6 +22,8 @@ import Login from './Components/Auth/Login';
 import Register from './Components/Auth/Register';
 import FlightSearch from './Components/Flights/FlightSearch';
 import Status from './Components/Flights/Status';
+import MyBooking from './Components/Reservation/MyBooking';
+import MyTrip from './Components/Reservation/MyTrip';
 
 const App = () => {
   return (
@@ -39,7 +41,7 @@ const App = () => {
                 <Lounge />
               </div>
             } />
-            <Route path="/book" element={<Book />} />
+            <Route path="/reservation" element={<Reservation />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/serviceCenter" element={<ServiceCenter />} />
             <Route path="/notice" element={<Notice />} />
@@ -53,6 +55,8 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/search-flights" element={<FlightSearch />} />
             <Route path="/status" element={<Status />} />
+            <Route path="/my-booking" element={<MyBooking />} />
+            <Route path="/my-trip" element={<MyTrip />} />
           </Routes>
         </main>
         <Footer />
