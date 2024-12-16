@@ -4,7 +4,7 @@ const userController = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // Routes cho khách hàng
-router.get("/planes", userController.getPlanes);
+router.get("/planes", authMiddleware.verifyToken, userController.getPlanes);
 router.get("/flights", userController.getFlights);
 router.get("/flights/search", userController.searchFlights);
 router.post(
@@ -24,7 +24,6 @@ router.get(
 );
 
 // Routes cho quản trị viên
-router.get("/models", userController.getModelsByManufacturer);
 
 router.get("/planes/:id", userController.getPlaneById);
 
