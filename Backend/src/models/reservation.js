@@ -37,9 +37,20 @@ const Reservation = sequelize.define('Reservation', {
     status: {
         type: DataTypes.ENUM('confirmed', 'cancelled'),
         defaultValue: 'confirmed'
+    },
+    reservationTime: {
+        type: DataTypes.DATE,
+        field: 'reservation_time',
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    status: {
+        type: DataTypes.ENUM('confirmed', 'cancelled'),
+        defaultValue: 'confirmed'
     }
 }, {
     timestamps: true,
+    createdAt: 'created_at', 
+    updatedAt: 'updated_at',
     tableName: 'Reservations'
 });
 
