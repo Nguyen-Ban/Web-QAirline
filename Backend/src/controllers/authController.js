@@ -77,3 +77,14 @@ exports.getAccount = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.getCurrentUser = async (req, res) => {
+  try {
+      const user = await User.findByPk(req.userId, {
+          attributes: ['id', 'username', 'email', 'role']
+      });
+      res.json(user);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};

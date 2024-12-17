@@ -11,13 +11,10 @@ app.use(bodyParser.json());
 app.use(express.json()); // read json
 app.use(express.urlencoded({ extended: true })); // read html form input
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
-const authRoutes = require("./src/routes/authRoute");
-const userRoutes = require("./src/routes/userRoute");
-
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+const apiRoute = require("./src/routes/apiRoute");
+app.use("/api", apiRoute);
 
 sequelize.sync().then(() => {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
