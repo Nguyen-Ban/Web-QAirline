@@ -6,41 +6,68 @@ import {
   createFlightAPI,
   updateFlightAPI,
 } from "../../services/API/Flights";
+import moment from "moment";
+import dayjs from "dayjs";
+import { fetchPlaneCodesAPI } from "../../services/API/Planes";
 
 const { Option } = Select;
 
 const FlightForm = ({ submitText = "Create Flight" }) => {
   const [form] = Form.useForm();
-  const [isEditMode, setIsEditMode] = useState(false); // Track if in edit mode
-  const [availableDestinations, setAvailableDestinations] = useState([]); // Dynamic destinations
-  const { id } = useParams(); // Get the flight ID from URL (if available)
-  const navigate = useNavigate(); // For navigation after success
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [availableDestinations, setAvailableDestinations] = useState([]);
+  const [availablePlanes, setAvailablePlanes] = useState([]);
 
-  const [departureTime, setDepartureTime] = useState(null); // Store departure time
-  const [arrivalTime, setArrivalTime] = useState(null); // Store arrival time
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // Dummy data for departure/destination options
+  const [originalDepartureTime, setOriginalDepartureTime] = useState(null);
+  const [departureTime, setDepartureTime] = useState(null);
+  const [arrivalTime, setArrivalTime] = useState(null);
+
   const destinationsByDeparture = {
     NewYork: ["London", "Paris", "Berlin"],
     LosAngeles: ["Tokyo", "Sydney", "Vancouver"],
   };
 
-  // Fetch flight data if in edit mode
+  useEffect(() => {
+    fetchPlaneCodes();
+  }, []);
+
   useEffect(() => {
     if (id) {
-      setIsEditMode(true); // We're editing an existing flight
+      setIsEditMode(true);
       fetchFlightData();
     }
   }, [id]);
 
+  const fetchPlaneCodes = async () => {
+    try {
+      const res = await fetchPlaneCodesAPI();
+      if (res) {
+        setAvailablePlanes(res);
+        form.setFieldsValue({
+          ...res,
+        });
+      } else {
+        console.error("Plane not found.");
+      }
+    } catch (error) {
+      console.error("Error fetching available data:", error);
+    }
+  };
+
   const fetchFlightData = async () => {
     try {
-      const res = await fetchFlightByIdAPI(id); // API call to fetch flight by ID
+      const res = await fetchFlightByIdAPI(id);
       if (res) {
-        setAvailableDestinations(destinationsByDeparture[res.departure] || []); // Set available destinations based on departure
-        setDepartureTime(res.departureTime); // Set departure time
-        setArrivalTime(res.arrivalTime); // Set arrival time
-        form.setFieldsValue(res); // Set form fields with fetched flight data
+        setAvailableDestinations(destinationsByDeparture[res.departure] || []);
+        setOriginalDepartureTime(dayjs(res.departureTime));
+        setDepartureTime(res.departureTime);
+        setArrivalTime(res.arrivalTime);
+        form.setFieldsValue({
+          ...res,
+        });
       } else {
         console.error("Flight not found.");
       }
@@ -49,18 +76,20 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
     }
   };
 
-  // Handle form submission for creating or updating flight
-  const onFinish = async (values) => {
+  const onFinish = async () => {
+    const values = form.getFieldsValue(); // Lấy giá trị mới nhất từ form
+    console.log("onfinish >>: ", values);
     try {
       let res;
+      console.log("isEdit? >>", isEditMode);
       if (isEditMode) {
-        values.id = id; // Add id for editing
-        res = await updateFlightAPI(values); // API call to update flight
+        values.id = id;
+        console.log("values update >>: ", values);
+        res = await updateFlightAPI(values); // Gửi dữ liệu đã cập nhật
       } else {
-        res = await createFlightAPI(values); // API call to create new flight
+        res = await createFlightAPI(values);
       }
 
-      // Show success notification
       notification.success({
         message: isEditMode
           ? "Flight Updated Successfully!"
@@ -70,12 +99,10 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
           : "The flight has been created.",
       });
 
-      // Redirect to the flights list or flight details page
       navigate("/flights");
     } catch (error) {
       console.error("Error updating/creating flight:", error);
 
-      // Show error notification
       notification.error({
         message: isEditMode
           ? "Failed to Update Flight"
@@ -85,35 +112,32 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
     }
   };
 
-  // Handle departure change and set available destinations dynamically
   const handleDepartureChange = (value) => {
     setAvailableDestinations(destinationsByDeparture[value] || []);
-    form.setFieldsValue({ destination: undefined }); // Reset destination
+    form.setFieldsValue({ destination: undefined });
+    setArrivalTime(null);
   };
 
-  // Disable arrival time before departure time (same day logic)
-  const disabledArrivalTime = (current) => {
-    if (!departureTime) return false; // Allow any arrival time if departure is not set
-    return current && current.isBefore(departureTime, "minute"); // Disable dates before departure
+  // Disable departure time: must be at least 24 hours ahead of current time
+  const disabledDate = (current) => {
+    const now = dayjs();
+    return current && current.isBefore(now);
   };
 
-  // Custom validation to ensure arrival time is strictly after departure time
-  const validateArrivalTime = (rule, value) => {
-    if (!departureTime || !value) {
-      return Promise.resolve(); // Don't validate if no departure or arrival time is set
-    }
-    // Ensure arrival time is strictly after departure time (same day allowed)
-    if (value.isBefore(departureTime, "minute")) {
-      return Promise.reject(
-        "Arrival time must be strictly after departure time."
-      );
-    }
-    return Promise.resolve();
+  const handleDepartureTimeChange = (newDate) => {
+    if (!newDate) return;
+
+    const oldDate = dayjs(originalDepartureTime); // Lấy thời gian cũ từ state
+    const newStatus = newDate.isAfter(oldDate) ? "delayed" : "scheduled";
+
+    setDepartureTime(newDate); // Cập nhật state departureTime
+    console.log("before >>>: ", form.getFieldValue());
+    form.setFieldsValue({ status: newStatus }); // Đồng bộ trạng thái trong form
+    console.log("after >>>: ", form.getFieldValue());
   };
 
   return (
     <Form form={form} onFinish={onFinish} layout="vertical">
-      {/* Flight Number */}
       <Form.Item
         name="flightNumber"
         label="Flight Number"
@@ -122,16 +146,26 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
         <Input placeholder="Enter flight number" />
       </Form.Item>
 
-      {/* Plane Name */}
       <Form.Item
-        name="planeName"
-        label="Plane Name"
-        rules={[{ required: true, message: "Plane name is required" }]}
+        name="planeCode"
+        label="Plane Code"
+        rules={[{ required: true, message: "Plane Code is required" }]}
       >
-        <Input placeholder="Enter plane name" />
+        <Select placeholder="Select Plane Code">
+          {availablePlanes.length > 0 ? (
+            availablePlanes.map((plane) => (
+              <Option key={plane.planeCode} value={plane.planeCode}>
+                {plane.planeCode}
+              </Option>
+            ))
+          ) : (
+            <Option disabled value="">
+              No Plane Codes Available
+            </Option>
+          )}
+        </Select>
       </Form.Item>
 
-      {/* Departure */}
       <Form.Item
         name="departure"
         label="Departure"
@@ -146,7 +180,6 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
         </Select>
       </Form.Item>
 
-      {/* Destination */}
       <Form.Item
         name="destination"
         label="Destination"
@@ -161,52 +194,84 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
         </Select>
       </Form.Item>
 
-      {/* Departure Time */}
       <Form.Item
         name="departureTime"
         label="Departure Time"
-        rules={[{ required: true, message: "Departure time is required" }]}
-      >
-        <DatePicker
-          showTime
-          style={{ width: "100%" }}
-          format="YYYY-MM-DD HH:mm"
-          onChange={(value) => setDepartureTime(value)}
-        />
-      </Form.Item>
-
-      {/* Arrival Time */}
-      <Form.Item
-        name="arrivalTime"
-        label="Arrival Time"
         rules={[
-          { required: true, message: "Arrival time is required" },
-          { validator: validateArrivalTime },
+          { required: true, message: "Departure time is required" },
+          () => ({
+            validator(_, value) {
+              const now = dayjs();
+              if (!value || value.isAfter(now.add(24, "hour"))) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error(
+                  `Departure time must be at least 24 hours from now. Current time: ${now.format(
+                    "YYYY-MM-DD HH:mm:ss"
+                  )}`
+                )
+              );
+            },
+          }),
         ]}
       >
         <DatePicker
           showTime
           style={{ width: "100%" }}
           format="YYYY-MM-DD HH:mm"
-          disabledDate={disabledArrivalTime} // Disable dates before departure time
-          onChange={(value) => setArrivalTime(value)} // Set arrival time
+          disabledDate={disabledDate}
+          onChange={(newDate) => handleDepartureTimeChange(newDate)}
         />
       </Form.Item>
 
-      {/* Flight Status */}
       <Form.Item
-        name="flightStatus"
+        name="arrivalTime"
+        label="Arrival Time"
+        rules={[
+          { required: true, message: "Arrival time is required" },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              const departureTime = getFieldValue("departureTime");
+              if (
+                !value ||
+                !departureTime ||
+                value.isAfter(dayjs(departureTime).add(1, "hour"))
+              ) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error(
+                  "Arrival time must be at least 1 hour later than departure time"
+                )
+              );
+            },
+          }),
+        ]}
+      >
+        <DatePicker
+          showTime
+          style={{ width: "100%" }}
+          format="YYYY-MM-DD HH:mm"
+          disabledDate={disabledDate}
+          onChange={(value) => setArrivalTime(value)}
+        />
+      </Form.Item>
+
+      <Form.Item
+        name="status"
         label="Flight Status"
         rules={[{ required: true, message: "Flight status is required" }]}
       >
-        <Select placeholder="Select flight status">
-          <Option value="Scheduled">Scheduled</Option>
-          <Option value="Cancelled">Cancelled</Option>
-          <Option value="Completed">Completed</Option>
+        <Select>
+          <Option value="scheduled">Scheduled</Option>
+          <Option value="delayed">Delayed</Option>
+          <Option value="on-air">On Air</Option>
+          <Option value="cancelled">Cancelled</Option>
+          <Option value="completed">Completed</Option>
         </Select>
       </Form.Item>
 
-      {/* Submit Button */}
       <Form.Item>
         <Button type="primary" htmlType="submit">
           {isEditMode ? "Update Flight" : submitText}

@@ -10,6 +10,11 @@ const FlightTable = () => {
       key: "flightNumber", // Mã chuyến bay
     },
     {
+      title: "Plane Code",
+      dataIndex: "planeCode",
+      key: "planeCode", // Mã chuyến bay
+    },
+    {
       title: "Departure",
       dataIndex: "departure",
       key: "departure", // Nơi đi
@@ -33,6 +38,18 @@ const FlightTable = () => {
       title: "Status",
       dataIndex: "status",
       key: "status", // Trạng thái chuyến bay
+      render: (status) => {
+        // Map trạng thái thành giá trị hiển thị
+        const statusMapping = {
+          scheduled: "Scheduled",
+          delayed: "Delayed",
+          cancelled: "Cancelled",
+          onAir: "On Air",
+          completed: "Completed",
+        };
+        console.log("status >>>: ", status);
+        return statusMapping[status] || "Unknown"; // Hiển thị giá trị tương ứng hoặc "Unknown" nếu không khớp
+      },
     },
   ];
 

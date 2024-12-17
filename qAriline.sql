@@ -21,7 +21,7 @@ CREATE TABLE Planes (
     model VARCHAR(50) NOT NULL,
     manufacturer VARCHAR(100) NOT NULL,
     seat_capacity INT NOT NULL,
-    plane_code VARCHAR(10) NOT NULL,  -- Mã máy bay
+    plane_code VARCHAR(10) NOT NULL,  
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -46,7 +46,7 @@ CREATE TABLE Flights (
     destination VARCHAR(100) NOT NULL,
     departure_time DATETIME NOT NULL,
     arrival_time DATETIME NOT NULL,
-    status ENUM('scheduled', 'delayed', 'cancelled') DEFAULT 'scheduled',
+    status ENUM('scheduled', 'delayed', 'onair', 'completed', 'cancelled') DEFAULT 'scheduled',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (plane_id) REFERENCES Planes(id) ON DELETE SET NULL
@@ -82,13 +82,13 @@ CREATE TABLE FlightPrices (
 -- Tạo bảng Posts
 CREATE TABLE Posts (
     post_id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,           -- Tiêu đề bài viết
-    category ENUM('introduction', 'news', 'promotion', 'notification') NOT NULL,  -- Thể loại bài viết
-    description TEXT NOT NULL,             -- Mô tả bài viết
-    detail TEXT NOT NULL,                  -- Chi tiết bài viết
+    title VARCHAR(255) NOT NULL,         
+    category ENUM('introduction', 'news', 'promotion', 'notification') NOT NULL,
+    description TEXT NOT NULL,           
+    detail TEXT NOT NULL,              
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Hiển thị các bảng trong cơ sở dữ liệu
+
 SHOW TABLES;

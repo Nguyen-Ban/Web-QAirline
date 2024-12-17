@@ -3,13 +3,13 @@ import axios from "../axios.customize.js";
 import dayjs from "dayjs";
 
 const fetchFlightsAPI = async () => {
-  const URL = "/api/users/flights"; // Đường dẫn API cho flights
+  const URL = "/api/users/flights-admin"; // Đường dẫn API cho flights
   const data = await axios.get(URL);
-
   // Định dạng lại dữ liệu để dễ sử dụng trong DataTable
   const flights = data.map((item) => ({
     id: item.id,
     flightNumber: item.flightNumber,
+    planeCode: item.planeCode,
     departure: item.departure,
     destination: item.destination,
     departureTime: dayjs(item.departureTime).format("YYYY-MM-DD HH:mm:ss"),
@@ -26,6 +26,7 @@ const fetchFlightByIdAPI = async (id) => {
   const res = {
     id: data.id,
     flightNumber: data.flightNumber,
+    planeCode: data.planeCode,
     departure: data.departure,
     destination: data.destination,
     departureTime: dayjs(data.departureTime),
@@ -37,6 +38,7 @@ const fetchFlightByIdAPI = async (id) => {
 
 const createFlightAPI = async ({
   flightNumber,
+  planeCode,
   departure,
   destination,
   departureTime,
@@ -46,6 +48,7 @@ const createFlightAPI = async ({
   const URL = "/api/users/flights"; // Endpoint for creating a flight
   const data = {
     flightCode: flightNumber,
+    planeCode,
     departure,
     destination,
     departureTime,
@@ -59,6 +62,7 @@ const createFlightAPI = async ({
 const updateFlightAPI = async ({
   id,
   flightNumber,
+  planeCode,
   departure,
   destination,
   departureTime,
@@ -68,6 +72,7 @@ const updateFlightAPI = async ({
   const URL = `/api/users/flights/${id}`;
   const data = {
     flightCode: flightNumber,
+    planeCode,
     departure,
     destination,
     departureTime,

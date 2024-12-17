@@ -1,7 +1,5 @@
-import { MdOutlineMenu } from "react-icons/md";
 import "./Header.css";
-import { ThemeContext } from "../../../contexts/ThemeContext";
-import { DARK_THEME, LIGHT_THEME } from "../../../constants/themeConstants";
+
 import { useContext, useEffect, useRef, useState } from "react";
 import { SidebarContext } from "../../../contexts/SidebarContext";
 import "react-date-range/dist/styles.css"; // main style file
@@ -15,10 +13,10 @@ import { CgMenu } from "react-icons/cg";
 import avatar from "../../../assets/images/avatar.jpg";
 import { AuthContext } from "../../../contexts/AuthContext";
 import UserDropdown from "../../userDropdown/UserDropdown";
+import { MdOutlineHighQuality } from "react-icons/md";
 
 const Header = () => {
   const { openSidebar } = useContext(SidebarContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const { user } = useContext(AuthContext);
 
@@ -32,19 +30,6 @@ const Header = () => {
         </div>
       </div>
       <div className="header-right">
-        <div className="item notification">
-          <span className="icon-badge">2</span>
-          <IoIosNotifications className="icon" />
-        </div>
-        <div className="item theme-toggle-btn" onClick={toggleTheme}>
-          <div className="theme-icon">
-            {theme === LIGHT_THEME ? (
-              <FiSun className="icon" />
-            ) : (
-              <FaRegMoon className="icon" />
-            )}
-          </div>
-        </div>
         <UserDropdown />
         {/* <div className="item avatar-item">
           <img src={avatar} alt="avatar" className="avatar" />

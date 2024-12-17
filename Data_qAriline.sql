@@ -3,7 +3,7 @@ USE QAirline;
 INSERT INTO Users (username, password, email, role)
 VALUES 
     ('customer', '$2b$10$5urAupL5o2pmpawI6IEC.OklVKG506GLghWbN.IHFJJ8Uu0GyjuCu', 'customer@gmail.com', 'customer'),
-    ('user', '$2b$10$sV3NXdCsUwsjLT..iDnQQ.upMoBQiiZGsreWQOXjR792qV2UTZBmG', 'admin@gmail.com', 'admin');
+    ('admin', '$2b$10$sV3NXdCsUwsjLT..iDnQQ.upMoBQiiZGsreWQOXjR792qV2UTZBmG', 'admin@gmail.com', 'admin');
 
 -- Thêm dữ liệu vào bảng Planes
 INSERT INTO Planes (model, manufacturer, seat_capacity, plane_code)
@@ -61,12 +61,11 @@ VALUES
     ('Flight Deals This Month', 'promotion', 'Get the best deals for flights this month!', 'Details about flight deals.'),
     ('New Routes to Europe', 'news', 'We are now flying to more cities in Europe.', 'Details about new routes to Europe.'),
     ('Company Introduction', 'introduction', 'Learn more about our airline company.', 'Introduction details.'),
-    ('Important Update on Flight Schedules', 'notification', 'Changes in flight schedules due to weather conditions.', 'Details on the updated schedule.');
+    ('Important Update on Flight Schedules', 'notification', 'Changes in flight schedules due to weather conditions.', 'Details on the updated schedule.'),
+	('Special Holiday Discounts', 'promotion', 'Don\'t miss out on special holiday discounts for flights!', 'Details about discounted fares during the holiday season.'),
+	('New Lounge Openings', 'news', 'We have opened new lounges in key international airports.', 'Explore the amenities available in our new airport lounges.'),
+	('Get to Know Our History', 'introduction', 'Discover the journey of our airline over the years.', 'A detailed look at the milestones we\'ve achieved since inception.'),
+	('Security Advisory Update', 'notification', 'Important security updates for all passengers.', 'Ensure you are aware of the new security procedures at airports.');
 
 
 
-
--- ('Special Holiday Discounts', 'promotion', 'Don\'t miss out on special holiday discounts for flights!', 'Details about discounted fares during the holiday season.'),
--- ('New Lounge Openings', 'news', 'We have opened new lounges in key international airports.', 'Explore the amenities available in our new airport lounges.'),
--- ('Get to Know Our History', 'introduction', 'Discover the journey of our airline over the years.', 'A detailed look at the milestones we\'ve achieved since inception.'),
--- ('Security Advisory Update', 'notification', 'Important security updates for all passengers.', 'Ensure you are aware of the new security procedures at airports.');

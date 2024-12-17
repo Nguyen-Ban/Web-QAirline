@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { ThemeContext } from "../../../contexts/ThemeContext";
-import { LIGHT_THEME } from "../../../constants/themeConstants";
+
 import { MdOutlineHighQuality } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
 import { FaPersonWalkingLuggage } from "react-icons/fa6";
@@ -30,7 +29,6 @@ import "./Sidebar.css";
 import { SidebarContext } from "../../../contexts/SidebarContext";
 
 const Sidebar = () => {
-  const { theme } = useContext(ThemeContext);
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const navbarRef = useRef(null);
 
@@ -39,7 +37,7 @@ const Sidebar = () => {
     if (
       navbarRef.current &&
       !navbarRef.current.contains(event.target) &&
-      event.target.className !== "sidebar-oepn-btn"
+      event.target.className !== "sidebar-open-btn"
     ) {
       closeSidebar();
     }

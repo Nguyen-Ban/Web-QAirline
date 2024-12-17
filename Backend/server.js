@@ -14,10 +14,10 @@ app.use(express.urlencoded({ extended: true })); // read html form input
 const PORT = process.env.PORT || 5000;
 
 const authRoutes = require("./src/routes/authRoute");
-const userRoutes = require("./src/routes/userRoute");
+const apiRoutes = require("./src/routes/apiRoute");
 
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/users", apiRoutes);
 
 sequelize.sync().then(() => {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -15,6 +15,17 @@ const fetchPlanesAPI = async () => {
   return res;
 };
 
+const fetchPlaneCodesAPI = async () => {
+  const URL = "/api/users/plane-codes"; // Đường dẫn API cho planes
+  const data = await axios.get(URL);
+
+  const res = data.map((item) => ({
+    planeCode: item.planeCode,
+  }));
+
+  return res;
+};
+
 const fetchPlaneByIdAPI = async (id) => {
   const URL = `/api/users/planes/${id}`;
   const data = await axios.get(URL);
@@ -81,6 +92,7 @@ const fetchModelsByManufacturerAPI = async (manufacturer) => {
 
 export {
   fetchPlanesAPI,
+  fetchPlaneCodesAPI,
   fetchPlaneByIdAPI,
   createPlaneAPI,
   updatePlaneAPI,
