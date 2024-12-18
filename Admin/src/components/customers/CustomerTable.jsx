@@ -5,14 +5,14 @@ import { fetchCustomersAPI } from "../../services/API/Customers";
 const CustomerTable = () => {
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
     },
     {
-      title: "Contact",
-      dataIndex: "contact",
-      key: "contact",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
       title: "Flight Number",
@@ -25,15 +25,23 @@ const CustomerTable = () => {
       key: "seatNumber",
     },
     {
-      title: "Ticket Class",
-      dataIndex: "ticketClass",
-      key: "ticketClass",
+      title: "Booking Status",
+      dataIndex: "bookingStatus",
+      key: "bookingStatus",
+      render: (status) => {
+        if (status === "confirmed") {
+          return "Confirm"; // Hiển thị 'Confirm' thay cho 'confirmed'
+        } else if (status === "cancelled") {
+          return "Cancel"; // Hiển thị 'Cancel' thay cho 'cancelled'
+        }
+        return status; // Trả về trạng thái gốc nếu không phải 'confirmed' hoặc 'cancelled'
+      },
     },
     {
       title: "Booking Time",
       dataIndex: "bookingTime",
       key: "bookingTime",
-      render: (text) => new Date(text).toLocaleString(), // Định dạng thời gian
+      render: (text) => new Date(text).toLocaleString(), // Format the booking time
     },
   ];
 

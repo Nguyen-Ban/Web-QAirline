@@ -28,11 +28,13 @@ const FlightTable = () => {
       title: "Departure Time",
       dataIndex: "departureTime",
       key: "departureTime", // Thời gian khởi hành
+      render: (text) => new Date(text).toLocaleString(), // Format the booking time
     },
     {
       title: "Arrival Time",
       dataIndex: "arrivalTime",
       key: "arrivalTime", // Thời gian đến
+      render: (text) => new Date(text).toLocaleString(), // Format the booking time
     },
     {
       title: "Status",
@@ -44,7 +46,7 @@ const FlightTable = () => {
           scheduled: "Scheduled",
           delayed: "Delayed",
           cancelled: "Cancelled",
-          onAir: "On Air",
+          onair: "On Air",
           completed: "Completed",
         };
         console.log("status >>>: ", status);

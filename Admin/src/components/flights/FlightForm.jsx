@@ -197,30 +197,30 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
       <Form.Item
         name="departureTime"
         label="Departure Time"
-        rules={[
-          { required: true, message: "Departure time is required" },
-          () => ({
-            validator(_, value) {
-              const now = dayjs();
-              if (!value || value.isAfter(now.add(24, "hour"))) {
-                return Promise.resolve();
-              }
-              return Promise.reject(
-                new Error(
-                  `Departure time must be at least 24 hours from now. Current time: ${now.format(
-                    "YYYY-MM-DD HH:mm:ss"
-                  )}`
-                )
-              );
-            },
-          }),
-        ]}
+        // rules={[
+        //   { required: true, message: "Departure time is required" },
+        //   () => ({
+        //     validator(_, value) {
+        //       const now = dayjs();
+        //       if (!value || value.isAfter(now.add(24, "hour"))) {
+        //         return Promise.resolve();
+        //       }
+        //       return Promise.reject(
+        //         new Error(
+        //           `Departure time must be at least 24 hours from now. Current time: ${now.format(
+        //             "YYYY-MM-DD HH:mm:ss"
+        //           )}`
+        //         )
+        //       );
+        //     },
+        //   }),
+        // ]}
       >
         <DatePicker
           showTime
           style={{ width: "100%" }}
           format="YYYY-MM-DD HH:mm"
-          disabledDate={disabledDate}
+          // disabledDate={disabledDate}
           onChange={(newDate) => handleDepartureTimeChange(newDate)}
         />
       </Form.Item>
@@ -253,7 +253,7 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
           showTime
           style={{ width: "100%" }}
           format="YYYY-MM-DD HH:mm"
-          disabledDate={disabledDate}
+          // disabledDate={disabledDate}
           onChange={(value) => setArrivalTime(value)}
         />
       </Form.Item>
@@ -266,7 +266,7 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
         <Select>
           <Option value="scheduled">Scheduled</Option>
           <Option value="delayed">Delayed</Option>
-          <Option value="on-air">On Air</Option>
+          <Option value="onair">On Air</Option>
           <Option value="cancelled">Cancelled</Option>
           <Option value="completed">Completed</Option>
         </Select>

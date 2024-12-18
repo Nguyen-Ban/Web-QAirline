@@ -5,10 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const UserDropdown = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+  console.log(user);
   const navigate = useNavigate();
   const handleLogOut = () => {
-    localStorage.removeItem("access_token");
+    logout();
     navigate("/login");
   };
   // Menu items for the dropdown

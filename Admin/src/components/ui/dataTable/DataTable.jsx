@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Space, Tooltip, Modal } from "antd";
+import {
+  Table,
+  Button,
+  Space,
+  Tooltip,
+  Modal,
+  message,
+  notification,
+} from "antd";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
@@ -35,8 +43,13 @@ const DataTable = ({ columns, apiData, onDelete, editUrl, hideActions }) => {
       cancelText: "No",
       onOk: async () => {
         const res = await onDelete(id);
-        if (res) {
+        if (res && res.message) {
           loadData();
+        } else {
+          notification.error({
+            message: "Can't not delete",
+            description: res.error,
+          });
         }
       },
     });

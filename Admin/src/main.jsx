@@ -19,6 +19,8 @@ import AdminProfile from "./pages/adminProfile/AdminProfile.jsx";
 import PrivateRoute from "./pages/private.route.jsx";
 import Customers from "./pages/customers/Customers.jsx";
 import AdminForm from "./components/admins/AdminForm.jsx";
+import FlightPrices from "./pages/flightPrices/FlightPrices.jsx";
+import FlightPriceForm from "./components/flightPrices/FlightPriceForm.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,66 +35,27 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      {
-        index: true,
-        element: <Dashboard />,
-      },
-      {
-        path: "/posts",
-        element: <Posts />,
-      },
-      {
-        path: "/posts/add",
-        element: <AddPostForm />,
-      },
-      {
-        path: "/posts/edit/:id",
-        element: <EditPostForm />,
-      },
-      {
-        path: "/planes",
-        element: <Planes />,
-      },
-      {
-        path: "/planes/add",
-        element: <PlaneForm />,
-      },
-      {
-        path: "/planes/edit/:id",
-        element: <PlaneForm />,
-      },
-      {
-        path: "/flights",
-        element: <Flights />,
-      },
-      {
-        path: "/flights/add",
-        element: <FlightForm />,
-      },
-      {
-        path: "/flights/edit/:id",
-        element: <FlightForm />,
-      },
-      {
-        path: "/customers",
-        element: <Customers />,
-      },
-
-      {
-        path: "/admins",
-        element: <Admins />,
-      },
-      {
-        path: "/admins/add",
-        element: <AdminForm />,
-      },
-      {
-        path: "/profile",
-        element: <AdminProfile />,
-      },
+      { index: true, element: <Dashboard /> },
+      { path: "posts", element: <Posts /> },
+      { path: "posts/add", element: <AddPostForm /> },
+      { path: "posts/edit/:id", element: <EditPostForm /> },
+      { path: "planes", element: <Planes /> },
+      { path: "planes/add", element: <PlaneForm /> },
+      { path: "planes/edit/:id", element: <PlaneForm /> },
+      { path: "flight-prices", element: <FlightPrices /> },
+      { path: "flight-prices/add", element: <FlightPriceForm /> },
+      { path: "flight-prices/edit/:id", element: <FlightPriceForm /> },
+      { path: "flights", element: <Flights /> },
+      { path: "flights/add", element: <FlightForm /> },
+      { path: "flights/edit/:id", element: <FlightForm /> },
+      { path: "customers", element: <Customers /> },
+      { path: "admins", element: <Admins /> },
+      { path: "admins/add", element: <AdminForm /> },
+      { path: "profile", element: <AdminProfile /> },
     ],
   },
 ]);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <SidebarProvider>

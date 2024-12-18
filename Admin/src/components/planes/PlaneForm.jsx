@@ -26,14 +26,14 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
   };
 
   const seatCapacityByModel = {
-    737: 150,
-    747: 400,
-    787: 250,
-    A320: 180,
-    A350: 300,
-    A380: 500,
-    F22: 1,
-    C130: 90,
+    737: 80,
+    747: 80,
+    787: 80,
+    A320: 80,
+    A350: 80,
+    A380: 80,
+    F22: 80,
+    C130: 80,
   };
 
   // Fetch existing plane data if in edit mode

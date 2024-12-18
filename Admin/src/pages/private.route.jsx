@@ -1,10 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; // Thư viện dùng để decode token (cài bằng `npm install jwt-decode`)
+import { message } from "antd";
 
 const PrivateRoute = (props) => {
-  const token = window.localStorage.getItem("access_token");
+  const { user, token, logout } = useContext(AuthContext);
+  const location = useLocation();
 
   // Hàm kiểm tra token hết hạn
   const isTokenExpired = (token) => {
@@ -18,10 +20,16 @@ const PrivateRoute = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (token && isTokenExpired(token)) {
+      logout();
+      message.error("Your token has expired");
+    }
+  }, [location.pathname]);
+
   if (token && !isTokenExpired(token)) {
     return <>{props.children}</>;
   }
-
   // Nếu token hết hạn hoặc không tồn tại => chuyển hướng tới trang đăng nhập
   return <Navigate to="/login" replace />;
 };

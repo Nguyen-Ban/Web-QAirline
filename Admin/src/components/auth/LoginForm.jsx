@@ -13,7 +13,7 @@ const LoginForm = () => {
     password: "",
   });
 
-  const { setUser } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData((prevData) => ({
@@ -38,8 +38,7 @@ const LoginForm = () => {
 
     if (res) {
       message.success("Login Successfully");
-      localStorage.setItem("access_token", res.token);
-      setUser(res.user);
+      login(res.token, res.user);
       navigate("/");
     } else {
       notification.error({

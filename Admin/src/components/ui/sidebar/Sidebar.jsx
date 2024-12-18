@@ -92,11 +92,19 @@ const Sidebar = () => {
               </NavLink>
             </li>
             <li className="menu-item">
+              <NavLink to="/flight-prices" className="menu-link">
+                <span className="menu-link-icon">
+                  <GrSchedules className="icon" />
+                </span>
+                <span className="menu-link-text">Flight Configurations</span>
+              </NavLink>
+            </li>
+            <li className="menu-item">
               <NavLink to="/flights" className="menu-link">
                 <span className="menu-link-icon">
                   <GrSchedules className="icon" />
                 </span>
-                <span className="menu-link-text">Flights</span>
+                <span className="menu-link-text">Flight Schedules </span>
               </NavLink>
             </li>
             <li className="menu-item">
@@ -120,14 +128,6 @@ const Sidebar = () => {
                 <span className="menu-link-text">Admins</span>
               </Link>
             </li>
-            {/* <li className="menu-item">
-              <Link to="/customer-accounts" className="menu-link">
-                <span className="menu-link-icon">
-                  <LuUser className="icon" />
-                </span>
-                <span className="menu-link-text">Customer Account</span>
-              </Link>
-            </li> */}
           </ul>
         </div>
       </div>
