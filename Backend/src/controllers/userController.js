@@ -101,7 +101,7 @@ exports.searchFlights = async (req, res) => {
                 include: [
                     {
                         model: Plane,
-                        attributes: ['model', 'manufacturer', 'seatCapacity'],
+                        attributes: ['id', 'model', 'manufacturer', 'seatCapacity'],
                     },
                     {
                         model: FlightPrice,
@@ -132,7 +132,11 @@ exports.searchFlights = async (req, res) => {
             arrivalTime: flight.arrivalTime,
             status: flight.status,
             plane: flight.Plane,
-            prices: flight.FlightPrices,
+            prices: flight.FlightPrices.map((price) => ({
+                class: price.class,
+                price: price.price,
+                seatCount: price.seatCount,
+            })),
         }));
 
         if (formattedFlights.length === 0) {
@@ -170,9 +174,17 @@ exports.bookTicket = async (req, res) => {
 // Khách hàng - Hủy vé
 exports.cancelTicket = async (req, res) => {
     try {
+        const whereClause = {
+             id: req.params.id
+        };
+        if (req.userId !== undefined) {
+             whereClause.userId = req.userId; 
+        } 
+        
         const reservation = await Reservation.destroy({
-            where: { id: req.params.id, userId: req.userId }
+             where: whereClause
         });
+        
         reservation
             ? res.json({ message: 'Reservation cancelled' })
             : res.status(404).json({ error: 'Reservation not found' });
@@ -184,7 +196,13 @@ exports.cancelTicket = async (req, res) => {
 // Khách hàng - Xem các chuyến bay đã đặt
 exports.getReservations = async (req, res) => {
     try {
-        const reservations = await Reservation.findAll({ where: { userId: req.userId } });
+        let whereClause = {};
+
+        if (req.userId) {
+             whereClause.userId = req.userId; 
+        }
+
+        const reservations = await Reservation.findAll({ where: whereClause });
         res.json(reservations);
     } catch (error) {
         res.status(400).json({ error: error.message });

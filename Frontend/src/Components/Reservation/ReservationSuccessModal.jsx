@@ -33,17 +33,57 @@ const ReservationSuccessModal = ({
                             <span>Booking Reference:</span>
                             <strong>{bookingReference}</strong>
                         </div>
+                        
                         <div className="flight-details">
-                            <div className="departure-info">
-                                <h3>Departure</h3>
-                                <p>{flightDetails.departureLocation}</p>
-                                <p>{flightDetails.departureDate}</p>
+                            <div className="outbound-flight">
+                                <h3>Outbound Flight</h3>
+                                <div className="flight-detail-row">
+                                    <strong>Flight Number:</strong> 
+                                    <span>{flightDetails.outbound.flightNumber}</span>
+                                </div>
+                                <div className="flight-detail-row">
+                                    <strong>Departure:</strong> 
+                                    <span>{flightDetails.outbound.departureLocation}</span>
+                                </div>
+                                <div className="flight-detail-row">
+                                    <strong>Departure Date/Time:</strong> 
+                                    <span>{flightDetails.outbound.departureDate} {flightDetails.outbound.departureTime}</span>
+                                </div>
+                                <div className="flight-detail-row">
+                                    <strong>Arrival:</strong> 
+                                    <span>{flightDetails.outbound.arrivalLocation}</span>
+                                </div>
+                                <div className="flight-detail-row">
+                                    <strong>Arrival Date/Time:</strong> 
+                                    <span>{flightDetails.outbound.arrivalDate} {flightDetails.outbound.arrivalTime}</span>
+                                </div>
                             </div>
-                            <div className="arrival-info">
-                                <h3>Arrival</h3>
-                                <p>{flightDetails.arrivalLocation}</p>
-                                <p>{flightDetails.arrivalDate}</p>
-                            </div>
+
+                            {flightDetails.return && (
+                                <div className="return-flight">
+                                    <h3>Return Flight</h3>
+                                    <div className="flight-detail-row">
+                                        <strong>Flight Number:</strong> 
+                                        <span>{flightDetails.return.flightNumber}</span>
+                                    </div>
+                                    <div className="flight-detail-row">
+                                        <strong>Departure:</strong> 
+                                        <span>{flightDetails.return.departureLocation}</span>
+                                    </div>
+                                    <div className="flight-detail-row">
+                                        <strong>Departure Date/Time:</strong> 
+                                        <span>{flightDetails.return.departureDate} {flightDetails.return.departureTime}</span>
+                                    </div>
+                                    <div className="flight-detail-row">
+                                        <strong>Arrival:</strong> 
+                                        <span>{flightDetails.return.arrivalLocation}</span>
+                                    </div>
+                                    <div className="flight-detail-row">
+                                        <strong>Arrival Date/Time:</strong> 
+                                        <span>{flightDetails.return.arrivalDate} {flightDetails.return.arrivalTime}</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -71,10 +111,24 @@ ReservationSuccessModal.propTypes = {
     onClose: PropTypes.func.isRequired,
     bookingReference: PropTypes.string.isRequired,
     flightDetails: PropTypes.shape({
-        departureLocation: PropTypes.string.isRequired,
-        departureDate: PropTypes.string.isRequired,
-        arrivalLocation: PropTypes.string.isRequired,
-        arrivalDate: PropTypes.string.isRequired
+        outbound: PropTypes.shape({
+            departureLocation: PropTypes.string.isRequired,
+            departureDate: PropTypes.string.isRequired,
+            departureTime: PropTypes.string.isRequired,
+            arrivalLocation: PropTypes.string.isRequired,
+            arrivalDate: PropTypes.string.isRequired,
+            arrivalTime: PropTypes.string.isRequired,
+            flightNumber: PropTypes.string.isRequired
+        }).isRequired,
+        return: PropTypes.shape({
+            departureLocation: PropTypes.string.isRequired,
+            departureDate: PropTypes.string.isRequired,
+            departureTime: PropTypes.string.isRequired,
+            arrivalLocation: PropTypes.string.isRequired,
+            arrivalDate: PropTypes.string.isRequired,
+            arrivalTime: PropTypes.string.isRequired,
+            flightNumber: PropTypes.string.isRequired
+        })
     }).isRequired
 };
 

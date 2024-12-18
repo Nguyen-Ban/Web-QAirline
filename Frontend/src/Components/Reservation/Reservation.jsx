@@ -4,6 +4,7 @@ import emailjs from '@emailjs/browser';
 import PropTypes from 'prop-types';
 import ReservationSuccessModal from './ReservationSuccessModal';
 import EmailVerificationModal from './EmailVerificationModal';
+import CancellationModal from './CancellationModal'; 
 
 import { CiCreditCard1 } from "react-icons/ci";
 import { PiPaypalLogo } from "react-icons/pi";
@@ -40,6 +41,7 @@ const Reservation = () => {
     const [isEmailVerificationModalOpen, setIsEmailVerificationModalOpen] = useState(false);
     const [verificationCode, setVerificationCode] = useState('');
     const [sentVerificationCode, setSentVerificationCode] = useState('');
+    const [isCancellationModalOpen, setIsCancellationModalOpen] = useState(false);
 
     useEffect(() => {
         // Retrieve flight information from localStorage
@@ -199,50 +201,57 @@ const Reservation = () => {
         console.log('Stored Token:', localStorage.getItem('token'));
 
         const checkLoginStatus = () => {
-            // Check token existence
-            const token = localStorage.getItem('token');
-            if (!token) {
-                alert('No authentication token found. Please log in again.');
-                return false;
+            if (bookingType === 'nonmember') {
+                return true;
             }
 
-            // Check user information
-            const userString = localStorage.getItem('user');
-            if (!userString) {
-                alert('User information not found. Please log in again.');
-                return false;
-            }
-
-            try {
-                /* const userObject = JSON.parse(userString);
-                 if (!userObject.id) {
-                     alert('Invalid user information. Please log in again.');
-                     return false;
-                 }*/
-
-                const userId = parseInt(userString, 10);
-
-                if (isNaN(userId)) {
-                    alert('Invalid user information. Please log in again.');
+            if (bookingType === "member") {
+                // Check token existence
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('No authentication token found. Please log in again.');
                     return false;
                 }
 
-                // Additional optional checks
-                const tokenExpiration = localStorage.getItem('tokenExpiration');
-                if (tokenExpiration) {
-                    const currentTime = Date.now();
-                    if (currentTime > parseInt(tokenExpiration)) {
-                        alert('Login session expired. Please log in again.');
-                        return false;
-                    }
+                // Check user information
+                const userString = localStorage.getItem('user');
+                if (!userString) {
+                    alert('User information not found. Please log in again.');
+                    return false;
                 }
 
-                return true;
-            } catch (error) {
-                console.error('Error parsing user data:', error);
-                alert('Error processing user information. Please log in again.');
-                return false;
+                try {
+                    /* const userObject = JSON.parse(userString);
+                     if (!userObject.id) {
+                         alert('Invalid user information. Please log in again.');
+                         return false;
+                     }*/
+
+                    const userId = parseInt(userString, 10);
+
+                    if (isNaN(userId)) {
+                        alert('Invalid user information. Please log in again.');
+                        return false;
+                    }
+
+                    // Additional optional checks
+                    const tokenExpiration = localStorage.getItem('tokenExpiration');
+                    if (tokenExpiration) {
+                        const currentTime = Date.now();
+                        if (currentTime > parseInt(tokenExpiration)) {
+                            alert('Login session expired. Please log in again.');
+                            return false;
+                        }
+                    }
+
+                    return true;
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                    alert('Error processing user information. Please log in again.');
+                    return false;
+                }
             }
+            return true;
         };
 
         // Verify login status before proceeding
@@ -253,8 +262,9 @@ const Reservation = () => {
 
         try {
             // Rest of the existing reservation preparation logic
-            const storedUser = JSON.parse(localStorage.getItem('user'));
-            const userId = storedUser.id;
+            //const storedUser = JSON.parse(localStorage.getItem('user'));
+            //const userId = storedUser.id;
+
 
             // Convert seat numbers to seat IDs
             const outboundSeatId = convertSeatToId(
@@ -269,6 +279,8 @@ const Reservation = () => {
                     selectedSeats.return
                 )
                 : null;
+
+            const userId = bookingType === 'nonmember' ? null : JSON.parse(localStorage.getItem('user')).id;
 
             const reservationData = {
                 userId: userId,
@@ -367,7 +379,7 @@ const Reservation = () => {
     const PaymentModal = ({
         isOpen,
         onClose,
-        reservationDetails,
+        //reservationDetails,
         totalPrice
     }) => {
         const [paymentMethod, setPaymentMethod] = useState('credit');
@@ -397,21 +409,109 @@ const Reservation = () => {
 
         const handleConfirmPayment = async () => {
             try {
-                const response = await axios.post('http://localhost:4000/api/users/reservations', reservationDetails, {
+                /*const response = await axios.post('http://localhost:4000/api/users/reservations', reservationDetails, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
                     }
-                });
+                });*/
 
+                const bookingType = localStorage.getItem('bookingType');
+
+                // 왕복 여부 확인 및 좌석 ID 변환 로직 추가
+                const outboundFlightId = selectedFlightInfo.outboundFlights[0].id;
+                const outboundSeatId = convertSeatToId(
+                    selectedFlightInfo.outboundFlights[0].plane.id,
+                    selectedSeats.outbound
+                );
+
+                // 돌아오는 편 처리 로직 강화
+                let returnFlightId = null;
+                let returnSeatId = null;
+
+                // returnFlight가 존재하는지 명확히 확인
+                if (selectedFlightInfo.returnFlight) {
+                    returnFlightId = selectedFlightInfo.returnFlight.id;
+
+                    // 돌아오는 편 좌석도 ID로 변환
+                    returnSeatId = convertSeatToId(
+                        selectedFlightInfo.returnFlight.plane.id,
+                        selectedSeats.return
+                    );
+                }
+
+                const userId = bookingType === 'member'
+                    ? JSON.parse(localStorage.getItem('user')).id
+                    : null;
+
+                // 예약 데이터 준비
+                const reservationData = {
+                    outboundReservation: {
+                        userId: userId,
+                        flightId: outboundFlightId,
+                        seatId: outboundSeatId,
+                        ...customerInfo,
+                        totalPrice: totalPrice / 2  // 가는 편 가격
+                    },
+                    returnReservation: selectedFlightInfo.returnFlight ? {
+                        userId: userId,
+                        flightId: returnFlightId,
+                        seatId: returnSeatId,
+                        ...customerInfo,
+                        totalPrice: totalPrice / 2  // 오는 편 가격
+                    } : null
+                };
+
+                const url = bookingType === 'nonmember'
+                    ? 'http://localhost:4000/api/users/nonmember-reservations'
+                    : 'http://localhost:4000/api/users/reservations';
+
+                // Determine headers based on booking type
+                const config = bookingType === 'member'
+                    ? {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                    : {};
+
+                const response = await axios.post(url, reservationData, config);
+
+                console.log('Reservation Response:', response.data);
+
+                /*const response = await axios.post('http://localhost:4000/api/users/reservations', reservationDetails, {
+                    headers: headers
+                });*/
+
+                // 응답 구조에 따라 동적으로 처리
+                const bookingReferenceId =
+                    response.data.outboundTicket?.id ||
+                    response.data.id ||
+                    'N/A';
+
+                // Prepare flight details with a single declaration
                 const flightDetails = {
-                    departureLocation: selectedFlightInfo.outboundFlights[0].departure,
-                    departureDate: new Date(selectedFlightInfo.outboundFlights[0].departureTime).toLocaleDateString(),
-                    arrivalLocation: selectedFlightInfo.outboundFlights[0].destination,
-                    arrivalDate: new Date(selectedFlightInfo.outboundFlights[0].arrivalTime).toLocaleDateString()
+                    outbound: {
+                        departureLocation: selectedFlightInfo.outboundFlights[0].departure,
+                        departureDate: new Date(selectedFlightInfo.outboundFlights[0].departureTime).toLocaleDateString(),
+                        departureTime: new Date(selectedFlightInfo.outboundFlights[0].departureTime).toLocaleTimeString(),
+                        arrivalLocation: selectedFlightInfo.outboundFlights[0].destination,
+                        arrivalDate: new Date(selectedFlightInfo.outboundFlights[0].arrivalTime).toLocaleDateString(),
+                        arrivalTime: new Date(selectedFlightInfo.outboundFlights[0].arrivalTime).toLocaleTimeString(),
+                        flightNumber: selectedFlightInfo.outboundFlights[0].flightNumber
+                    },
+                    return: selectedFlightInfo.returnFlight ? {
+                        departureLocation: selectedFlightInfo.returnFlight.departure,
+                        departureDate: new Date(selectedFlightInfo.returnFlight.departureTime).toLocaleDateString(),
+                        departureTime: new Date(selectedFlightInfo.returnFlight.departureTime).toLocaleTimeString(),
+                        arrivalLocation: selectedFlightInfo.returnFlight.destination,
+                        arrivalDate: new Date(selectedFlightInfo.returnFlight.arrivalTime).toLocaleDateString(),
+                        arrivalTime: new Date(selectedFlightInfo.returnFlight.arrivalTime).toLocaleTimeString(),
+                        flightNumber: selectedFlightInfo.returnFlight.flightNumber
+                    } : null
                 };
 
                 // Set booking reference and flight details
-                setBookingReference(response.data.id.toString());
+                setBookingReference(bookingReferenceId.toString());
                 setSuccessFlightDetails(flightDetails);
 
                 // Close payment modal and open success modal
@@ -419,7 +519,11 @@ const Reservation = () => {
                 setIsReservationSuccessModalOpen(true);
             } catch (error) {
                 console.error('Reservation error:', error);
-                alert('Reservation failed. ' + (error.response?.data?.error || 'Please check your details and try again.'));
+                const errorMessage = error.response?.data?.error
+                    || error.message
+                    || 'Please check your details and try again.';
+
+                alert(`Reservation failed: ${errorMessage}`);
             }
         };
 
@@ -689,26 +793,35 @@ const Reservation = () => {
                 <div className="pricing-details">
                     <h3>Air transporations charges</h3>
                     <div className="price-item">
-                        <span>Fare</span>
-                        <span>USD {totalPrice.toFixed(2)}</span>
+                        <span className="label">Fare</span>
+                        <span className="price">USD {totalPrice.toFixed(2)}</span>
                     </div>
                     <div className="price-item">
-                        <span>Carrier Imposed Fee</span>
-                        <span>USD {(totalPrice * 0.22).toFixed(2)}</span>
+                        <span className="label">Carrier Imposed Fee</span>
+                        <span className="price">USD {(totalPrice * 0.22).toFixed(2)}</span>
                     </div>
                     <div className="price-item">
-                        <span>Taxes, Fees, and Charges</span>
-                        <span>USD {(totalPrice * 0.12).toFixed(2)}</span>
+                        <span className="label">Taxes, Fees, and Charges</span>
+                        <span className="price">USD {(totalPrice * 0.12).toFixed(2)}</span>
                     </div>
                     <div className="total-price">
                         <strong>Total Amount</strong>
                         <strong>USD {(totalPrice * (1 + 0.22 + 0.12)).toFixed(2)}</strong>
                     </div>
                     <div className="price-disclaimer">
-                        <p>Changes and Refund Regulations Apply</p>
+                        <p
+                            onClick={() => setIsCancellationModalOpen(true)}
+                            className="cursor-pointer hover:underline"
+                        >
+                            Changes and Refund Regulations Apply
+                        </p>
                     </div>
                 </div>
             </div>
+            <CancellationModal
+                isOpen={isCancellationModalOpen}
+                onClose={() => setIsCancellationModalOpen(false)}
+            />
             <PaymentModal
                 isOpen={isPaymentModalOpen}
                 onClose={() => setIsPaymentModalOpen(false)}
