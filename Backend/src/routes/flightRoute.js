@@ -15,5 +15,6 @@ router.get(
   flightController.getFlightsStats
 );
 router.get("/flights-admin", flightController.getFlightsForAdmin);
+router.get("/flightprices", flightController.getFlightPrices);
 
 module.exports = router;
