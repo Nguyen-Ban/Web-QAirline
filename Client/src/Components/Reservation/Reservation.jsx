@@ -447,13 +447,13 @@ const Reservation = () => {
 
                 // Update seat capacity for outbound flight
                 await axios.patch(
-                    `http://localhost:4000/api/users/flight-prices/${outboundFlightPriceId}/update-seat-capacity`
+                    `http://localhost:4000/api/users/flight-prices/${selectedFlightInfo.outboundFlights[0].id}/update-seat-capacity?class=${travelClass.toLowerCase()}`
                 );
 
                 // If return flight exists, update its seat capacity too
                 if (returnFlightPriceId) {
                     await axios.patch(
-                        `http://localhost:4000/api/users/flight-prices/${returnFlightPriceId}/update-seat-capacity`
+                        `http://localhost:4000/api/users/flight-prices/${selectedFlightInfo.returnFlights.id}/update-seat-capacity`
                     );
                 }
 
@@ -490,14 +490,14 @@ const Reservation = () => {
                     outboundReservation: {
                         userId: userId,
                         flightId: outboundFlightId,
-                        seatId: outboundSeatId,
+                        seatNumber: selectedSeats.outbound,
                         ...customerInfo,
                         totalPrice: totalPrice / 2  // 가는 편 가격
                     },
                     returnReservation: selectedFlightInfo.returnFlight ? {
                         userId: userId,
                         flightId: returnFlightId,
-                        seatId: returnSeatId,
+                        seatNumber: selectedSeats.return || null, 
                         ...customerInfo,
                         totalPrice: totalPrice / 2  // 오는 편 가격
                     } : null

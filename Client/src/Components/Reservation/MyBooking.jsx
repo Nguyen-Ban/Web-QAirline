@@ -306,7 +306,7 @@ const MyBooking = () => {
 
                         // Find seat details
                         const seatDetails = flight.plane && flight.plane.id
-                            ? convertSeatIdToSeat(flight.plane.id, reservation.seatId)
+                            ? reservation.seatNumber
                             : 'N/A';
 
                         const { date, time, boardTime } = formatDateTime(flight.departureTime);
