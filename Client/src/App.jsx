@@ -7,6 +7,8 @@ import Home from './Components/Home/Home';
 import Reservation from './Components/Reservation/Reservation';
 import AboutUs from './Components/AboutUs/AboutUs';
 import Search from './Components/Home/Search';
+import Traveler from './Components/Home/Traveler';
+import Subscribe from './Components/Home/Subscribe';
 import Support from './Components/Home/Support';
 import Lounge from './Components/Home/Lounge';
 import Footer from './Components/Footer/Footer';
@@ -38,7 +40,9 @@ const App = () => {
                 <Home />
                 <Search />
                 <Support />
+                <Traveler />
                 <Lounge />
+                <Subscribe />
               </div>
             } />
             <Route path="/reservation" element={<Reservation />} />

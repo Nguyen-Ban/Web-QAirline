@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
 import PropTypes from 'prop-types';
 import ReservationSuccessModal from './ReservationSuccessModal';
 import EmailVerificationModal from './EmailVerificationModal';
-import CancellationModal from './CancellationModal'; 
+import CancellationModal from './CancellationModal';
 
 import { CiCreditCard1 } from "react-icons/ci";
 import { PiPaypalLogo } from "react-icons/pi";
@@ -407,6 +407,20 @@ const Reservation = () => {
             }
         ];
 
+        const calculateFlightPriceId = (flightId, travelClass) => {
+            // Since each flight has 3 classes, and they're in order (economy, business, first)
+            // We can calculate the base ID for the flight and add the offset for the class
+            const baseId = (flightId - 1) * 3 + 1;
+
+            const classOffsets = {
+                'Economy': 0,
+                'Business': 1,
+                'First': 2
+            };
+
+            return baseId + classOffsets[travelClass];
+        };
+
         const handleConfirmPayment = async () => {
             try {
                 /*const response = await axios.post('http://localhost:4000/api/users/reservations', reservationDetails, {
@@ -414,6 +428,34 @@ const Reservation = () => {
                         'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
                     }
                 });*/
+
+                const travelClass = localStorage.getItem('travelClass');
+
+                // Calculate flight price IDs for both outbound and return flights
+                const outboundFlightPriceId = calculateFlightPriceId(
+                    selectedFlightInfo.outboundFlights[0].id,
+                    travelClass
+                );
+
+                let returnFlightPriceId = null;
+                if (selectedFlightInfo.returnFlight) {
+                    returnFlightPriceId = calculateFlightPriceId(
+                        selectedFlightInfo.returnFlight.id,
+                        travelClass
+                    );
+                }
+
+                // Update seat capacity for outbound flight
+                await axios.patch(
+                    `http://localhost:4000/api/users/flight-prices/${outboundFlightPriceId}/update-seat-capacity`
+                );
+
+                // If return flight exists, update its seat capacity too
+                if (returnFlightPriceId) {
+                    await axios.patch(
+                        `http://localhost:4000/api/users/flight-prices/${returnFlightPriceId}/update-seat-capacity`
+                    );
+                }
 
                 const bookingType = localStorage.getItem('bookingType');
 
