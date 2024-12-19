@@ -73,7 +73,7 @@ const Notice = () => {
           <p className="noticeCategory">Category: {selectedNotice.category}</p>
           <p>{selectedNotice.detail}</p>
           <p className="noticeDate">
-            <strong>Date:</strong> {new Date(selectedNotice.created_at).toLocaleDateString()}
+            <strong>Date:</strong> {new Date(selectedNotice.createdAt).toLocaleDateString()}
           </p>
           <button onClick={() => setSelectedNotice(null)}>Back to List</button>
         </div>
@@ -86,10 +86,10 @@ const Notice = () => {
               onClick={() => handleNoticeClick(notice)}
             >
               <h3>{notice.title}</h3>
-              <p className="noticeCategory">{notice.category}</p>
+              <p className="noticeCategory">Category: {notice.category}</p>
               <p>{notice.description.slice(0, 300)}...</p>
               <p className="noticeDate">
-                {new Date(notice.created_at).toLocaleDateString()}
+                {new Date(notice.createdAt).toLocaleDateString()}
               </p>
             </div>
           ))}
