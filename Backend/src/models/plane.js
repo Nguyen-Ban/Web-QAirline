@@ -23,10 +23,19 @@ const Plane = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    seatCapacity: {
-      type: DataTypes.INTEGER,
+    classes: {
+      type: DataTypes.STRING,
       allowNull: false,
-      field: "seat_capacity",
+      defaultValue: "", // Giá trị mặc định khi không có hạng ghế nào
+      get() {
+        // Trả về mảng các hạng ghế
+        return this.getDataValue("classes").split(",");
+      },
+      set(value) {
+        // Chuyển mảng thành chuỗi để lưu
+        this.setDataValue("classes", value.join(","));
+      },
+      field: "classes",
     },
     createdAt: {
       type: DataTypes.DATE,

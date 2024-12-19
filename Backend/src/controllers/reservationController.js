@@ -1,5 +1,5 @@
 const Flight = require("../models/flight");
-const Reservation = require('../models/reservation');
+const Reservation = require("../models/reservation");
 
 // Khách hàng - Đặt vé
 exports.bookTicket = async (req, res) => {
@@ -8,13 +8,15 @@ exports.bookTicket = async (req, res) => {
 
     // 가는 편 예약 처리
     if (!outboundReservation.flightId || !outboundReservation.seatId) {
-      return res.status(400).json({ error: 'Outbound Flight ID and Seat ID are required' });
+      return res
+        .status(400)
+        .json({ error: "Outbound Flight ID and Seat ID are required" });
     }
 
     // 가는 편 비행기 정보 조회
     const outboundFlight = await Flight.findByPk(outboundReservation.flightId);
     if (!outboundFlight) {
-      return res.status(404).json({ error: 'Outbound Flight not found' });
+      return res.status(404).json({ error: "Outbound Flight not found" });
     }
 
     // 가는 편 좌석 중복 예약 확인
@@ -22,24 +24,26 @@ exports.bookTicket = async (req, res) => {
       where: {
         flightId: outboundReservation.flightId,
         seatId: outboundReservation.seatId,
-        status: 'confirmed'
-      }
+        status: "confirmed",
+      },
     });
 
     if (existingOutboundReservation) {
-      return res.status(400).json({ error: 'Outbound seat is already reserved' });
+      return res
+        .status(400)
+        .json({ error: "Outbound seat is already reserved" });
     }
 
     // 가는 편 예약 데이터 준비
     const outboundReservationData = {
       ...outboundReservation,
       userId: req.userId || null,
-      status: 'confirmed',
+      status: "confirmed",
       departureTime: outboundFlight.departureTime,
       arrivalTime: outboundFlight.arrivalTime,
       departureLocation: outboundFlight.departure,
       arrivalLocation: outboundFlight.destination,
-      flightNumber: outboundFlight.flightNumber
+      flightNumber: outboundFlight.flightNumber,
     };
 
     // 가는 편 예약 생성
@@ -49,7 +53,9 @@ exports.bookTicket = async (req, res) => {
     let returnTicket = null;
     if (returnReservation) {
       if (!returnReservation.flightId || !returnReservation.seatId) {
-        return res.status(400).json({ error: 'Return Flight ID and Seat ID are required' });
+        return res
+          .status(400)
+          .json({ error: "Return Flight ID and Seat ID are required" });
       }
 
       // 돌아오는 편 비행기 정보 조회
@@ -57,7 +63,7 @@ exports.bookTicket = async (req, res) => {
       if (!returnFlight) {
         // 가는 편 예약 롤백
         await outboundTicket.destroy();
-        return res.status(404).json({ error: 'Return Flight not found' });
+        return res.status(404).json({ error: "Return Flight not found" });
       }
 
       // 돌아오는 편 좌석 중복 예약 확인
@@ -65,26 +71,28 @@ exports.bookTicket = async (req, res) => {
         where: {
           flightId: returnReservation.flightId,
           seatId: returnReservation.seatId,
-          status: 'confirmed'
-        }
+          status: "confirmed",
+        },
       });
 
       if (existingReturnReservation) {
         // 가는 편 예약 롤백
         await outboundTicket.destroy();
-        return res.status(400).json({ error: 'Return seat is already reserved' });
+        return res
+          .status(400)
+          .json({ error: "Return seat is already reserved" });
       }
 
       // 돌아오는 편 예약 데이터 준비
       const returnReservationData = {
         ...returnReservation,
         userId: req.userId || null,
-        status: 'confirmed',
+        status: "confirmed",
         departureTime: returnFlight.departureTime,
         arrivalTime: returnFlight.arrivalTime,
         departureLocation: returnFlight.departure,
         arrivalLocation: returnFlight.destination,
-        flightNumber: returnFlight.flightNumber
+        flightNumber: returnFlight.flightNumber,
       };
 
       // 돌아오는 편 예약 생성
@@ -93,11 +101,10 @@ exports.bookTicket = async (req, res) => {
 
     res.status(201).json({
       outboundTicket,
-      returnTicket
+      returnTicket,
     });
-
   } catch (error) {
-    console.error('Reservation error:', error);
+    console.error("Reservation error:", error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -106,20 +113,85 @@ exports.bookTicket = async (req, res) => {
 exports.cancelTicket = async (req, res) => {
   try {
     const whereClause = {
-      id: req.params.id
+      id: req.params.id,
     };
     if (req.userId !== undefined) {
       whereClause.userId = req.userId;
     }
 
     const reservation = await Reservation.destroy({
-      where: whereClause
+      where: whereClause,
     });
 
     reservation
-      ? res.json({ message: 'Reservation cancelled' })
-      : res.status(404).json({ error: 'Reservation not found' });
+      ? res.json({ message: "Reservation cancelled" })
+      : res.status(404).json({ error: "Reservation not found" });
   } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.updateReservationStatus = async (req, res) => {
+  try {
+    const whereClause = {
+      id: req.params.id,
+    };
+
+    if (req.userId !== undefined) {
+      whereClause.userId = req.userId;
+    }
+    const [updatedRows] = await Reservation.update(
+      {
+        status: req.body.status,
+        updated_at: new Date(),
+      },
+      {
+        where: whereClause,
+      }
+    );
+    if (updatedRows > 0) {
+      res.json({
+        message: "Reservation status updated",
+        status: req.body.status,
+      });
+    } else {
+      res.status(404).json({ error: "Reservation not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+exports.updateNonMemberReservationStatus = async (req, res) => {
+  try {
+    const [updatedRows] = await Reservation.update(
+      {
+        status: req.body.status,
+        updated_at: new Date(),
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    if (updatedRows > 0) {
+      // 업데이트된 예약 정보를 다시 조회
+      const updatedReservation = await Reservation.findOne({
+        where: {
+          id: req.params.id,
+        },
+      });
+
+      res.json({
+        message: "Reservation status updated",
+        status: updatedReservation.status,
+        reservation: updatedReservation,
+      });
+    } else {
+      res.status(404).json({ error: "Reservation not found" });
+    }
+  } catch (error) {
+    console.error("Update Error:", error);
     res.status(400).json({ error: error.message });
   }
 };

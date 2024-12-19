@@ -1,7 +1,7 @@
-const Flight = require('../models/flight');
-const Plane = require('../models/plane');
-const FlightPrice = require('../models/flightPrice');
-const { Op } = require('sequelize');
+const Flight = require("../models/flight");
+const Plane = require("../models/plane");
+const FlightPrice = require("../models/flightPrice");
+const { Op } = require("sequelize");
 
 // Xem tất cả chuyến bay
 exports.getFlights = async (req, res) => {
@@ -10,14 +10,22 @@ exports.getFlights = async (req, res) => {
       include: [
         {
           model: Plane,
-          attributes: ['id', 'model', 'manufacturer', 'seatCapacity']
+          attributes: ["id", "model", "manufacturer"],
         },
         {
           model: FlightPrice,
-          attributes: ['class', 'price', 'seatCount']
+          attributes: ["class", "price", "seatCount"],
         },
       ],
-      attributes: ['id', 'flightNumber', 'departure', 'destination', 'departureTime', 'arrivalTime', 'status']
+      attributes: [
+        "id",
+        "flightNumber",
+        "departure",
+        "destination",
+        "departureTime",
+        "arrivalTime",
+        "status",
+      ],
     });
 
     const formattedFlights = flights.map((flight) => ({
@@ -33,7 +41,7 @@ exports.getFlights = async (req, res) => {
         class: price.class,
         price: price.price,
         seatCount: price.seatCount,
-      })),  // 수정함
+      })), // 수정함
     }));
 
     res.json(formattedFlights);
@@ -44,12 +52,15 @@ exports.getFlights = async (req, res) => {
 
 // Tìm kiếm chuyến bay
 exports.searchFlights = async (req, res) => {
-  const { departure, destination, departureDate, returnDate, tripType } = req.query;
+  const { departure, destination, departureDate, returnDate, tripType } =
+    req.query;
 
   try {
     // Validate required parameters
     if (!departure || !destination) {
-      return res.status(400).json({ error: 'Departure and destination are required' });
+      return res
+        .status(400)
+        .json({ error: "Departure and destination are required" });
     }
 
     // Prepare date-based conditions
@@ -63,51 +74,51 @@ exports.searchFlights = async (req, res) => {
         departure_time: {
           [Op.between]: [
             new Date(departureDate),
-            new Date(new Date(departureDate).setHours(23, 59, 59))
-          ]
-        }
-      })
+            new Date(new Date(departureDate).setHours(23, 59, 59)),
+          ],
+        },
+      }),
     };
     whereConditions.push(outboundCondition);
 
     // Round trip condition
-    if (tripType === 'roundtrip' && returnDate) {
+    if (tripType === "roundtrip" && returnDate) {
       const returnCondition = {
         departure: destination,
         destination: departure,
         departure_time: {
           [Op.between]: [
             new Date(returnDate),
-            new Date(new Date(returnDate).setHours(23, 59, 59))
-          ]
-        }
+            new Date(new Date(returnDate).setHours(23, 59, 59)),
+          ],
+        },
       };
       whereConditions.push(returnCondition);
     }
 
     // Fetch flights
-    const flightPromises = whereConditions.map(condition =>
+    const flightPromises = whereConditions.map((condition) =>
       Flight.findAll({
         where: { departure, destination },
         include: [
           {
             model: Plane,
-            attributes: ['id', 'model', 'manufacturer', 'seatCapacity'],
+            attributes: ["id", "model", "manufacturer"],
           },
           {
             model: FlightPrice,
-            attributes: ['class', 'price', 'seatCount'],
+            attributes: ["class", "price", "seatCount"],
           },
         ],
         attributes: [
-          'id',
-          'flightNumber',
-          'departure',
-          'destination',
-          'departureTime',
-          'arrivalTime',
-          'status',
-        ]
+          "id",
+          "flightNumber",
+          "departure",
+          "destination",
+          "departureTime",
+          "arrivalTime",
+          "status",
+        ],
       })
     );
 
@@ -131,7 +142,7 @@ exports.searchFlights = async (req, res) => {
     }));
 
     if (formattedFlights.length === 0) {
-      return res.status(404).json({ error: 'No flights found' });
+      return res.status(404).json({ error: "No flights found" });
     }
 
     res.json(formattedFlights);
@@ -386,6 +397,6 @@ exports.getFlightPrices = async (req, res) => {
     const flightPrices = await FlightPrice.findAll();
     res.json(flightPrices);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch flight prices' });
+    res.status(500).json({ error: "Failed to fetch flight prices" });
   }
 };

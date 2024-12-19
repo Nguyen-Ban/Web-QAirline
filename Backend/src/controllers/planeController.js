@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const Flight = require("../models/flight");
 const Plane = require("../models/plane");
+const Seat = require("../models/seat");
 
 exports.getPlanes = async (req, res) => {
   try {
@@ -19,13 +20,16 @@ exports.getAvailablePlaneCodes = async (req, res) => {
       include: [
         {
           model: Flight,
-          attributes: [], // Không cần lấy dữ liệu từ Flight
-          required: false, // LEFT JOIN thay vì INNER JOIN
+          attributes: [],
+          required: false, // LEFT JOIN
+          where: {
+            [Op.or]: [
+              { planeId: null }, // Không có Flight nào liên kết
+              { status: { [Op.in]: ["completed", "cancelled"] } }, // Trạng thái là completed hoặc cancelled
+            ],
+          },
         },
       ],
-      where: {
-        "$Flights.id$": { [Op.is]: null }, // Điều kiện: không có Flight nào liên kết
-      },
     });
 
     res.json(planes);
@@ -59,13 +63,18 @@ exports.getPlaneById = async (req, res) => {
 // Quản trị viên - Đăng thông tin máy bay
 exports.createPlane = async (req, res) => {
   try {
-    const { planeCode, model, manufacturer, seatCapacity } = req.body;
+    const { planeCode, model, manufacturer, classes } = req.body;
     const plane = await Plane.create({
       planeCode,
       model,
       manufacturer,
-      seatCapacity,
+      classes,
     });
+    // createSeatForPlane
+
+    // Gọi hàm tạo ghế với `plane.id`
+    await createSeatsForPlane(plane.id, classes);
+
     res.status(201).json(plane);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -75,12 +84,12 @@ exports.createPlane = async (req, res) => {
 exports.updatePlane = async (req, res) => {
   try {
     const { id } = req.params;
-    const { model, manufacturer, seatCapacity, planeCode } = req.body;
+    const { model, manufacturer, classes, planeCode } = req.body;
     const [update] = await Plane.update(
       {
         model,
         manufacturer,
-        seatCapacity,
+        classes,
         planeCode,
       },
       { where: { id } }
@@ -108,4 +117,27 @@ exports.deletePlane = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
+};
+
+// Hàm tạo ghế
+const createSeatsForPlane = async (planeId, classes) => {
+  const rows = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  const columns = Array.from({ length: 10 }, (_, i) => i + 1); // [1-10]
+  const seatData = [];
+
+  // Lặp qua từng hạng ghế và tạo dữ liệu ghế
+  classes.forEach((seatClass) => {
+    rows.forEach((row) => {
+      columns.forEach((col) => {
+        seatData.push({
+          planeId, // Liên kết ghế với máy bay qua planeId
+          seatNumber: `${row}${col}`, // Định dạng ghế
+          class: seatClass, // Hạng ghế
+        });
+      });
+    });
+  });
+
+  // Chèn dữ liệu vào bảng Seats
+  await Seat.bulkCreate(seatData);
 };

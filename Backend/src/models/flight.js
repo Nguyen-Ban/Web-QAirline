@@ -35,7 +35,13 @@ const Flight = sequelize.define(
       field: "arrival_time",
     },
     status: {
-      type: DataTypes.ENUM("scheduled", "delayed", "cancelled"),
+      type: DataTypes.ENUM(
+        "scheduled",
+        "delayed",
+        "onair",
+        "completed",
+        "cancelled"
+      ),
       defaultValue: "scheduled",
     },
     planeId: {
