@@ -20,5 +20,6 @@ router.get(
 );
 router.post('/nonmember-reservations', reservationController.bookTicket);
 router.delete('/nonmember-reservations/:id', reservationController.cancelTicket);
+router.get('/nonmember-reservations', reservationController.getReservations);
 
 module.exports = router;
