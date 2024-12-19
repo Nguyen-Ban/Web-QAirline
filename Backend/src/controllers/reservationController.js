@@ -124,6 +124,75 @@ exports.cancelTicket = async (req, res) => {
   }
 };
 
+exports.updateReservationStatus = async (req, res) => {
+  try {
+    const whereClause = {
+      id: req.params.id
+    };
+    
+    if (req.userId !== undefined) {
+      whereClause.userId = req.userId;
+    }
+
+    const [updatedRows] = await Reservation.update(
+      { 
+        status: req.body.status,
+        updated_at: new Date()
+      },
+      {
+        where: whereClause
+      }
+    );
+
+    if (updatedRows > 0) {
+      res.json({ 
+        message: 'Reservation status updated',
+        status: req.body.status
+      });
+    } else {
+      res.status(404).json({ error: 'Reservation not found' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.updateNonMemberReservationStatus = async (req, res) => {
+  try {
+    const [updatedRows] = await Reservation.update(
+      { 
+        status: req.body.status,
+        updated_at: new Date()
+      },
+      {
+        where: {
+          id: req.params.id
+        }
+      }
+    );
+
+    if (updatedRows > 0) {
+      // 업데이트된 예약 정보를 다시 조회
+      const updatedReservation = await Reservation.findOne({
+        where: {
+          id: req.params.id
+        }
+      });
+      
+      res.json({ 
+        message: 'Reservation status updated',
+        status: updatedReservation.status,
+        reservation: updatedReservation
+      });
+    } else {
+      res.status(404).json({ error: 'Reservation not found' });
+    }
+  } catch (error) {
+    console.error('Update Error:', error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // Khách hàng - Xem các chuyến bay đã đặt
 exports.getReservations = async (req, res) => {
   try {
