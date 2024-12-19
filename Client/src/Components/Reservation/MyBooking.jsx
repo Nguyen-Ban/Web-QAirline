@@ -108,7 +108,7 @@ const MyBooking = () => {
                 refundPercentage: 0
             };
         }
-        
+
         if (daysDifference > 7) {
             return {
                 cancellable: true,
@@ -116,7 +116,7 @@ const MyBooking = () => {
                 refundPercentage: 100
             };
         }
-        
+
         if (daysDifference >= 5 && daysDifference <= 7) {
             return {
                 cancellable: true,
@@ -124,7 +124,7 @@ const MyBooking = () => {
                 refundPercentage: 0
             };
         }
-        
+
         if (daysDifference >= 3 && daysDifference < 5) {
             return {
                 cancellable: true,
@@ -132,7 +132,7 @@ const MyBooking = () => {
                 refundPercentage: 50
             };
         }
-        
+
         if (daysDifference >= 2 && daysDifference < 3) {
             return {
                 cancellable: true,
@@ -140,14 +140,14 @@ const MyBooking = () => {
                 refundPercentage: 25
             };
         }
-        
+
         if (daysDifference < 1) {
             return {
                 cancellable: false,
                 message: "Unfortunately, cancellations or changes are not allowed less than 24 hours before departure.",
                 refundPercentage: 0
             };
-        }        
+        }
 
         // 기본값 반환
         return {
@@ -180,22 +180,33 @@ const MyBooking = () => {
                 refundPercentage: cancellationPolicy.refundPercentage,
                 onConfirm: async () => {
                     try {
-                        await axios.delete(`http://localhost:4000/api/users/reservations/${booking.id}`, {
-                            headers: {
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`
-                            }
-                        });
+                        const response = await axios.patch(
+                            `http://localhost:4000/api/users/reservations/${booking.id}`,
+                            { status: 'cancelled' },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                }
+                            });
 
-                        setBookings(prevBookings =>
+                        /*setBookings(prevBookings =>
                             prevBookings.filter(b => b.id !== booking.id)
-                        );
+                        );*/
 
-                        setCancelSuccessMessage(`✅ Booking ${booking.id} has been successfully cancelled.`);
-                        setCancelConfirmation(null);
+                        if (response.data.status === 'cancelled') {
+                            // Remove the cancelled booking from the displayed list
+                            setBookings(prevBookings =>
+                                prevBookings.filter(b => b.id !== booking.id)
+                            );
 
-                        setTimeout(() => {
-                            setCancelSuccessMessage(null);
-                        }, 3000);
+
+                            setCancelSuccessMessage(`✅ Booking ${booking.id} has been successfully cancelled.`);
+                            setCancelConfirmation(null);
+
+                            setTimeout(() => {
+                                setCancelSuccessMessage(null);
+                            }, 3000);
+                        }
                     } catch (err) {
                         console.error('Error cancelling ticket:', err);
                     }
@@ -204,21 +215,25 @@ const MyBooking = () => {
         } else {
             // 무료 변경 또는 전액 환불 시나리오
             try {
-                await axios.delete(`http://localhost:4000/api/users/reservations/${booking.id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+                const response = await axios.patch(
+                    `http://localhost:4000/api/users/reservations/${booking.id}`,
+                    { status: 'cancelled' },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+                if (response.data.status === 'cancelled') {
+                    setBookings(prevBookings =>
+                        prevBookings.filter(b => b.id !== booking.id)
+                    );
 
-                setBookings(prevBookings =>
-                    prevBookings.filter(b => b.id !== booking.id)
-                );
+                    setCancelSuccessMessage(`✅ Booking ${booking.id} has been successfully cancelled.`);
 
-                setCancelSuccessMessage(`✅ Booking ${booking.id} has been successfully cancelled.`);
-
-                setTimeout(() => {
-                    setCancelSuccessMessage(null);
-                }, 3000);
+                    setTimeout(() => {
+                        setCancelSuccessMessage(null);
+                    }, 3000);
+                }
             } catch (err) {
                 console.error('Error cancelling ticket:', err);
             }
@@ -281,33 +296,35 @@ const MyBooking = () => {
                 const flightsResponse = await axios.get('http://localhost:4000/api/users/flights');
 
                 // Process bookings
-                const userBookings = reservationsResponse.data.map(reservation => {
-                    // Find corresponding flight
-                    const flight = flightsResponse.data.find(f => f.id === reservation.flightId);
+                const userBookings = reservationsResponse.data
+                    .filter(reservation => reservation.status === 'confirmed')
+                    .map(reservation => {
+                        // Find corresponding flight
+                        const flight = flightsResponse.data.find(f => f.id === reservation.flightId);
 
-                    if (!flight) return null;
+                        if (!flight) return null;
 
-                    // Find seat details
-                    const seatDetails = flight.plane && flight.plane.id
-                        ? convertSeatIdToSeat(flight.plane.id, reservation.seatId)
-                        : 'N/A';
+                        // Find seat details
+                        const seatDetails = flight.plane && flight.plane.id
+                            ? convertSeatIdToSeat(flight.plane.id, reservation.seatId)
+                            : 'N/A';
 
-                    const { date, time, boardTime } = formatDateTime(flight.departureTime);
+                        const { date, time, boardTime } = formatDateTime(flight.departureTime);
 
-                    return {
-                        ...reservation,
-                        flightNumber: flight.flightNumber,
-                        departure: flight.departure,
-                        destination: flight.destination,
-                        planeModel: flight.plane ? flight.plane.model : 'N/A',
-                        departureDate: date,
-                        departureTime: time,
-                        arrivalDate: date,
-                        arrivaleTime: time,
-                        boardTime: boardTime,
-                        seatNumber: seatDetails
-                    };
-                }).filter(booking => booking !== null);
+                        return {
+                            ...reservation,
+                            flightNumber: flight.flightNumber,
+                            departure: flight.departure,
+                            destination: flight.destination,
+                            planeModel: flight.plane ? flight.plane.model : 'N/A',
+                            departureDate: date,
+                            departureTime: time,
+                            arrivalDate: date,
+                            arrivaleTime: time,
+                            boardTime: boardTime,
+                            seatNumber: seatDetails
+                        };
+                    }).filter(booking => booking !== null);
 
                 setBookings(userBookings);
                 setLoading(false);

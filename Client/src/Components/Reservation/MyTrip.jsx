@@ -115,7 +115,9 @@ const MyTrip = () => {
 
             // Find reservation by ID
             const matchedReservation = response.data.find(
-                reservation => reservation.id === parseInt(formData.reservationId)
+                reservation =>
+                    reservation.id === parseInt(formData.reservationId) &&
+                    reservation.status === 'confirmed'
             );
 
             if (!matchedReservation) {
@@ -180,14 +182,20 @@ const MyTrip = () => {
             refundPercentage: cancellationPolicy.refundPercentage,
             onConfirm: async () => {
                 try {
-                    await axios.delete(`http://localhost:4000/api/users/nonmember-reservations/${bookingId}`);
-                    setReservationDetails(null);
-                    setCancelSuccessMessage(`✅ Booking ${bookingId} has been successfully cancelled.`);
-                    setCancelConfirmation(null);
+                    const response = await axios.patch(
+                        `http://localhost:4000/api/users/nonmember-reservations/${bookingId}`,
+                        { status: 'cancelled' }
+                    );
 
-                    setTimeout(() => {
-                        setCancelSuccessMessage(null);
-                    }, 3000);
+                    if (response.data.status === 'cancelled') {
+                        setReservationDetails(null);
+                        setCancelSuccessMessage(`✅ Booking ${bookingId} has been successfully cancelled.`);
+                        setCancelConfirmation(null);
+
+                        setTimeout(() => {
+                            setCancelSuccessMessage(null);
+                        }, 3000);
+                    }
                 } catch (err) {
                     console.error('Error cancelling ticket:', err);
                     alert('Failed to cancel ticket. Please try again.');
