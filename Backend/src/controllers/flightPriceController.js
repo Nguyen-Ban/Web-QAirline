@@ -232,3 +232,30 @@ exports.deleteFlightPrice = async (req, res) => {
     return res.status(500).json({ error: "Failed to delete flight prices" });
   }
 };
+
+exports.updateSeatCapacity = async (req, res) => {
+  try {
+      const { flightPriceId } = req.params;
+      
+      const flightPrice = await FlightPrice.findByPk(flightPriceId);
+      
+      if (!flightPrice) {
+          return res.status(404).json({ error: "Flight price not found" });
+      }
+      
+      if (flightPrice.seat_count <= 0) {
+          return res.status(400).json({ error: "No seats available" });
+      }
+      
+      // Decrement seat count
+      await flightPrice.decrement('seat_count');
+      
+      // Get updated record
+      const updatedFlightPrice = await FlightPrice.findByPk(flightPriceId);
+      
+      res.json(updatedFlightPrice);
+  } catch (error) {
+      console.error("Error updating seat capacity:", error);
+      res.status(500).json({ error: "Failed to update seat capacity" });
+  }
+};

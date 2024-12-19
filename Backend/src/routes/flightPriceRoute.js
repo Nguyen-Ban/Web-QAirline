@@ -13,4 +13,5 @@ router.get("/flights-unpriced", flightPriceController.getFlightUnpriced);
 router.post("/flight-prices", flightPriceController.addFlightPrice);
 router.put("/flight-prices/:id", flightPriceController.updateFlightPrice);
 router.delete("/flight-prices/:id", flightPriceController.deleteFlightPrice);
+router.patch("/flight-prices/:flightPriceId/update-seat-capacity", flightPriceController.updateSeatCapacity);
 module.exports = router;
