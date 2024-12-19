@@ -20,9 +20,28 @@ const PlaneTable = () => {
       key: "manufacturer", // Nhà sản xuất máy bay
     },
     {
-      title: "Seat Capacity",
-      dataIndex: "seatCapacity",
-      key: "seatCapacity", // Sức chứa ghế
+      title: "First Class",
+      dataIndex: "firstClass",
+      key: "firstClass",
+      render: (firstClass) => (
+        <span style={{ fontSize: "18px" }}>{firstClass ? "✓" : "×"}</span>
+      ),
+    },
+    {
+      title: "Business Class",
+      dataIndex: "businessClass",
+      key: "businessClass",
+      render: (businessClass) => (
+        <span style={{ fontSize: "18px" }}>{businessClass ? "✓" : "×"}</span>
+      ),
+    },
+    {
+      title: "Economy Class",
+      dataIndex: "economyClass",
+      key: "economyClass",
+      render: (economyClass) => (
+        <span style={{ fontSize: "18px" }}>{economyClass ? "✓" : "×"}</span>
+      ),
     },
   ];
 

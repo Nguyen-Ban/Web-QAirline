@@ -35,30 +35,29 @@ const fetchFlightPriceByIdAPI = async (flightId) => {
   return result;
 };
 
+const fetchFlightsUnpricedAPI = async () => {
+  const URL = `/api/users/flights-unpriced`;
+  const data = await axios.get(URL);
+  const result = data.map((flight) => ({
+    flightNumber: flight.flightNumber,
+  }));
+  return result;
+};
 // Tạo mới giá vé cho một chuyến bay
 const createFlightPriceAPI = async ({
-  flightId,
+  flightNumber,
   firstPrice,
   businessPrice,
   economyPrice,
 }) => {
   const URL = "/api/users/flight-prices";
   const data = {
-    flightId,
+    flightNumber,
     firstPrice,
     businessPrice,
     economyPrice,
   };
-  const res = await axios.post(URL, data);
-
-  // Đổi tên các thuộc tính trước khi trả về
-  return {
-    id: res.data.flightId, // Đổi flightId thành id
-    flightNumber: res.data.flightNumber,
-    firstPrice: res.data.firstPrice,
-    businessPrice: res.data.businessPrice,
-    economyPrice: res.data.economyPrice,
-  };
+  return axios.post(URL, data);
 };
 
 // Cập nhật giá vé của một chuyến bay
@@ -100,6 +99,7 @@ const deleteFlightPriceAPI = async (id) => {
 export {
   fetchFlightPricesAPI,
   fetchFlightPriceByIdAPI,
+  fetchFlightsUnpricedAPI,
   createFlightPriceAPI,
   updateFlightPriceAPI,
   deleteFlightPriceAPI,

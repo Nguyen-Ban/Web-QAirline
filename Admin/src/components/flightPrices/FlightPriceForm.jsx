@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Form, Input, Button, notification } from "antd";
+import { Form, Input, Button, notification, Select } from "antd";
 import {
+  fetchFlightsUnpricedAPI,
   fetchFlightPriceByIdAPI,
   updateFlightPriceAPI,
   createFlightPriceAPI,
@@ -13,27 +14,41 @@ const FlightPriceForm = () => {
   const { id } = useParams(); // Get id from URL if available (for edit)
 
   const [isEdit, setIsEdit] = useState(false); // To check if it's in edit mode
-  const [flightData, setFlightData] = useState(null); // Store flight data for editing
-
+  const [availableFlights, setAvailableFlights] = useState([]);
   // Fetch flight data if id is present (for editing)
+
+  useEffect(() => {
+    fetchFlightNumbers();
+  }, []);
+
   useEffect(() => {
     if (id) {
       fetchFlightPriceById(id);
     }
   }, [id]);
 
+  const fetchFlightNumbers = async () => {
+    try {
+      const res = await fetchFlightsUnpricedAPI();
+      if (res) {
+        setAvailableFlights(res);
+        form.setFieldsValue({
+          ...res,
+        });
+      } else {
+        console.error("Flight not found.");
+      }
+    } catch (error) {
+      console.error("Error fetching available data:", error);
+    }
+  };
+
   const fetchFlightPriceById = async (id) => {
     try {
       const res = await fetchFlightPriceByIdAPI(id); // API call to fetch flight data
       if (res) {
         console.log(res); // Check the response data
-        setFlightData(res); // Store the fetched flight data
-        form.setFieldsValue({
-          flightNumber: res.flightNumber, // Populate the form fields
-          firstPrice: res.firstPrice,
-          businessPrice: res.businessPrice,
-          economyPrice: res.economyPrice,
-        });
+        form.setFieldsValue(res);
         setIsEdit(true); // Mark as edit mode
       } else {
         console.error("Flight not found.");
@@ -43,32 +58,38 @@ const FlightPriceForm = () => {
     }
   };
 
-  const handleSubmit = async (values) => {
+  const onFinish = async () => {
+    const values = form.getFieldsValue(); // Lấy giá trị mới nhất từ form
+    console.log("onfinish >>: ", values);
     try {
+      let res;
+      console.log("isEdit? >>", isEdit);
       if (isEdit) {
-        // Update flight price if in edit mode
-        const updatedData = await updateFlightPriceAPI({
-          id,
-          ...values,
-        });
-        notification.success({
-          message: "Success",
-          description: "Flight prices updated successfully",
-        });
+        values.id = id;
+        console.log("values update >>: ", values);
+        res = await updateFlightPriceAPI(values); // Gửi dữ liệu đã cập nhật
       } else {
-        // Add flight price if creating new
-        const newData = await createFlightPriceAPI(values);
-        notification.success({
-          message: "Success",
-          description: "Flight prices added successfully",
-        });
+        res = await createFlightPriceAPI(values);
       }
-      // Redirect to flights page after successful operation
-      navigate("/flights");
+
+      notification.success({
+        message: isEdit
+          ? "Flight Price Updated Successfully!"
+          : "Flight Price Created Successfully!",
+        description: isEdit
+          ? "The flight price has been updated."
+          : "The flight price has been created.",
+      });
+
+      navigate("/flight-prices");
     } catch (error) {
+      console.error("Error updating/creating flight price:", error);
+
       notification.error({
-        message: "Error",
-        description: error.response?.data?.error || "An error occurred",
+        message: isEditMode
+          ? "Failed to Update Flight Price"
+          : "Failed to Create Flight Price",
+        description: "There was an error. Please try again later.",
       });
     }
   };
@@ -76,12 +97,7 @@ const FlightPriceForm = () => {
   return (
     <div>
       <h2>{isEdit ? "Edit Flight Prices" : "Add Flight Prices"}</h2>
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleSubmit}
-        initialValues={flightData || {}} // Set initial values for the form
-      >
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
           label="Flight Number"
           name="flightNumber"
@@ -89,7 +105,19 @@ const FlightPriceForm = () => {
             { required: true, message: "Please input the flight number!" },
           ]}
         >
-          <Input disabled={isEdit} /> {/* Disable input in edit mode */}
+          <Select placeholder="Select Flight Number">
+            {availableFlights.length > 0 ? (
+              availableFlights.map((flight) => (
+                <Option key={flight.flightNumber} value={flight.flightNumber}>
+                  {flight.flightNumber}
+                </Option>
+              ))
+            ) : (
+              <Option disabled value="">
+                No Flight Numbers Available
+              </Option>
+            )}
+          </Select>
         </Form.Item>
 
         <Form.Item

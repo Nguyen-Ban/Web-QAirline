@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Select, InputNumber, Button, notification } from "antd";
+import {
+  Form,
+  Input,
+  Select,
+  InputNumber,
+  Button,
+  notification,
+  Checkbox,
+} from "antd";
 import { useParams, useNavigate } from "react-router-dom"; // for fetching URL params
 import {
   fetchPlaneByIdAPI,
@@ -13,7 +21,6 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
   const [form] = Form.useForm();
   const [availableModels, setAvailableModels] = useState([]);
   const [manufacturer, setManufacturer] = useState("");
-  const [seatCapacity, setSeatCapacity] = useState(undefined);
   const [isEditMode, setIsEditMode] = useState(false); // To track whether we're in edit mode
   const { id } = useParams(); // Get the plane ID from URL (if available)
   const navigate = useNavigate(); // For navigation after success
@@ -22,18 +29,6 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
   const modelsByManufacturer = {
     Boeing: ["737", "747", "787"],
     Airbus: ["A320", "A350", "A380"],
-    "Lockheed Martin": ["F22", "C130"],
-  };
-
-  const seatCapacityByModel = {
-    737: 80,
-    747: 80,
-    787: 80,
-    A320: 80,
-    A350: 80,
-    A380: 80,
-    F22: 80,
-    C130: 80,
   };
 
   // Fetch existing plane data if in edit mode
@@ -49,7 +44,6 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
       const res = await fetchPlaneByIdAPI(id); // API call to fetch the plane by ID
       if (res) {
         setManufacturer(res.manufacturer);
-        setSeatCapacity(res.seatCapacity);
         setAvailableModels(modelsByManufacturer[res.manufacturer] || []);
         form.setFieldsValue(res); // Set the form fields with the fetched plane data
       } else {
@@ -102,11 +96,6 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
     form.setFieldsValue({ model: undefined, seatCapacity: undefined }); // Reset model and seat capacity
   };
 
-  const handleModelChange = (value) => {
-    setSeatCapacity(seatCapacityByModel[value]);
-    form.setFieldsValue({ seatCapacity: seatCapacityByModel[value] });
-  };
-
   return (
     <Form
       form={form}
@@ -147,7 +136,7 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
         label="Model"
         rules={[{ required: true, message: "Model is required" }]}
       >
-        <Select placeholder="Select model" onChange={handleModelChange}>
+        <Select placeholder="Select model">
           {availableModels.map((model) => (
             <Option key={model} value={model}>
               {model}
@@ -156,16 +145,18 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
         </Select>
       </Form.Item>
 
-      {/* Seat Capacity */}
       <Form.Item
-        name="seatCapacity"
-        label="Seat Capacity"
+        name="classes"
+        label="Select Class"
         rules={[
-          { required: true, message: "Seat capacity is required" },
-          { pattern: /^[0-9]+$/, message: "Please enter a valid number" },
+          { required: true, message: "Please select at least one class!" },
         ]}
       >
-        <InputNumber min={1} value={seatCapacity} disabled />
+        <Checkbox.Group>
+          <Checkbox value="first">First Class</Checkbox>
+          <Checkbox value="business">Business Class</Checkbox>
+          <Checkbox value="economy">Economy Class</Checkbox>
+        </Checkbox.Group>
       </Form.Item>
 
       {/* Submit Button */}

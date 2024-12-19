@@ -9,7 +9,9 @@ const fetchPlanesAPI = async () => {
     planeCode: item.planeCode,
     model: item.model,
     manufacturer: item.manufacturer,
-    seatCapacity: item.seatCapacity,
+    firstClass: item.classes.includes("first"),
+    businessClass: item.classes.includes("business"),
+    economyClass: item.classes.includes("economy"),
   }));
 
   return res;
@@ -35,23 +37,18 @@ const fetchPlaneByIdAPI = async (id) => {
     planeCode: data.planeCode,
     model: data.model,
     manufacturer: data.manufacturer,
-    seatCapacity: data.seatCapacity,
+    classes: data.classes,
   };
   return res;
 };
 
-const createPlaneAPI = async ({
-  planeCode,
-  model,
-  manufacturer,
-  seatCapacity,
-}) => {
+const createPlaneAPI = async ({ planeCode, model, manufacturer, classes }) => {
   const URL = "/api/users/planes"; // The API endpoint for creating a plane
   const data = {
     planeCode,
     model,
     manufacturer,
-    seatCapacity,
+    classes,
   };
 
   return axios.post(URL, data); // Directly return the result of the axios post request
@@ -62,14 +59,14 @@ const updatePlaneAPI = async ({
   planeCode,
   model,
   manufacturer,
-  seatCapacity,
+  classes,
 }) => {
   const URL = `/api/users/planes/${id}`;
   const data = {
     planeCode,
     model,
     manufacturer,
-    seatCapacity,
+    classes,
   };
   const res = await axios.put(URL, data);
   return res;

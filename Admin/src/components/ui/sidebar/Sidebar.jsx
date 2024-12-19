@@ -96,7 +96,7 @@ const Sidebar = () => {
                 <span className="menu-link-icon">
                   <GrSchedules className="icon" />
                 </span>
-                <span className="menu-link-text">Flight Configurations</span>
+                <span className="menu-link-text">Flight Prices</span>
               </NavLink>
             </li>
             <li className="menu-item">

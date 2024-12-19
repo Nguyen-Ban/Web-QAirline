@@ -20,8 +20,14 @@ const PrivateRoute = (props) => {
     }
   };
 
+  const isTokenInLocalStorage = () => {
+    const ltoken = window.localStorage.getItem("access_token");
+    if (ltoken === null) return false;
+    return true;
+  };
+
   useEffect(() => {
-    if (token && isTokenExpired(token)) {
+    if (token && isTokenInLocalStorage() && isTokenExpired(token)) {
       logout();
       message.error("Your token has expired");
     }
