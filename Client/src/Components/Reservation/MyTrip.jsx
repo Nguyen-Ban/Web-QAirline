@@ -137,7 +137,10 @@ const MyTrip = () => {
                 ? convertSeatIdToSeat(flight.plane.id, matchedReservation.seatId)
                 : 'N/A';
 
-            const { date, time, boardTime } = formatDateTime(flight.departureTime);
+            const { boardTime } = formatDateTime(flight.departureTime);
+
+            const departure = formatDateTime(flight.departureTime);
+            const arrival = formatDateTime(flight.arrivalTime);
 
             const bookingDetails = {
                 ...matchedReservation,
@@ -145,10 +148,10 @@ const MyTrip = () => {
                 departure: flight.departure,
                 destination: flight.destination,
                 planeModel: flight.plane ? flight.plane.model : 'N/A',
-                departureDate: date,
-                departureTime: time,
-                arrivalDate: date,
-                arrivalTime: time,
+                departureDate: departure.date,
+                departureTime: departure.time,
+                arrivalDate: arrival.date,
+                arrivalTime: arrival.time,
                 boardTime: boardTime,
                 seatNumber: seatDetails,
                 departureTimeISO: flight.departureTime
