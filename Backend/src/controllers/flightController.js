@@ -1,6 +1,8 @@
+const sequelize = require("../../config/sequelize");
+const { Op } = require("sequelize");
 const Flight = require("../models/flight");
-const flightPrice = require("../models/flightPrice");
 const Plane = require("../models/plane");
+const FlightPrice = require("../models/flightPrice");
 
 // Khách hàng - Xem tất cả chuyến bay
 exports.getFlights = async (req, res) => {
@@ -157,6 +159,28 @@ exports.getFlightsForAdmin = async (req, res) => {
   }
 };
 
+exports.getFlightUnpriced = async (req, res) => {
+  try {
+    const flightsWithoutPrices = await Flight.findAll({
+      include: [
+        {
+          model: FlightPrice,
+          required: false, // Cho phép LEFT JOIN, để lấy cả những flights không có giá
+          attributes: [], // Không lấy dữ liệu từ FlightPrice
+        },
+      ],
+      where: {
+        "$FlightPrices.id$": null, // Điều kiện lọc: chỉ lấy các chuyến bay không có FlightPrice
+      },
+      attributes: ["id", "flightNumber"], // Chỉ lấy id và flightNumber từ Flight
+    });
+
+    res.json(flightsWithoutPrices);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.getFlightById = async (req, res) => {
   const { id } = req.params; // Extract the ID from the URL parameters
 
@@ -302,6 +326,17 @@ exports.updateFlight = async (req, res) => {
 exports.deleteFlight = async (req, res) => {
   try {
     const { id } = req.params;
+
+    const flightWithPrices = await FlightPrice.findOne({
+      where: { flightId: id },
+    });
+
+    if (flightWithPrices) {
+      return res.status(400).json({
+        error: "Flight is priced",
+      });
+    }
+
     const deleted = await Flight.destroy({ where: { id } });
     if (deleted) {
       res.json({ message: "Flight deleted" });
@@ -333,7 +368,7 @@ const updateFlightStatus = async (flight) => {
   if (currentTime > arrivalTime) {
     status = "completed";
   } else if (currentTime > departureTime && currentTime < arrivalTime) {
-    status = "on-air";
+    status = "onair";
   } else {
     status = flight.status; // Giữ nguyên trạng thái nếu không có thay đổi
   }

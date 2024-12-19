@@ -99,7 +99,20 @@ exports.updatePlane = async (req, res) => {
 exports.deletePlane = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // // Kiểm tra xem planeId có tồn tại trong bảng Flight hay không
+    // const planeInFlight = await Flight.findOne({ where: { planeId: id } });
+
+    // if (planeInFlight) {
+    //   // Nếu planeId có trong bảng Flight, trả về lỗi
+    //   return res.status(400).json({
+    //     error: "Plane used in a flight",
+    //   });
+    // }
+
+    // Nếu không có trong bảng Flight, thực hiện xóa máy bay
     const deleted = await Plane.destroy({ where: { id } });
+
     if (deleted) {
       res.json({ message: "Plane deleted" });
     } else {

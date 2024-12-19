@@ -20,8 +20,8 @@ CREATE TABLE Planes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     model VARCHAR(50) NOT NULL,
     manufacturer VARCHAR(100) NOT NULL,
+    seat_capacity INT NOT NULL,
     plane_code VARCHAR(10) NOT NULL,  
-	classes SET('first', 'business', 'economy') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

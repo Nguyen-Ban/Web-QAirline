@@ -6,11 +6,11 @@ VALUES
     ('admin', '$2b$10$sV3NXdCsUwsjLT..iDnQQ.upMoBQiiZGsreWQOXjR792qV2UTZBmG', 'admin@gmail.com', 'admin');
 
 -- Thêm dữ liệu vào bảng Planes
-INSERT INTO Planes (model, manufacturer, classes, plane_code)
+INSERT INTO Planes (model, manufacturer, seat_capacity, plane_code)
 VALUES 
-    ('Boeing 737', 'Boeing', 'first,business', 'B737-800'),
-    ('Airbus A320', 'Airbus', 'first,economy', 'A320-200'),
-    ('Boeing 787', 'Boeing', 'business,economy', 'B787-900');
+    ('Boeing 737', 'Boeing', 180, 'B737-800'),
+    ('Airbus A320', 'Airbus', 160, 'A320-200'),
+    ('Boeing 787', 'Boeing', 250, 'B787-900');
 
 -- Thêm dữ liệu vào bảng Seats
 INSERT INTO Seats (plane_id, seat_number, class)
