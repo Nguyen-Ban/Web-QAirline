@@ -1,0 +1,16 @@
+.auth {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh; /* background: url('') no-repeat; */
+  background-size: cover;
+  background-position: center;
+  background: linear-gradient(var(--heavy-blue), var(--light-blue));
+}

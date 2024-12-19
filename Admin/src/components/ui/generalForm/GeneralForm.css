@@ -1,0 +1,22 @@
+/* Hide the red asterisk for required fields */
+.ant-form-item-required::before {
+  display: none !important;
+}
+
+/* Đảm bảo label và input thẳng hàng, input canh lề trái */
+.horizontal-form .ant-form {
+  display: flex;
+  flex-direction: row; /* Giữ label và input theo hàng ngang */
+  align-items: center; /* Canh chỉnh chúng thẳng theo chiều dọc */
+  width: 100%;
+}
+
+.horizontal-form .ant-form-item-label {
+  flex: 0 0 120px; /* Đảm bảo label có chiều rộng cố định */
+  text-align: left; /* Canh lề trái cho label */
+}
+
+.horizontal-form .ant-form-item-control {
+  flex: 1; /* Input sẽ chiếm toàn bộ phần còn lại */
+  display: flex;
+}

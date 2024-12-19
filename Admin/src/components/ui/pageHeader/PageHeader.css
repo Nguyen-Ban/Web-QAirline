@@ -1,0 +1,29 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header-title {
+  display: flex;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: 1000;
+}
+
+.page-header-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--heavy-blue);
+  color: var(--pure-white);
+  width: 10rem;
+  height: 4rem;
+  border-radius: 3rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.page-header-btn:hover {
+  background-color: var(--active-heavy-blue);
+}
