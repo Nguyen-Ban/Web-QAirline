@@ -192,30 +192,30 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
       <Form.Item
         name="departureTime"
         label="Departure Time"
-        // rules={[
-        //   { required: true, message: "Departure time is required" },
-        //   () => ({
-        //     validator(_, value) {
-        //       const now = dayjs();
-        //       if (!value || value.isAfter(now.add(24, "hour"))) {
-        //         return Promise.resolve();
-        //       }
-        //       return Promise.reject(
-        //         new Error(
-        //           `Departure time must be at least 24 hours from now. Current time: ${now.format(
-        //             "YYYY-MM-DD HH:mm:ss"
-        //           )}`
-        //         )
-        //       );
-        //     },
-        //   }),
-        // ]}
+        rules={[
+          { required: true, message: "Departure time is required" },
+          () => ({
+            validator(_, value) {
+              const now = dayjs();
+              if (!value || value.isAfter(now.add(24, "hour"))) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error(
+                  `Departure time must be at least 24 hours from now. Current time: ${now.format(
+                    "YYYY-MM-DD HH:mm:ss"
+                  )}`
+                )
+              );
+            },
+          }),
+        ]}
       >
         <DatePicker
           showTime
           style={{ width: "100%" }}
           format="YYYY-MM-DD HH:mm"
-          // disabledDate={disabledDate}
+          disabledDate={disabledDate}
         />
       </Form.Item>
 
@@ -247,7 +247,7 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
           showTime
           style={{ width: "100%" }}
           format="YYYY-MM-DD HH:mm"
-          // disabledDate={disabledDate}
+          disabledDate={disabledDate}
           onChange={(value) => setArrivalTime(value)}
         />
       </Form.Item>
