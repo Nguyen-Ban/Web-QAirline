@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const Flight = require("../models/flight");
 const Plane = require("../models/plane");
 const Seat = require("../models/seat");
+const sequelize = require("../../config/sequelize");
 
 exports.getPlanes = async (req, res) => {
   try {
@@ -15,22 +16,13 @@ exports.getPlanes = async (req, res) => {
 
 exports.getAvailablePlaneCodes = async (req, res) => {
   try {
-    const planes = await Plane.findAll({
-      attributes: ["id", "planeCode"],
-      include: [
-        {
-          model: Flight,
-          attributes: [],
-          required: false, // LEFT JOIN
-          where: {
-            [Op.or]: [
-              { planeId: null }, // Không có Flight nào liên kết
-              { status: { [Op.in]: ["completed", "cancelled"] } }, // Trạng thái là completed hoặc cancelled
-            ],
-          },
-        },
-      ],
-    });
+    const [planes, metadata] = await sequelize.query(`
+      SELECT p.id, p.plane_code as planeCode
+      FROM Planes p
+      LEFT JOIN Flights f ON p.id = f.plane_id
+      WHERE f.plane_id IS NULL
+         OR f.status IN ('cancelled', 'completed');
+    `);
 
     res.json(planes);
   } catch (error) {
@@ -63,17 +55,16 @@ exports.getPlaneById = async (req, res) => {
 // Quản trị viên - Đăng thông tin máy bay
 exports.createPlane = async (req, res) => {
   try {
-    const { planeCode, model, manufacturer, classes } = req.body;
+    const { planeCode, model, manufacturer } = req.body;
     const plane = await Plane.create({
       planeCode,
       model,
       manufacturer,
-      classes,
     });
     // createSeatForPlane
 
     // Gọi hàm tạo ghế với `plane.id`
-    await createSeatsForPlane(plane.id, classes);
+    await createSeatsForPlane(plane.id);
 
     res.status(201).json(plane);
   } catch (error) {
@@ -84,12 +75,12 @@ exports.createPlane = async (req, res) => {
 exports.updatePlane = async (req, res) => {
   try {
     const { id } = req.params;
-    const { model, manufacturer, classes, planeCode } = req.body;
+    const { model, manufacturer, planeCode } = req.body;
     const [update] = await Plane.update(
       {
         model,
         manufacturer,
-        classes,
+
         planeCode,
       },
       { where: { id } }
@@ -120,10 +111,13 @@ exports.deletePlane = async (req, res) => {
 };
 
 // Hàm tạo ghế
-const createSeatsForPlane = async (planeId, classes) => {
+const createSeatsForPlane = async (planeId) => {
   const rows = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const columns = Array.from({ length: 10 }, (_, i) => i + 1); // [1-10]
   const seatData = [];
+
+  // Danh sách hạng ghế mặc định
+  const classes = ["first", "business", "economy"];
 
   // Lặp qua từng hạng ghế và tạo dữ liệu ghế
   classes.forEach((seatClass) => {

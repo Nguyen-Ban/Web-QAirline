@@ -66,6 +66,32 @@ const Flight = sequelize.define(
   {
     timestamps: true,
     tableName: "Flights",
+    hooks: {
+      beforeSave: async (flight, options) => {
+        const currentTime = new Date();
+        const departureTime = new Date(flight.departureTime);
+        const arrivalTime = new Date(flight.arrivalTime);
+        const oldDepartureTime = new Date(flight._previousDataValues.departureTime); // Get previous departure time
+
+        let newStatus = flight.status;
+
+        if (currentTime > arrivalTime) {
+          newStatus = "completed";
+        }
+        else if (flight.status === "cancelled") {
+          newStatus = "cancelled";
+        }
+        else if (currentTime > departureTime && currentTime < arrivalTime) {
+          newStatus = "onair";
+        }
+        else if (departureTime > oldDepartureTime) {
+          newStatus = "delayed";
+        }
+
+        flight.status = newStatus;
+        
+      },
+    }
   }
 );
 

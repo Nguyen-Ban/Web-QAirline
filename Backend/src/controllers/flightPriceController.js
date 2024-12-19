@@ -129,11 +129,21 @@ exports.addFlightPrice = async (req, res) => {
         .json({ error: "Prices already exist for this flight" });
     }
 
-    // Tạo mới giá cho từng hạng vé
+    // Tạo mới giá cho từng hạng vé với seat_count mặc định là 80
     const prices = [
-      { class: "first", price: firstPrice, flightId: flight.id },
-      { class: "business", price: businessPrice, flightId: flight.id },
-      { class: "economy", price: economyPrice, flightId: flight.id },
+      { class: "first", price: firstPrice, flightId: flight.id, seatCount: 80 },
+      {
+        class: "business",
+        price: businessPrice,
+        flightId: flight.id,
+        seatCount: 80,
+      },
+      {
+        class: "economy",
+        price: economyPrice,
+        flightId: flight.id,
+        seatCount: 80,
+      },
     ];
 
     // Lưu từng giá vào bảng FlightPrice
@@ -235,27 +245,34 @@ exports.deleteFlightPrice = async (req, res) => {
 
 exports.updateSeatCapacity = async (req, res) => {
   try {
-      const { flightPriceId } = req.params;
-      
-      const flightPrice = await FlightPrice.findByPk(flightPriceId);
-      
-      if (!flightPrice) {
-          return res.status(404).json({ error: "Flight price not found" });
-      }
-      
-      if (flightPrice.seat_count <= 0) {
-          return res.status(400).json({ error: "No seats available" });
-      }
-      
-      // Decrement seat count
-      await flightPrice.decrement('seat_count');
-      
-      // Get updated record
-      const updatedFlightPrice = await FlightPrice.findByPk(flightPriceId);
-      
-      res.json(updatedFlightPrice);
+    const { flightPriceId } = req.params;
+    const { class: travelClass } = req.query; // Lấy travelClass từ query string
+
+
+   const flightPrice = await FlightPrice.findOne({
+      where: {
+        flightId: flightPriceId,
+        class: travelClass,
+      },
+    });
+
+    if (!flightPrice) {
+      return res.status(404).json({ error: "Flight price not found" });
+    }
+
+    if (flightPrice.seat_count <= 0) {
+      return res.status(400).json({ error: "No seats available" });
+    }
+
+    // Decrement seat count
+    await flightPrice.decrement("seat_count");
+
+    // Get updated record
+    const updatedFlightPrice = await FlightPrice.findByPk(flightPriceId);
+
+    res.json(updatedFlightPrice);
   } catch (error) {
-      console.error("Error updating seat capacity:", error);
-      res.status(500).json({ error: "Failed to update seat capacity" });
+    console.error("Error updating seat capacity:", error);
+    res.status(500).json({ error: "Failed to update seat capacity" });
   }
 };

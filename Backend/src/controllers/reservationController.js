@@ -1,5 +1,6 @@
 const Flight = require("../models/flight");
 const Reservation = require("../models/reservation");
+const Seat = require("../models/seat");
 
 // Khách hàng - Đặt vé
 exports.bookTicket = async (req, res) => {
@@ -7,10 +8,10 @@ exports.bookTicket = async (req, res) => {
     const { outboundReservation, returnReservation } = req.body;
 
     // 가는 편 예약 처리
-    if (!outboundReservation.flightId || !outboundReservation.seatId) {
+    if (!outboundReservation.flightId || !outboundReservation.seatNumber) {
       return res
         .status(400)
-        .json({ error: "Outbound Flight ID and Seat ID are required" });
+        .json({ error: "Outbound Flight ID and Seat Number are required" });
     }
 
     // 가는 편 비행기 정보 조회
@@ -19,11 +20,13 @@ exports.bookTicket = async (req, res) => {
       return res.status(404).json({ error: "Outbound Flight not found" });
     }
 
+    const outboundSeatId = await getSeatIdBySeatNumber(outboundReservation.seatNumber);
+
     // 가는 편 좌석 중복 예약 확인
     const existingOutboundReservation = await Reservation.findOne({
       where: {
         flightId: outboundReservation.flightId,
-        seatId: outboundReservation.seatId,
+        seatId: outboundSeatId,
         status: "confirmed",
       },
     });
@@ -38,6 +41,7 @@ exports.bookTicket = async (req, res) => {
     const outboundReservationData = {
       ...outboundReservation,
       userId: req.userId || null,
+      seatId: outboundSeatId, // Thêm seatId
       status: "confirmed",
       departureTime: outboundFlight.departureTime,
       arrivalTime: outboundFlight.arrivalTime,
@@ -52,10 +56,10 @@ exports.bookTicket = async (req, res) => {
     // 돌아오는 편 예약 처리 (왕복인 경우)
     let returnTicket = null;
     if (returnReservation) {
-      if (!returnReservation.flightId || !returnReservation.seatId) {
+      if (!returnReservation.flightId || !returnReservation.seatNumber) {
         return res
           .status(400)
-          .json({ error: "Return Flight ID and Seat ID are required" });
+          .json({ error: "Return Flight ID and Seat Number are required" });
       }
 
       // 돌아오는 편 비행기 정보 조회
@@ -66,11 +70,13 @@ exports.bookTicket = async (req, res) => {
         return res.status(404).json({ error: "Return Flight not found" });
       }
 
+      const returnSeatId = await getSeatIdBySeatNumber(returnReservation.seatNumber);
+
       // 돌아오는 편 좌석 중복 예약 확인
       const existingReturnReservation = await Reservation.findOne({
         where: {
           flightId: returnReservation.flightId,
-          seatId: returnReservation.seatId,
+          seatId: returnSeatId,
           status: "confirmed",
         },
       });
@@ -87,6 +93,7 @@ exports.bookTicket = async (req, res) => {
       const returnReservationData = {
         ...returnReservation,
         userId: req.userId || null,
+        seatId: returnSeatId, // Thêm seatId
         status: "confirmed",
         departureTime: returnFlight.departureTime,
         arrivalTime: returnFlight.arrivalTime,
@@ -205,9 +212,55 @@ exports.getReservations = async (req, res) => {
       whereClause.userId = req.userId;
     }
 
-    const reservations = await Reservation.findAll({ where: whereClause });
-    res.json(reservations);
+    // Truy vấn với thông tin ghế ngồi
+    const reservations = await Reservation.findAll({
+      where: whereClause,
+      include: [
+        {
+          model: Seat,
+          attributes: ["seatNumber"], // Chỉ lấy seatNumber
+        },
+      ],
+      attributes: [
+        "id",
+        "flightId",
+        "userId",
+        "reservationTime",
+        "status",
+        "createdAt",
+        "updatedAt",
+      ], // Chỉ lấy các trường cần thiết từ Reservation
+    });
+
+    // Chuyển đổi dữ liệu trả về
+    const formattedReservations = reservations.map((reservation) => ({
+      id: reservation.id,
+      flightId: reservation.flightId,
+      userId: reservation.userId,
+      reservationTime: reservation.reservationTime,
+      status: reservation.status,
+      createdAt: reservation.createdAt,
+      updatedAt: reservation.updatedAt,
+      seatNumber: reservation.Seat?.seatNumber || null, // Thay seatId bằng seatNumber
+    }));
+
+    res.json(formattedReservations);
   } catch (error) {
+    console.error("Error fetching reservations:", error);
     res.status(400).json({ error: error.message });
   }
 };
+
+const getSeatIdBySeatNumber = async(seatNumber) => {
+  try {
+      const seat = await Seat.findOne({
+          where: { seatNumber },
+          attributes: ['id'] // Chỉ lấy trường id
+      });
+
+      return seat ? seat.id : null; // Trả về id hoặc null nếu không tìm thấy
+  } catch (error) {
+      console.error('Error finding seatId', error);
+      throw error; // Ném lỗi ra ngoài nếu có vấn đề
+  }
+}

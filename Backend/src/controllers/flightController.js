@@ -99,7 +99,7 @@ exports.searchFlights = async (req, res) => {
     // Fetch flights
     const flightPromises = whereConditions.map((condition) =>
       Flight.findAll({
-        where: { departure, destination },
+        where: { departure, destination, status: ["scheduled", "delayed"] },
         include: [
           {
             model: Plane,
@@ -173,7 +173,6 @@ exports.getFlightsForAdmin = async (req, res) => {
 
     const formattedFlights = await Promise.all(
       flights.map(async (flight) => {
-        const status = await updateFlightStatus(flight); // Gọi hàm cập nhật trạng thái
 
         return {
           id: flight.id,
@@ -183,7 +182,7 @@ exports.getFlightsForAdmin = async (req, res) => {
           destination: flight.destination,
           departureTime: flight.departureTime,
           arrivalTime: flight.arrivalTime,
-          status: status, // Dùng `status` mới nếu cần
+          status: flight.status, // Dùng `status` mới nếu cần
         };
       })
     );
@@ -239,7 +238,6 @@ exports.getFlightById = async (req, res) => {
   }
 };
 
-// Quản trị viên - Nhập dữ liệu chuyến bay
 exports.createFlight = async (req, res) => {
   try {
     const {
@@ -249,7 +247,6 @@ exports.createFlight = async (req, res) => {
       destination,
       departureTime,
       arrivalTime,
-      flightStatus,
     } = req.body;
 
     // Tìm planeId từ bảng Plane dựa trên planeCode
@@ -264,16 +261,18 @@ exports.createFlight = async (req, res) => {
         .json({ error: "Plane not found with the provided planeCode" });
     }
 
-    // Tạo chuyến bay với planeId khớp
-    const flight = await Flight.create({
+    // Tạo đối tượng Flight mới mà không lưu vào cơ sở dữ liệu ngay lập tức
+    const flight = Flight.build({
       flightNumber: flightCode,
       planeId: plane.id, // Gán planeId đã tìm được
       departure,
       destination,
       departureTime,
       arrivalTime,
-      status: flightStatus,
     });
+
+    // Lưu đối tượng vào cơ sở dữ liệu bằng save
+    await flight.save();
 
     res.status(201).json(flight);
   } catch (error) {
@@ -281,6 +280,7 @@ exports.createFlight = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 exports.updateFlight = async (req, res) => {
   try {
@@ -307,28 +307,30 @@ exports.updateFlight = async (req, res) => {
         .json({ error: "Plane not found with the provided planeCode" });
     }
 
-    // Thực hiện update chuyến bay
-    const [update] = await Flight.update(
-      {
-        flightNumber: flightCode,
-        planeId: plane.id, // Gán planeId đã tìm được
-        departure,
-        destination,
-        departureTime,
-        arrivalTime,
-        status,
-      },
-      { where: { id } }
-    );
-
-    if (update) {
-      const updatedFlight = await Flight.findByPk(id, {
-        include: [{ model: Plane, attributes: ["planeCode"] }],
-      });
-      res.json({ message: "Flight updated", updatedFlight });
-    } else {
-      res.status(404).json({ error: "Flight not found" });
+    // Tìm chuyến bay hiện tại
+    const flight = await Flight.findByPk(id);
+    if (!flight) {
+      return res.status(404).json({ error: "Flight not found" });
     }
+
+    // Cập nhật các trường
+    flight.flightNumber = flightCode;
+    flight.planeId = plane.id; // Gán planeId đã tìm được
+    flight.departure = departure;
+    flight.destination = destination;
+    flight.departureTime = departureTime;
+    flight.arrivalTime = arrivalTime;
+    flight.status = status;
+
+    // Lưu bản ghi và kích hoạt hook
+    await flight.save();
+
+    // Lấy lại chuyến bay đã được cập nhật
+    const updatedFlight = await Flight.findByPk(id, {
+      include: [{ model: Plane, attributes: ["planeCode"] }],
+    });
+
+    res.json({ message: "Flight updated", updatedFlight });
   } catch (error) {
     console.error("Error updating flight:", error);
     res.status(400).json({ error: error.message });
@@ -357,39 +359,6 @@ exports.getFlightsStats = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-};
-
-// Hàm xử lý trạng thái và cập nhật vào database
-const updateFlightStatus = async (flight) => {
-  const currentTime = new Date();
-  const departureTime = new Date(flight.departureTime);
-  const arrivalTime = new Date(flight.arrivalTime);
-
-  let status;
-  if (currentTime > arrivalTime) {
-    status = "completed";
-  } else if (currentTime > departureTime && currentTime < arrivalTime) {
-    status = "on-air";
-  } else {
-    status = flight.status; // Giữ nguyên trạng thái nếu không có thay đổi
-  }
-
-  // Kiểm tra và cập nhật vào database
-  if (status !== flight.status) {
-    try {
-      await Flight.update({ status }, { where: { id: flight.id } });
-      console.log(
-        `Cập nhật trạng thái cho chuyến bay ${flight.id} thành ${status}`
-      );
-    } catch (error) {
-      console.error(
-        `Lỗi khi cập nhật trạng thái cho chuyến bay ${flight.id}:`,
-        error
-      );
-    }
-  }
-
-  return status; // Trả về trạng thái mới
 };
 
 exports.getFlightPrices = async (req, res) => {
