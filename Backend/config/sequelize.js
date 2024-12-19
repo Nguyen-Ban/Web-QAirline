@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize");
+const initSuperAdmin = require("./initSuperAdmin");
 
 const sequelize = new Sequelize("QAirline", "root", "huyfcbayern", {
   host: "localhost",
@@ -8,8 +9,9 @@ const sequelize = new Sequelize("QAirline", "root", "huyfcbayern", {
 
 sequelize
   .authenticate()
-  .then(() => {
+  .then(async () => {
     console.log("Kết nối cơ sở dữ liệu thành công");
+    await initSuperAdmin();
   })
   .catch((error) => {
     console.error("Lỗi kết nối", error);
