@@ -309,7 +309,11 @@ const MyBooking = () => {
                             ? reservation.seatNumber
                             : 'N/A';
 
-                        const { date, time, boardTime } = formatDateTime(flight.departureTime);
+                        const {  boardTime } = formatDateTime(flight.departureTime);
+
+                        // departure와 arrival 시간을 각각 처리
+                        const departure = formatDateTime(flight.departureTime);
+                        const arrival = formatDateTime(flight.arrivalTime);
 
                         return {
                             ...reservation,
@@ -317,10 +321,10 @@ const MyBooking = () => {
                             departure: flight.departure,
                             destination: flight.destination,
                             planeModel: flight.plane ? flight.plane.model : 'N/A',
-                            departureDate: date,
-                            departureTime: time,
-                            arrivalDate: date,
-                            arrivaleTime: time,
+                            departureDate: departure.date,
+                            departureTime: departure.time,
+                            arrivalDate: arrival.date,
+                            arrivaleTime: arrival.time,
                             boardTime: boardTime,
                             seatNumber: seatDetails
                         };

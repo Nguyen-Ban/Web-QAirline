@@ -12,7 +12,10 @@ const Notice = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('http://localhost:4000/api/users/posts');
-        setNotices(response.data);
+        
+        //내림차순으로 정렬
+        const sortedNotices = response.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        setNotices(sortedNotices);
       } catch (error) {
         console.error("Failed to fetch posts:", error);
       }
