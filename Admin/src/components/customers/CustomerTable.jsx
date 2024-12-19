@@ -30,9 +30,9 @@ const CustomerTable = () => {
       key: "bookingStatus",
       render: (status) => {
         if (status === "confirmed") {
-          return "Confirm"; // Hiển thị 'Confirm' thay cho 'confirmed'
+          return "Confirmed"; // Hiển thị 'Confirm' thay cho 'confirmed'
         } else if (status === "cancelled") {
-          return "Cancel"; // Hiển thị 'Cancel' thay cho 'cancelled'
+          return "Cancelled"; // Hiển thị 'Cancel' thay cho 'cancelled'
         }
         return status; // Trả về trạng thái gốc nếu không phải 'confirmed' hoặc 'cancelled'
       },

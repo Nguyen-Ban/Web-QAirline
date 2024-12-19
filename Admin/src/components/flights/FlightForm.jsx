@@ -24,6 +24,12 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
   const [originalDepartureTime, setOriginalDepartureTime] = useState(null);
   const [departureTime, setDepartureTime] = useState(null);
   const [arrivalTime, setArrivalTime] = useState(null);
+  const [status, setStatus] = useState(''); // Để lưu trữ trạng thái chuyến bay
+
+  const handleCancelFlight = () => {
+    setStatus('cancelled'); // Cập nhật status thành 'cancelled' khi nhấn nút
+    form.setFieldsValue({ status: 'cancelled' }); // Cập nhật giá trị status trong form
+  };
 
   const destinationsByDeparture = {
     NewYork: ["London", "Paris", "Berlin"],
@@ -124,17 +130,6 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
     return current && current.isBefore(now);
   };
 
-  const handleDepartureTimeChange = (newDate) => {
-    if (!newDate) return;
-
-    const oldDate = dayjs(originalDepartureTime); // Lấy thời gian cũ từ state
-    const newStatus = newDate.isAfter(oldDate) ? "delayed" : "scheduled";
-
-    setDepartureTime(newDate); // Cập nhật state departureTime
-    console.log("before >>>: ", form.getFieldValue());
-    form.setFieldsValue({ status: newStatus }); // Đồng bộ trạng thái trong form
-    console.log("after >>>: ", form.getFieldValue());
-  };
 
   return (
     <Form form={form} onFinish={onFinish} layout="vertical">
@@ -221,7 +216,6 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
           style={{ width: "100%" }}
           format="YYYY-MM-DD HH:mm"
           // disabledDate={disabledDate}
-          onChange={(newDate) => handleDepartureTimeChange(newDate)}
         />
       </Form.Item>
 
@@ -257,20 +251,26 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
           onChange={(value) => setArrivalTime(value)}
         />
       </Form.Item>
-
-      <Form.Item
-        name="status"
-        label="Flight Status"
-        rules={[{ required: true, message: "Flight status is required" }]}
-      >
-        <Select>
-          <Option value="scheduled">Scheduled</Option>
-          <Option value="delayed">Delayed</Option>
-          <Option value="onair">On Air</Option>
-          <Option value="cancelled">Cancelled</Option>
-          <Option value="completed">Completed</Option>
-        </Select>
-      </Form.Item>
+      {isEditMode ?
+      <Form.Item name="status" label="Status" layout="horizontal">
+        <Button 
+          onClick={handleCancelFlight}  
+          style={
+            status === 'cancelled' ? 
+            {
+              backgroundColor: 'red',
+              color: 'black',
+              fontWeight: 'bold'
+            } :
+            {
+              backgroundColor: 'white',
+              color: 'blue',
+            }
+          }
+        >
+          {status === 'cancelled' ? 'Flight Cancelled' : 'Cancel Flight'} 
+        </Button>
+      </Form.Item> : ''}
 
       <Form.Item>
         <Button type="primary" htmlType="submit">

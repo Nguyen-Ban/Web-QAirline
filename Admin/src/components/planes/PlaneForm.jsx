@@ -145,20 +145,6 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
         </Select>
       </Form.Item>
 
-      <Form.Item
-        name="classes"
-        label="Select Class"
-        rules={[
-          { required: true, message: "Please select at least one class!" },
-        ]}
-      >
-        <Checkbox.Group>
-          <Checkbox value="first">First Class</Checkbox>
-          <Checkbox value="business">Business Class</Checkbox>
-          <Checkbox value="economy">Economy Class</Checkbox>
-        </Checkbox.Group>
-      </Form.Item>
-
       {/* Submit Button */}
       <Form.Item>
         <Button type="primary" htmlType="submit">

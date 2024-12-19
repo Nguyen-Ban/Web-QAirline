@@ -43,7 +43,6 @@ const createFlightAPI = async ({
   destination,
   departureTime,
   arrivalTime,
-  status,
 }) => {
   const URL = "/api/users/flights"; // Endpoint for creating a flight
   const data = {
@@ -53,7 +52,6 @@ const createFlightAPI = async ({
     destination,
     departureTime,
     arrivalTime,
-    status,
   };
 
   return axios.post(URL, data); // Return the promise from axios.post
