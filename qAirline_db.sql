@@ -89,7 +89,3 @@ CREATE TABLE Posts (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-
-INSERT INTO Users (username, password, email, role)
-VALUES ('admin', SHA2('admin', 256), 'admin@qairline.com', 'admin');
-SHOW TABLES;
