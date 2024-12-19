@@ -5347,36 +5347,11 @@ h2 {
   // 취소 성공 토스트 메시지
   .cancellation-toast {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #2ecc71;
-    color: white;
-    padding: 15px 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    animation: slideIn 0.3s ease-out;
-  }
-
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  .cancellation-toast {
-    position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: var(--grayBg);
+    color: var(--textColor);
     padding: 15px 30px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
