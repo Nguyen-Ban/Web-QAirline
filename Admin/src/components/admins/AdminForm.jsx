@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Button, Select, notification } from "antd";
+import './AdminForm.css'
 import { useNavigate } from "react-router-dom";
 import { createAdminAPI } from "../../services/API/Admins";
 
@@ -60,7 +61,7 @@ const AdminForm = () => {
   };
 
   return (
-    <Form onFinish={onFinish} layout="vertical">
+    <Form className="admin-form" onFinish={onFinish} layout="vertical">
       {formFields.map((field) => (
         <Form.Item
           key={field.name}

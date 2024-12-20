@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+/* Cài đặt font chữ Poppins cho toàn bộ form */
+.plane-form {
+    font-family: "Poppins", sans-serif;
+  }
+  
+  /* Tùy chỉnh font chữ cho các nhãn */
+  .plane-form .ant-form-item-label > label {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  /* Tùy chỉnh font chữ cho các input và select */
+  .plane-form .ant-input,
+  .plane-form .ant-select-selector,
+  .plane-form .ant-input-number {
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  /* Tùy chỉnh font chữ cho nút bấm */
+  .plane-form .ant-btn {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+  }
+  

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import './PlaneForm.css'
 import {
   Form,
   Input,
@@ -98,6 +99,7 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
 
   return (
     <Form
+      className="plane-form"
       form={form}
       onFinish={onFinish}
       layout="vertical"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import'./FlightForm.css';
 import { Form, Input, Select, DatePicker, Button, notification } from "antd";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -150,7 +151,7 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
   };
 
   return (
-    <Form form={form} onFinish={onFinish} layout="vertical">
+    <Form className="flight-form" form={form} onFinish={onFinish} layout="vertical">
       <Form.Item
         name="flightNumber"
         label="Flight Number"

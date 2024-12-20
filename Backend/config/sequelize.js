@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const bcrypt = require("bcrypt");
 
-const sequelize = new Sequelize("QAirline", "root", "qortjfrhdwn+7skswoddl", {
+const sequelize = new Sequelize("QAirline", "root", "huyfcbayern", {
   host: "localhost",
   dialect: "mysql",
   port: 3306,

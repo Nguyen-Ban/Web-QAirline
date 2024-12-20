@@ -1,3 +1,8 @@
+/* Import font chữ Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+
+
 /* Hide the red asterisk for required fields */
 .ant-form-item-required::before {
   display: none !important;
@@ -19,4 +24,25 @@
 .horizontal-form .ant-form-item-control {
   flex: 1; /* Input sẽ chiếm toàn bộ phần còn lại */
   display: flex;
+}
+
+/* Áp dụng font chữ cho toàn bộ Form */
+.general-form {
+  font-family: 'Poppins', serif;
+  font-size: 14px; /* Điều chỉnh kích thước nếu cần */
+}
+
+/* Áp dụng font chữ cho các nhãn và input */
+.general-form .ant-form-item-label > label,
+.general-form .ant-input,
+.general-form .ant-select-selector {
+  font-family: 'Poppins', serif;
+  font-size: 14px;
+}
+
+/* Nút bấm */
+.general-form .custom-button {
+  font-family: 'Poppins', serif;
+  font-weight: bold;
+  font-size: 14px;
 }

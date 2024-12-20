@@ -1,3 +1,6 @@
+/* Import font Poppins từ Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
 .data-table {
   overflow-x: auto;
   overflow-y: hidden;
@@ -5,6 +8,26 @@
   box-shadow: var(--default-shadow);
   border-radius: 1rem;
   background-color: var(--pure-white);
+}
+
+
+/* Áp dụng font chữ Poppins cho toàn bộ bảng */
+.data-table .ant-table {
+  font-family: 'Poppins', serif !important;
+  font-size: 14px; /* Kích thước chữ */
+}
+
+/* Header bảng */
+.data-table .ant-table-thead > tr > th {
+  font-family: 'Poppins', serif;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Nội dung bảng */
+.data-table .ant-table-tbody > tr > td {
+  font-family: 'Poppins', serif;
+  font-size: 14px;
 }
 
 .data-table::-webkit-scrollbar {

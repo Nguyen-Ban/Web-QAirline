@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import './FlightPriceForm.css'
 import { useNavigate, useParams } from "react-router-dom";
 import { Form, Input, Button, notification, Select } from "antd";
 import {
@@ -97,7 +98,7 @@ const FlightPriceForm = () => {
   return (
     <div>
       <h2>{isEdit ? "Edit Flight Prices" : "Add Flight Prices"}</h2>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
+      <Form className="flight-price-form" form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
           label="Flight Number"
           name="flightNumber"
