@@ -35,4 +35,6 @@ router.patch(
   "/nonmember-reservations/:id",
   reservationController.updateNonMemberReservationStatus
 );
+
+router.get("/reservation-overview", reservationController.getReservationOverview);
 module.exports = router;

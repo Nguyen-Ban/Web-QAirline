@@ -1,29 +1,19 @@
 import axios from "../axios.customize.js";
 
 const fetchTicketTypeAPI = async () => {
-  // const URL = "/api/users/statistics";
-  // const data = await axios.get(URL);
+  const URL = "/api/users/reservation-overview";
+  const data = await axios.get(URL);
 
-  const ticketType = {
-    total: 120,
-    oneWay: 80,
-    roundTrip: 40,
-  };
 
-  return ticketType;
+  return data;
 };
 
 const fetchSeatClassAPI = async () => {
-  // const URL = "/api/users/statistics";
-  // const data = await axios.get(URL);
+  const URL = "/api/users/class-overview";
+  const data = await axios.get(URL);
 
-  const seatClass = {
-    first: 120,
-    business: 300,
-    economy: 580,
-  };
 
-  return seatClass;
+  return data;
 };
 
 const fetchMostRoutesAPI = async () => {

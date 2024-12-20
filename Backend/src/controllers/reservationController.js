@@ -1,3 +1,4 @@
+const sequelize = require("../../config/sequelize");
 const Flight = require("../models/flight");
 const Reservation = require("../models/reservation");
 const Seat = require("../models/seat");
@@ -262,5 +263,25 @@ const getSeatIdBySeatNumber = async(seatNumber) => {
   } catch (error) {
       console.error('Error finding seatId', error);
       throw error; // Ném lỗi ra ngoài nếu có vấn đề
+  }
+}
+
+
+exports.getReservationOverview = async(req, res) =>  {
+  try {
+    const counts = await Reservation.findAll({
+      attributes: [
+        [sequelize.fn('COUNT', sequelize.col('id')), 'total'], // Đếm tổng số lượng reservation
+        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN status = 'confirmed' THEN 1 END")), 'confirmed'],
+        [sequelize.fn('COUNT', sequelize.literal("CASE WHEN status = 'cancelled' THEN 1 END")), 'cancelled']
+      ],
+      raw: true
+    });
+
+    // Trả về số lượng confirmed, cancelled và total
+    res.json(counts[0]); // Sẽ trả về một object với số lượng
+  } catch (error) {
+    console.error("Error fetching reservation overview:", error);
+    res.status(400).json({ error: error.message });
   }
 }

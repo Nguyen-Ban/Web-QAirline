@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const Flight = require("../models/flight");
 const FlightPrice = require("../models/flightPrice");
+const sequelize = require("../../config/sequelize");
 exports.getFlightPrices = async (req, res) => {
   try {
     const flightPrices = await Flight.findAll({
@@ -274,5 +275,46 @@ exports.updateSeatCapacity = async (req, res) => {
   } catch (error) {
     console.error("Error updating seat capacity:", error);
     res.status(500).json({ error: "Failed to update seat capacity" });
+  }
+};
+
+
+exports.getClassOverview = async (req, res) => {
+  try {
+    const result = await FlightPrice.findAll({
+      attributes: [
+        [sequelize.col('class'), 'classes'],
+        [sequelize.fn('SUM', sequelize.literal('80 - seat_count')), 'bookedSeats'],
+      ],
+      where: {
+        seatCount: {
+          [Op.lt]: 80, // seat_count < 80
+        },
+      },
+      group: ['class'],
+      raw: true, // Đảm bảo kết quả trả về dưới dạng object thuần
+    });
+
+
+    const seatData = {
+      economy: 0,
+      business: 0,
+      first: 0,
+    };
+
+
+    result.forEach((item) => {
+      const className = item.classes;
+      const seats =  parseInt(item.bookedSeats);
+      if (seatData.hasOwnProperty(className)) {
+        seatData[className] = seats;
+      }
+    });
+
+
+    res.json(seatData);
+  } catch (error) {
+    console.error("Error fetching seat class overview:", error);
+    res.status(400).json({ error: error.message });
   }
 };

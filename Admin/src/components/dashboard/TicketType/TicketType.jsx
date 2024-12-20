@@ -45,15 +45,15 @@ const TicketType = () => {
       />
       <AreaCard
         icon={<FaArrowRight style={{ fontSize: 24, color: "#4ce13f" }} />}
-        title="One-Way"
-        value={`${data.oneWay} Bookings`}
+        title="Confirmed"
+        value={`${data.confirmed} Bookings`}
       />
       <AreaCard
         icon={
           <FaArrowRightArrowLeft style={{ fontSize: 24, color: "#4ce13f" }} />
         }
-        title="Round-Trip"
-        value={`${data.roundTrip} Bookings`}
+        title="Cancelled"
+        value={`${data.cancelled} Bookings`}
       />
     </section>
   );

@@ -42,6 +42,8 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
     { departure: "Da Nang", destinations: ["Hanoi", "Ho Chi Minh City", "Singapore", "Bangkok", "Seoul"] },
     { departure: "Seoul", destinations: ["Tokyo", "Hanoi", "Ho Chi Minh City", "Munich", "Los Angeles"] },
     { departure: "Munich", destinations: ["New York", "London", "Berlin", "Tokyo", "Seoul"] },
+    { departure: "Bangkok", destinations: ["Ho Chi Minh City", "Paris", "Berlin", "Tokyo", "Munich"] },
+
   ];
   
 

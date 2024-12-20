@@ -453,7 +453,7 @@ const Reservation = () => {
                 // If return flight exists, update its seat capacity too
                 if (returnFlightPriceId) {
                     await axios.patch(
-                        `http://localhost:4000/api/users/flight-prices/${selectedFlightInfo.returnFlights.id}/update-seat-capacity`
+                        `http://localhost:4000/api/users/flight-prices/${selectedFlightInfo.returnFlight.id}/update-seat-capacity?class=${travelClass.toLowerCase()}`
                     );
                 }
 
