@@ -116,3 +116,55 @@ ul {
     margin-left: 0;
   }
 }
+
+/* Thay đổi màu nút primary khi hover */
+.ant-btn-primary {
+  background-color: #2b5081; /* Màu nền mới */
+  border-color: #2b5081; /* Màu viền mới */
+  color: white; /* Màu chữ */
+}
+
+.ant-btn-primary:hover {
+  background-color: #1e3a56; /* Màu nền khi hover */
+  border-color: #1e3a56; /* Màu viền khi hover */
+  color: white; /* Màu chữ khi hover */
+}
+
+/* Thay đổi màu nút default khi hover */
+.ant-btn-default {
+  background-color: #f1f1f1; /* Màu nền mặc định */
+  border-color: #dcdcdc; /* Màu viền mặc định */
+  color: #333; /* Màu chữ mặc định */
+}
+
+.ant-btn-default:hover {
+  background-color: #e0e0e0; /* Màu nền khi hover */
+  border-color: #dcdcdc; /* Màu viền khi hover */
+  color: #333; /* Màu chữ khi hover */
+}
+
+/* Thay đổi màu nút danger khi hover */
+.ant-btn-danger {
+  background-color: #f44336; /* Màu nền mặc định */
+  border-color: #f44336; /* Màu viền mặc định */
+  color: white; /* Màu chữ */
+}
+
+.ant-btn-danger:hover {
+  background-color: #d32f2f; /* Màu nền khi hover */
+  border-color: #d32f2f; /* Màu viền khi hover */
+  color: white; /* Màu chữ khi hover */
+}
+
+/* Thay đổi màu nút ghost khi hover */
+.ant-btn-ghost {
+  background-color: transparent; /* Nền trong suốt */
+  border-color: #2b5081; /* Màu viền */
+  color: #2b5081; /* Màu chữ */
+}
+
+.ant-btn-ghost:hover {
+  background-color: #2b5081; /* Màu nền khi hover */
+  border-color: #2b5081; /* Màu viền khi hover */
+  color: white; /* Màu chữ khi hover */
+}

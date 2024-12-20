@@ -50,7 +50,7 @@ const MostRoutes = () => {
       <h2 className="most-routes-title">Top Booked Routes</h2>
       <ResponsiveContainer
         width="100%"
-        height={400}
+        height={100}
         className="bar-chart-container"
       >
         <BarChart data={topRoutes} layout="vertical">

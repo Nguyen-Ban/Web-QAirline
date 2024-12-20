@@ -1,4 +1,4 @@
-import { TicketType } from "../../components/dashboard/TicketType";
+import { BookingStatus } from "../../components/dashboard/BookingStatus";
 
 import MostRoutes from "../../components/dashboard/MostRoutes/MostRoutes";
 import SeatClass from "../../components/dashboard/SeatClass/SeatClass";
@@ -6,7 +6,7 @@ import SeatClass from "../../components/dashboard/SeatClass/SeatClass";
 const Dashboard = () => {
   return (
     <div className="dashboard">
-      <TicketType />
+      <BookingStatus />
       <SeatClass />
        <MostRoutes />
     </div>

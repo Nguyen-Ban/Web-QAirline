@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import AreaCard from "./AreaCard";
 import { DollarOutlined } from "@ant-design/icons";
-import "./TicketType.css";
-import { fetchTicketTypeAPI } from "../../../services/API/Dashboard";
+import "./BookingStatus.css";
+import { fetchBookingStatusAPI } from "../../../services/API/Dashboard";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa6";
 import { IoTicketOutline } from "react-icons/io5";
 
-const TicketType = () => {
+const BookingStatus = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     try {
       setLoading(true); // Set loading to true before fetching data
-      const res = await fetchTicketTypeAPI();
+      const res = await fetchBookingStatusAPI();
       setData(res);
     } catch (error) {
       console.error("Error fetching ticket type data:", error);
@@ -59,4 +59,4 @@ const TicketType = () => {
   );
 };
 
-export default TicketType;
+export default BookingStatus;
