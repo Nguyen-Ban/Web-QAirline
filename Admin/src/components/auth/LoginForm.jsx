@@ -36,7 +36,7 @@ const LoginForm = () => {
     const res = await LoginAPI(email, password);
     console.log(res);
 
-    if (res) {
+    if (res.token) {
       message.success("Login Successfully");
       login(res.token, res.user);
       navigate("/");
