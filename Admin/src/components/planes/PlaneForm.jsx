@@ -27,8 +27,8 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
 
   // Dummy model and seat capacity data based on manufacturer
   const modelsByManufacturer = {
-    Boeing: ["737", "747", "787"],
-    Airbus: ["A320", "A350", "A380"],
+    Boeing: ["747-400", "747-8i", "747-8F", "777F"],
+    Airbus: ["A380-800", "A321neo"],
   };
 
   // Fetch existing plane data if in edit mode
@@ -107,7 +107,13 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
       <Form.Item
         name="planeCode"
         label="Plane Code"
-        rules={[{ required: true, message: "Plane code is required" }]}
+        rules={[
+          { required: true, message: "Plane code is required" },
+          { 
+            pattern: /^VN\d+$/, // Regex kiểm tra bắt đầu bằng QA và theo sau bởi một hoặc nhiều chữ số
+            message: "Flight number must start with 'VN' followed by digits",
+          }
+        ]}
       >
         <Input placeholder="Enter plane code" />
       </Form.Item>
@@ -122,7 +128,7 @@ const PlaneForm = ({ submitText = "Create Plane" }) => {
           placeholder="Select manufacturer"
           onChange={handleManufacturerChange}
         >
-          {["Boeing", "Airbus", "Lockheed Martin"].map((manufacturer) => (
+          {["Boeing", "Airbus"].map((manufacturer) => (
             <Option key={manufacturer} value={manufacturer}>
               {manufacturer}
             </Option>

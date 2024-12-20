@@ -24,17 +24,26 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
   const [originalDepartureTime, setOriginalDepartureTime] = useState(null);
   const [departureTime, setDepartureTime] = useState(null);
   const [arrivalTime, setArrivalTime] = useState(null);
-  const [status, setStatus] = useState(''); // Để lưu trữ trạng thái chuyến bay
+  const [status, setStatus] = useState(""); // Để lưu trữ trạng thái chuyến bay
 
   const handleCancelFlight = () => {
-    setStatus('cancelled'); // Cập nhật status thành 'cancelled' khi nhấn nút
-    form.setFieldsValue({ status: 'cancelled' }); // Cập nhật giá trị status trong form
+    setStatus("cancelled"); // Cập nhật status thành 'cancelled' khi nhấn nút
+    form.setFieldsValue({ status: "cancelled" }); // Cập nhật giá trị status trong form
   };
 
-  const destinationsByDeparture = {
-    NewYork: ["London", "Paris", "Berlin"],
-    LosAngeles: ["Tokyo", "Sydney", "Vancouver"],
-  };
+  const destinationsByDeparture = [
+    { departure: "New York", destinations: ["London", "Paris", "Berlin", "Tokyo", "Munich"] },
+    { departure: "Los Angeles", destinations: ["Tokyo", "Sydney", "Vancouver", "Hanoi", "Seoul"] },
+    { departure: "London", destinations: ["New York", "Paris", "Berlin", "Ho Chi Minh City", "Munich"] },
+    { departure: "Hanoi", destinations: ["Ho Chi Minh City", "Da Nang", "Tokyo", "Sydney", "Seoul"] },
+    { departure: "Ho Chi Minh City", destinations: ["Hanoi", "Da Nang", "Bangkok", "Singapore", "Seoul"] },
+    { departure: "Tokyo", destinations: ["Los Angeles", "Sydney", "Seoul", "Hanoi", "Munich"] },
+    { departure: "Sydney", destinations: ["Los Angeles", "Tokyo", "Hanoi", "Da Nang", "Munich"] },
+    { departure: "Da Nang", destinations: ["Hanoi", "Ho Chi Minh City", "Singapore", "Bangkok", "Seoul"] },
+    { departure: "Seoul", destinations: ["Tokyo", "Hanoi", "Ho Chi Minh City", "Munich", "Los Angeles"] },
+    { departure: "Munich", destinations: ["New York", "London", "Berlin", "Tokyo", "Seoul"] },
+  ];
+  
 
   useEffect(() => {
     fetchPlaneCodes();
@@ -118,8 +127,16 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
     }
   };
 
+  const getDestinationsByDeparture = (departure) => {
+    const match = destinationsByDeparture.find(
+      (item) => item.departure === departure
+    );
+    return match ? match.destinations : [];
+  };
+
   const handleDepartureChange = (value) => {
-    setAvailableDestinations(destinationsByDeparture[value] || []);
+    const destinations = getDestinationsByDeparture(value);
+    setAvailableDestinations(destinations);
     form.setFieldsValue({ destination: undefined });
     setArrivalTime(null);
   };
@@ -130,13 +147,18 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
     return current && current.isBefore(now);
   };
 
-
   return (
     <Form form={form} onFinish={onFinish} layout="vertical">
       <Form.Item
         name="flightNumber"
         label="Flight Number"
-        rules={[{ required: true, message: "Flight number is required" }]}
+        rules={[
+          { required: true, message: "Flight number is required" },
+          {
+            pattern: /^QA\d+$/, // Regex kiểm tra bắt đầu bằng QA và theo sau bởi một hoặc nhiều chữ số
+            message: "Flight number must start with 'QA' followed by digits",
+          },
+        ]}
       >
         <Input placeholder="Enter flight number" />
       </Form.Item>
@@ -167,9 +189,9 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
         rules={[{ required: true, message: "Departure is required" }]}
       >
         <Select placeholder="Select departure" onChange={handleDepartureChange}>
-          {["NewYork", "LosAngeles"].map((departure) => (
-            <Option key={departure} value={departure}>
-              {departure}
+          {destinationsByDeparture.map((item) => (
+            <Option key={item.departure} value={item.departure}>
+              {item.departure}
             </Option>
           ))}
         </Select>
@@ -251,26 +273,29 @@ const FlightForm = ({ submitText = "Create Flight" }) => {
           onChange={(value) => setArrivalTime(value)}
         />
       </Form.Item>
-      {isEditMode ?
-      <Form.Item name="status" label="Status" layout="horizontal">
-        <Button 
-          onClick={handleCancelFlight}  
-          style={
-            status === 'cancelled' ? 
-            {
-              backgroundColor: 'red',
-              color: 'black',
-              fontWeight: 'bold'
-            } :
-            {
-              backgroundColor: 'white',
-              color: 'blue',
+      {isEditMode ? (
+        <Form.Item name="status" label="Status" layout="horizontal">
+          <Button
+            onClick={handleCancelFlight}
+            style={
+              status === "cancelled"
+                ? {
+                    backgroundColor: "red",
+                    color: "black",
+                    fontWeight: "bold",
+                  }
+                : {
+                    backgroundColor: "white",
+                    color: "blue",
+                  }
             }
-          }
-        >
-          {status === 'cancelled' ? 'Flight Cancelled' : 'Cancel Flight'} 
-        </Button>
-      </Form.Item> : ''}
+          >
+            {status === "cancelled" ? "Flight Cancelled" : "Cancel Flight"}
+          </Button>
+        </Form.Item>
+      ) : (
+        ""
+      )}
 
       <Form.Item>
         <Button type="primary" htmlType="submit">
