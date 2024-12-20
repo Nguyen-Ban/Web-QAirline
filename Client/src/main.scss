@@ -4373,7 +4373,8 @@ h2 {
 
         h3 {
           margin-bottom: 15px;
-          font-size: 1.2rem;
+          font-size: 1.8rem;
+          margin-top: 5rem;
         }
 
         .seat-rows {
@@ -4399,34 +4400,23 @@ h2 {
           transition: all 0.3s ease;
 
           &.available {
-            background-color: var(--primaryColor);
+            background-color: #9fa2a4;
             color: white;
 
             &:hover {
-              background-color: var(--primaryColor);
+              background-color: #848688;
             }
           }
 
           &.unavailable {
-            background-color: lightgrey;
-            color: white;
-            //cursor: not-allowed;
-            opacity: 0.6;
+            background-color: #e9ecef;
+            color: #adb5bd;
+            cursor: not-allowed;
           }
 
           &.selected {
-            background-color: var(--HoverColor);
-            border-color: var(--HoverColor);
+            background-color: #0c496f;
             color: white;
-          }
-
-          &.reserved-by-other-passenger {
-            background-color: #ffd700;
-            cursor: not-allowed;
-
-            &:hover {
-              background-color: #ffd700;
-            }
           }
         }
       }
@@ -4454,6 +4444,43 @@ h2 {
 
         option {
           padding: 10px;
+        }
+      }
+
+      .seat-legend {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 3rem;
+
+        .legend-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          .seat-sample {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+
+            &.available {
+              background-color: #9fa2a4;
+            }
+
+            &.reserved {
+              background-color: #e9ecef;
+            }
+
+            &.selected {
+              background-color: #0c496f;
+            }
+          }
+
+          span {
+            font-size: 0.9rem;
+            color: #666;
+          }
         }
       }
     }
@@ -5015,7 +5042,9 @@ h2 {
 }
 
 .cancellation-modal-content {
-  .cancellation-timeline, .cancellation-notes {
+
+  .cancellation-timeline,
+  .cancellation-notes {
     margin-bottom: 1.5rem;
 
     h3 {
@@ -5043,11 +5072,25 @@ h2 {
           color: #777777;
         }
 
-        &.full-refund { color: #28a745; }
-        &.change-only { color: #17a2b8; }
-        &.partial-refund-50 { color: #ffc107; }
-        &.partial-refund-25 { color: #fd7e14; }
-        &.no-refund { color: #dc3545; }
+        &.full-refund {
+          color: #28a745;
+        }
+
+        &.change-only {
+          color: #17a2b8;
+        }
+
+        &.partial-refund-50 {
+          color: #ffc107;
+        }
+
+        &.partial-refund-25 {
+          color: #fd7e14;
+        }
+
+        &.no-refund {
+          color: #dc3545;
+        }
       }
     }
 
@@ -5083,6 +5126,7 @@ h2 {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }

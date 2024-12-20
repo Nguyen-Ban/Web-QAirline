@@ -43,6 +43,8 @@ const Reservation = () => {
     const [sentVerificationCode, setSentVerificationCode] = useState('');
     const [isCancellationModalOpen, setIsCancellationModalOpen] = useState(false);
 
+    const [reservedSeats, setReservedSeats] = useState([]);
+
     useEffect(() => {
         // Retrieve flight information from localStorage
         const storedFlightInfo = JSON.parse(localStorage.getItem('selectedFlightInfo'));
@@ -54,6 +56,21 @@ const Reservation = () => {
             setSelectedFlightInfo(storedFlightInfo);
             calculateTotalPrice(storedFlightInfo);
         }
+
+        const fetchReservedSeats = async () => {
+            try {
+                const response = await axios.get('http://localhost:4000/api/users/nonmember-reservations');
+                const reservedSeatsData = response.data.map(reservation => ({
+                    flightId: reservation.flightId,
+                    seatNumber: reservation.seatNumber
+                }));
+                setReservedSeats(reservedSeatsData);
+            } catch (error) {
+                console.error('Error fetching reserved seats:', error);
+            }
+        };
+
+        fetchReservedSeats();
     }, []);
 
     const calculateTotalPrice = (flightInfo) => {
@@ -338,15 +355,38 @@ const Reservation = () => {
         const seatLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
         const seatRows = 10; // 임시로 10개의 행 표시
 
+        const currentFlightId = type === 'outbound'
+            ? selectedFlightInfo?.outboundFlights[0]?.id
+            : selectedFlightInfo?.returnFlight?.id;
+
         return (
             <div className={`seat-map ${type}`}>
-                <h3>Select {type} Seat</h3>
+                <h3 className="selectSeat">Select {type} Seat</h3>
                 <div className="seat-rows">
+                <div className="seat-legend">
+                            <div className="legend-item">
+                                <div className="seat-sample available"></div>
+                                <span>Available</span>
+                            </div>
+                            <div className="legend-item">
+                                <div className="seat-sample reserved"></div>
+                                <span>Reserved</span>
+                            </div>
+                            <div className="legend-item">
+                                <div className="seat-sample selected"></div>
+                                <span>Selected</span>
+                            </div>
+                        </div>
                     {[...Array(seatRows)].map((_, rowIndex) => (
                         <div key={rowIndex} className="seat-row">
                             {seatLetters.map((letter) => {
                                 const seatNumber = `${letter}${rowIndex + 1}`;
-                                const isSeatAvailable = seats?.includes(seatNumber); // seats 배열이 있다면 includes 사용, 없다면 false 반환
+                                // 해당 좌석이 예약되었는지 확인
+                                const isReserved = reservedSeats.some(
+                                    seat => seat.flightId === currentFlightId &&
+                                        seat.seatNumber === seatNumber
+                                );
+
                                 const isSelected = selectedSeats[type] === seatNumber;
 
                                 //console.log(`Seat ${seatNumber} is in column ${columnIndex}`);
@@ -354,9 +394,8 @@ const Reservation = () => {
                                 return (
                                     <div
                                         key={seatNumber}
-                                        className={`seat ${isSeatAvailable ? 'available' : 'unavailable'} ${isSelected ? 'selected' : ''
-                                            }`}
-                                        onClick={() => handleSeatSelection(type, seatNumber)}
+                                        className={`seat ${isReserved ? 'unavailable' : 'available'} ${isSelected ? 'selected' : ''}`}
+                                        onClick={() => !isReserved && handleSeatSelection(type, seatNumber)}
                                     >
                                         {seatNumber}
                                     </div>
@@ -497,7 +536,7 @@ const Reservation = () => {
                     returnReservation: selectedFlightInfo.returnFlight ? {
                         userId: userId,
                         flightId: returnFlightId,
-                        seatNumber: selectedSeats.return || null, 
+                        seatNumber: selectedSeats.return || null,
                         ...customerInfo,
                         totalPrice: totalPrice / 2  // 오는 편 가격
                     } : null
