@@ -2,6 +2,8 @@ const Flight = require("../models/flight");
 const Plane = require("../models/plane");
 const FlightPrice = require("../models/flightPrice");
 const { Op } = require("sequelize");
+const Reservation = require("../models/reservation");
+const sequelize = require("../../config/sequelize");
 
 // Xem tất cả chuyến bay
 exports.getFlights = async (req, res) => {
@@ -367,5 +369,49 @@ exports.getFlightPrices = async (req, res) => {
     res.json(flightPrices);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch flight prices" });
+  }
+};
+
+
+exports.getRouteOverview = async (req, res) => {
+  try {
+    const topRoutes = await Reservation.findAll({
+      attributes: [
+        [sequelize.fn('CONCAT', sequelize.col('Flight.departure'), '-', sequelize.col('Flight.destination')), 'route'],
+        [sequelize.fn('COUNT', sequelize.col('Reservation.id')), 'bookings']
+      ],
+      include: [
+        {
+          model: Flight,
+          attributes: [], 
+        }
+      ],
+      group: ['Flight.departure', 'Flight.destination'],
+      order: [[sequelize.fn('COUNT', sequelize.col('Reservation.id')), 'DESC']],
+      limit: 10,
+      raw: true,
+    });
+
+
+    const formattedRoutes = topRoutes.reduce((acc, route) => {
+      const [departure, destination] = route.route.split('-');
+      const formattedRoute = departure < destination ? `${departure}-${destination}` : `${destination}-${departure}`;
+      
+
+      if (acc[formattedRoute]) {
+        acc[formattedRoute].bookings += route.bookings;
+      } else {
+        acc[formattedRoute] = { route: formattedRoute, bookings: route.bookings };
+      }
+
+      return acc;
+    }, {});
+
+    const finalRoutes = Object.values(formattedRoutes);
+
+    res.json(finalRoutes);
+  } catch (error) {
+    console.error("Error fetching reservation overview:", error);
+    res.status(400).json({ error: error.message });
   }
 };
