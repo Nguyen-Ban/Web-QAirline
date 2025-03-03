@@ -5,6 +5,8 @@ const userRoute = require("./userRoute");
 const postRoute = require("./postRoute");
 const planeRoute = require("./planeRoute");
 const flightRoute = require("./flightRoute");
+const flightPriceRoute = require("./flightPriceRoute");
+
 const reservationRoute = require("./reservationRoute");
 const authRoute = require("./authRoute");
 
@@ -13,6 +15,8 @@ router.use("/users", userRoute);
 router.use("/users", postRoute);
 router.use("/users", planeRoute);
 router.use("/users", flightRoute);
+router.use("/users", flightPriceRoute);
+
 router.use("/users", reservationRoute);
 router.use("/auth", authRoute);
 

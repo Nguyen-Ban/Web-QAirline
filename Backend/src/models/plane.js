@@ -23,11 +23,6 @@ const Plane = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    seatCapacity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: "seat_capacity",
-    },
     createdAt: {
       type: DataTypes.DATE,
       field: "created_at",

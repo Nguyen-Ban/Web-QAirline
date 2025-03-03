@@ -31,7 +31,7 @@ const FlightPrice = sequelize.define(
       // Thêm cột mới để lưu số lượng ghế
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0, // Giá trị mặc định
+      defaultValue: 80, // Giá trị mặc định
       field: "seat_count",
     },
   },

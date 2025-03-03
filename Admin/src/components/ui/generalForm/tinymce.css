@@ -1,0 +1,57 @@
+/* Tùy chỉnh nền của editor */
+.tox-edit-area {
+  background-color: #f0f0f0; /* Màu nền của phần nội dung trong editor */
+}
+
+/* Tùy chỉnh thanh công cụ (toolbar) */
+.tox-toolbar {
+  background-color: #007bff; /* Màu nền của thanh công cụ */
+  color: #ffffff; /* Màu chữ của các button trên thanh công cụ */
+  padding: 10px;
+}
+
+/* Tùy chỉnh nút trên thanh công cụ */
+.tox-btn {
+  background-color: #28a745; /* Màu nền của nút */
+  color: #ffffff; /* Màu chữ của nút */
+  border-radius: 5px;
+  padding: 8px 15px;
+}
+
+.tox-btn:hover {
+  background-color: #218838; /* Màu nút khi hover */
+}
+
+/* Tùy chỉnh dialog */
+.tox-dialog {
+  background-color: #ffffff; /* Màu nền của dialog */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tox-dialog-header {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 15px;
+}
+
+.tox-dialog-body {
+  padding: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+.tox-dialog-footer {
+  padding: 15px;
+  background-color: #f8f9fa;
+  text-align: right;
+}
+
+/* Tùy chỉnh các nút của dialog */
+.tox-btn--primary {
+  background-color: #28a745;
+}
+
+.tox-btn--primary:hover {
+  background-color: #218838;
+}

@@ -1,0 +1,72 @@
+/* Import font Poppins từ Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+.data-table {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 25px 0;
+  box-shadow: var(--default-shadow);
+  border-radius: 1rem;
+  background-color: var(--pure-white);
+}
+
+
+/* Áp dụng font chữ Poppins cho toàn bộ bảng */
+.data-table .ant-table {
+  font-family: 'Poppins', serif !important;
+  font-size: 14px; /* Kích thước chữ */
+}
+
+/* Header bảng */
+.data-table .ant-table-thead > tr > th {
+  font-family: 'Poppins', serif;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Nội dung bảng */
+.data-table .ant-table-tbody > tr > td {
+  font-family: 'Poppins', serif;
+  font-size: 14px;
+}
+
+.data-table::-webkit-scrollbar {
+  height: 10px;
+}
+
+.data-table::-webkit-scrollbar-track {
+  background: white;
+  border-radius: 5px;
+}
+
+.data-table::-webkit-scrollbar-thumb {
+  background: var(--heavy-blue);
+  border-radius: 5px;
+  border: 2px solid white;
+}
+
+.data-table::-webkit-scrollbar-thumb:hover {
+  background: var(--hover-heavy-blue);
+}
+
+.data-table table {
+  border-collapse: collapse;
+  font-size: 1.6rem;
+  width: 100%;
+  border-radius: 5px 5px 0 0;
+  min-width: 800px;
+}
+
+.data-table table th,
+.data-table table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.data-table .action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}

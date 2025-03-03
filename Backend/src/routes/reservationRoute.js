@@ -18,7 +18,23 @@ router.get(
   authMiddleware.verifyToken,
   reservationController.getReservations
 );
-router.post('/nonmember-reservations', reservationController.bookTicket);
-router.delete('/nonmember-reservations/:id', reservationController.cancelTicket);
 
+router.patch(
+  "/reservations/:id",
+  authMiddleware.verifyToken,
+  reservationController.updateReservationStatus
+);
+
+router.post("/nonmember-reservations", reservationController.bookTicket);
+router.delete(
+  "/nonmember-reservations/:id",
+  reservationController.cancelTicket
+);
+router.get("/nonmember-reservations", reservationController.getReservations);
+router.patch(
+  "/nonmember-reservations/:id",
+  reservationController.updateNonMemberReservationStatus
+);
+
+router.get("/reservation-overview", reservationController.getReservationOverview);
 module.exports = router;
